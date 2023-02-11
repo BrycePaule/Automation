@@ -42,7 +42,7 @@ public class Conveyor : MonoBehaviour
 
     public void PlaceItem(GameObject _itemObj)
     {
-        _itemObj.transform.position = Slots[0].transform.position;
+        // _itemObj.transform.position = Slots[0].transform.position;
         Slots[0].SetItemObject(_itemObj, Slots[1].transform.position);
     }
 
