@@ -26,10 +26,10 @@ public class ConveyorSlot : MonoBehaviour
     public Item GetItem() => item;
     public GameObject GetItemObject() => itemObj;
 
-    public void SetItemObject(GameObject _itemObj, Vector3 target)
+    public void SetItemObject(Item _item, Vector3 target)
     {
-        itemObj = _itemObj;
-        item = itemObj.GetComponent<Item>();
+        itemObj = _item.gameObject;
+        item = _item;
 
         item.StartPos = item.transform.position;
         item.TargetPos = target;

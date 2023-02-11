@@ -168,6 +168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _tilemap: {fileID: 1163442512}
   conveyerPrefab: {fileID: 4196235035966897580, guid: eff56da9a8174d74da03724cb19a7306, type: 3}
+  itemPrefab: {fileID: 1412769314480690462, guid: 04aa86c169b21624d88e8148edff3091, type: 3}
 --- !u!1 &202961938
 GameObject:
   m_ObjectHideFlags: 0

@@ -49,17 +49,16 @@ public class InputManager : MonoBehaviour
 
     private void OnLeftClick()
     {
-        Conveyor conv = GetConveyor();
-
-        if (conv == null)
+        if (ClickedTilemap())
         {
             Vector3 offsetCorrection = new Vector3(.5f, .5f, 0);
             Vector3Int cell = _tilemap.WorldToCell(mousePosWorld);
             Instantiate(conveyerPrefab, _tilemap.CellToWorld(cell) + offsetCorrection, Quaternion.identity);
-        } 
-        else 
+        }
+
+        if (ClickedConveyor())
         {
-            Destroy(conv.gameObject);
+            GetConveyor().RotateClockwise();
         }
     }
 
@@ -68,7 +67,7 @@ public class InputManager : MonoBehaviour
         Conveyor conv = GetConveyor();
         
         if (conv != null)
-            conv.RotateClockwise();
+            Destroy(conv.gameObject);
     }
 
     private Conveyor GetConveyor()
@@ -84,6 +83,22 @@ public class InputManager : MonoBehaviour
         return null;
     }
 
+    private bool ClickedTilemap()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(mousePosScreen);
+        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, 100f);
+
+        return (hit && hit.transform.gameObject.layer == (int) Layers.Tilemap);
+    }
+
+    private bool ClickedConveyor()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(mousePosScreen);
+        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, 100f);
+
+        return (hit && hit.transform.gameObject.layer == (int) Layers.Conveyer);
+    }
+
     private void OnQ()
     {
         Conveyor conv = GetConveyor();
@@ -91,7 +106,10 @@ public class InputManager : MonoBehaviour
         if (conv.Slots[0].IsNotEmpty()) { return; }
 
         GameObject itemObj = Instantiate(itemPrefab, Vector3.zero, Quaternion.identity);
-        conv.PlaceItem(itemObj);
+        conv.PlaceItem(itemObj.GetComponent<Item>());
+
+        Color randomColor = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f));
+        itemObj.GetComponent<SpriteRenderer>().color = randomColor;
     }
 
 
