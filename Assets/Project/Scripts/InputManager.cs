@@ -47,18 +47,38 @@ public class InputManager : MonoBehaviour
         mousePosWorld.z = 0f; 
     }
 
+    // BUTTONS
+
     private void OnLeftClick()
     {
-        if (ClickedTilemap())
+        if (RayToConveyor(mousePosScreen))
+        {
+            GetConveyor().RotateClockwise();
+        }
+
+        if (RayToTilemap(mousePosScreen))
         {
             Vector3 offsetCorrection = new Vector3(.5f, .5f, 0);
             Vector3Int cell = _tilemap.WorldToCell(mousePosWorld);
-            Instantiate(conveyerPrefab, _tilemap.CellToWorld(cell) + offsetCorrection, Quaternion.identity);
-        }
 
-        if (ClickedConveyor())
+            Conveyor conv = Instantiate(conveyerPrefab, _tilemap.CellToWorld(cell) + offsetCorrection, Quaternion.identity).GetComponent<Conveyor>();
+            conv.Tilemap = _tilemap;
+            RefreshConveyorsInBlock(cell);
+        }
+    }
+
+    private void RefreshConveyorsInBlock(Vector3Int cell)
+    {
+        for (int i = -1; i <= 1; i++)
         {
-            GetConveyor().RotateClockwise();
+            for (int j = -1; j <= 1; j++)
+            {
+                Vector3 offset = new Vector3(i, j, 0);
+                Conveyor adjConv = GetConveyorAtWorldPos(cell + offset);
+
+                if (adjConv)
+                    adjConv.RefreshConnections();
+            }
         }
     }
 
@@ -66,8 +86,35 @@ public class InputManager : MonoBehaviour
     {
         Conveyor conv = GetConveyor();
         
-        if (conv != null)
+        if (conv)
             Destroy(conv.gameObject);
+    }
+
+    private void OnQ()
+    {
+        Conveyor conv = GetConveyor();
+        if (conv == null) { return; }
+        if (!conv.SlotQueue.Peek().IsEmpty()) { return; }
+
+        GameObject itemObj = Instantiate(itemPrefab, Vector3.zero, Quaternion.identity);
+        conv.PlaceItem(itemObj.GetComponent<Item>());
+
+        Color randomColor = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f));
+        itemObj.GetComponent<SpriteRenderer>().color = randomColor;
+    }
+
+    // HELPERS
+
+    private Conveyor GetConveyorAtWorldPos(Vector3 _pos)
+    {
+        RaycastHit2D hit = Physics2D.Raycast(_pos, Vector2.up);
+
+        if (hit && hit.transform.gameObject.layer == (int) Layers.Conveyer)
+        {
+            return hit.transform.GetComponent<Conveyor>();
+        }
+        
+        return null;
     }
 
     private Conveyor GetConveyor()
@@ -83,34 +130,19 @@ public class InputManager : MonoBehaviour
         return null;
     }
 
-    private bool ClickedTilemap()
+    private bool RayToTilemap(Vector2 pos)
     {
-        Ray ray = Camera.main.ScreenPointToRay(mousePosScreen);
+        Ray ray = Camera.main.ScreenPointToRay(pos);
         RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, 100f);
 
         return (hit && hit.transform.gameObject.layer == (int) Layers.Tilemap);
     }
 
-    private bool ClickedConveyor()
+    private bool RayToConveyor(Vector2 pos)
     {
-        Ray ray = Camera.main.ScreenPointToRay(mousePosScreen);
+        Ray ray = Camera.main.ScreenPointToRay(pos);
         RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, 100f);
 
         return (hit && hit.transform.gameObject.layer == (int) Layers.Conveyer);
     }
-
-    private void OnQ()
-    {
-        Conveyor conv = GetConveyor();
-        if (conv == null) { return; }
-        if (conv.Slots[0].IsNotEmpty()) { return; }
-
-        GameObject itemObj = Instantiate(itemPrefab, Vector3.zero, Quaternion.identity);
-        conv.PlaceItem(itemObj.GetComponent<Item>());
-
-        Color randomColor = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f));
-        itemObj.GetComponent<SpriteRenderer>().color = randomColor;
-    }
-
-
 }

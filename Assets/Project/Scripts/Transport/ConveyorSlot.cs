@@ -7,14 +7,16 @@ public class ConveyorSlot : MonoBehaviour
     [SerializeField] private GameObject itemObj;
     [SerializeField] private Item item;
 
+    private SpriteRenderer _sr;
+
+    private void Awake()
+    {
+        _sr = GetComponent<SpriteRenderer>();
+    }
+
     public bool IsEmpty()
     {
         return itemObj == null;
-    }
-
-    public bool IsNotEmpty()
-    {
-        return itemObj != null;
     }
 
     public void Clear()
@@ -26,14 +28,16 @@ public class ConveyorSlot : MonoBehaviour
     public Item GetItem() => item;
     public GameObject GetItemObject() => itemObj;
 
-    public void SetItemObject(Item _item, Vector3 target)
+    public void SetItemObject(Item _item)
     {
         itemObj = _item.gameObject;
         item = _item;
 
-        item.StartPos = item.transform.position;
-        item.TargetPos = target;
-
+        itemObj.transform.position = transform.position;
         itemObj.transform.SetParent(transform);
     }
+
+    public void ShowSprite() => _sr.enabled = true;
+    public void HideSprite() => _sr.enabled = false;
+
 }

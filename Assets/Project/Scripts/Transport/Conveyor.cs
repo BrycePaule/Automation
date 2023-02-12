@@ -3,73 +3,123 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEditor;
 
 public class Conveyor : MonoBehaviour
 {
+    public int SlotCount;
     public float ItemsMovedPerSecond;
+
+    public Conveyor PushingTo;
     public CardinalDirection Facing = CardinalDirection.East;
+    public Queue<ConveyorSlot> SlotQueue;
 
     [Header("References")]
-    public Conveyor Provider;
-    public Conveyor Receiver;
-    public ConveyorSlot[] Slots;
-    [SerializeField] private Tilemap Tilemap;
+    public Tilemap Tilemap;
+    [SerializeField] private GameObject SlotPrefab;
 
+    [Header("Debug")]
+    [SerializeField] private bool ShowSlotGraphics;
 
-    private float timerCount = 0f;
-    private float timerProgress;
-
-    private void FixedUpdate()
+    private void Awake()
     {
-        timerCount += Time.fixedDeltaTime;
-        timerProgress = timerCount / (1 / ItemsMovedPerSecond);
-
-        MoveItemsAlongConveyor();
-
-        if (CycleComplete())
+        for (int i = 0; i < SlotCount; i++)
         {
-            ResetTimer();
+            Vector3 _positionOffset = new Vector3(-0.5f + ((1f/SlotCount) * (i + 1f)), 0f, 0f);
+            GameObject slotObj = Instantiate(SlotPrefab, transform.position + _positionOffset, Quaternion.identity);
+            slotObj.transform.parent = transform;
+            slotObj.name = SlotPrefab.name + "_" + i;
+            slotObj.transform.localScale = new Vector3(
+                slotObj.transform.localScale.x /  SlotCount,
+                slotObj.transform.localScale.y,
+                slotObj.transform.localScale.z);
+        }
+
+        SlotQueue = new Queue<ConveyorSlot>(SlotCount);
+        ConveyorSlot[] slots = GetComponentsInChildren<ConveyorSlot>();
+        for (int i = SlotCount - 1; i >= 0; i--)
+        {
+            SlotQueue.Enqueue(slots[i]);
         }
     }
 
-    // TIMING
+    private void FixedUpdate()
+    {
+        MoveSlotsAlongConveyor();
+        DrawSlotSprites();
+    }
 
-    private void ResetTimer() => timerCount -= 1 / ItemsMovedPerSecond;
-    private bool CycleComplete() => timerCount >= 1 / ItemsMovedPerSecond;
+    private void DrawSlotSprites()
+    {
+        if (ShowSlotGraphics)
+        {
+            foreach (ConveyorSlot slot in SlotQueue)
+            {
+                slot.ShowSprite();
+            }
+        }
+        else
+        {
+            foreach (ConveyorSlot slot in SlotQueue)
+            {
+                slot.HideSprite();
+            }
+        }
+    }
+
+    private void MoveSlotsAlongConveyor()
+    {
+        for (int i = 0; i < SlotCount; i++)
+        {
+            ConveyorSlot slot = SlotQueue.Dequeue();
+            slot.transform.localPosition += new Vector3((ItemsMovedPerSecond / SlotQueue.Count) * Time.deltaTime, 0f, 0f);
+            SlotQueue.Enqueue(slot);
+        }
+
+        ConveyorSlot first = SlotQueue.Peek();
+        if (first.transform.localPosition.x >= .5f)
+        {
+            first = SlotQueue.Dequeue();
+
+            if (!first.IsEmpty() && PushingTo)
+            {
+                PushingTo.PlaceItem(first.GetItem());
+                first.Clear();
+            }
+
+            first.transform.localPosition -= new Vector3(1f, 0f, 0f);
+            SlotQueue.Enqueue(first);
+        }
+    }
 
     // ITEM MOVEMENT
 
     public void PlaceItem(Item _item)
     {
-        _item.transform.position = Slots[0].transform.position;
-        Slots[0].SetItemObject(_item, Slots[1].transform.position);
+        // shuffle all but last slot
+        for (int i = 0; i < SlotCount - 1; i++)
+        {
+            ConveyorSlot slotToShuffle = SlotQueue.Dequeue();
+            SlotQueue.Enqueue(slotToShuffle);
+        }
+
+        // add item to last slot
+        ConveyorSlot lastSlot = SlotQueue.Dequeue();
+        lastSlot.SetItemObject(_item);
+
+        RefreshConnections();
+
+        SlotQueue.Enqueue(lastSlot);
     }
 
-    private void MoveItemsAlongConveyor()
+    public void RefreshConnections()
     {
-        for (int currSlot = Slots.Length - 1; currSlot >= 0; currSlot--)
+        PushingTo = null;
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position + Utils.DirToVector(Facing), Vector2.up);
+        if (hit && hit.transform.gameObject.layer == (int) Layers.Conveyer)
         {
-            if (Slots[currSlot].IsEmpty()) { continue; }
-
-            Item _item = Slots[currSlot].GetItemObject().GetComponent<Item>();
-            int oneSlotAhead = (currSlot + 1) % Slots.Length;
-            int twoSlotAhead = (currSlot + 2) % Slots.Length;
-
-            if (_item.IsAtTarget() && Slots[oneSlotAhead].IsEmpty())
-            {
-                Slots[oneSlotAhead].SetItemObject(_item, Slots[twoSlotAhead].transform.position);           
-                Slots[currSlot].Clear();
-            }
-
-            if (Slots[oneSlotAhead].IsNotEmpty())
-            {
-                _item.transform.position = _item.StartPos;
-            }
-
-            if (Slots[oneSlotAhead].IsEmpty())
-            {
-                _item.transform.position = Vector3.Lerp(_item.StartPos, _item.TargetPos, timerProgress);
-            }
+            PushingTo = hit.transform.GetComponent<Conveyor>();
         }
     }
 
@@ -83,30 +133,6 @@ public class Conveyor : MonoBehaviour
         Facing = (CardinalDirection) newDir;
         transform.Rotate(new Vector3(0, 0, -90));
 
-        for (int currSlot = 0; currSlot < Slots.Length; currSlot++)
-        {
-            if (Slots[currSlot].IsEmpty()) { continue; }
-
-            int oneSlotAhead = (currSlot + 1) % Slots.Length;
-            Slots[currSlot].SetItemObject(Slots[currSlot].GetItem(), Slots[oneSlotAhead].transform.position);
-        }
+        RefreshConnections();
     }
-
-    public void RotateAntiClockwise()
-    {
-        int currDir = (int) Facing;
-        int newDir = (currDir - 1) % 4;
-
-        Facing = (CardinalDirection) newDir;
-        transform.Rotate(new Vector3(0, 0, 90));
-
-        for (int currSlot = 0; currSlot < Slots.Length; currSlot++)
-        {
-            if (Slots[currSlot].IsEmpty()) { continue; }
-
-            int oneSlotAhead = (currSlot + 1) % Slots.Length;
-            Slots[currSlot].SetItemObject(Slots[currSlot].GetItem(), Slots[oneSlotAhead].transform.position);
-        }
-    }
-
 }
