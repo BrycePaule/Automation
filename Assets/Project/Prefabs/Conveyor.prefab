@@ -124,7 +124,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SlotCount: 5
   ItemsMovedPerSecond: 3
-  PushingTo: {fileID: 0}
+  NextConveyor: {fileID: 0}
   Facing: 1
   conveyorManager: {fileID: 0}
   slotPrefab: {fileID: 9181417097715480746, guid: a65204ea818758e479541772cddec69c, type: 3}

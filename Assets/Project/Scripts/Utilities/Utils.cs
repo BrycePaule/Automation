@@ -11,10 +11,13 @@ public static class Utils
         {
             case CardinalDirection.North:
                 return new Vector3Int(0, 1, 0);
+
             case CardinalDirection.East:
                 return new Vector3Int(1, 0, 0);
+
             case CardinalDirection.South:
                 return new Vector3Int(0, -1, 0);
+
             case CardinalDirection.West:
                 return new Vector3Int(-1, 0, 0);
 

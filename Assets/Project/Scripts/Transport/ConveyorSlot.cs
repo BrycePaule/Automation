@@ -15,12 +15,15 @@ public class ConveyorSlot : MonoBehaviour
     }
 
     public bool IsEmpty() => itemObj == null;
+    public bool IsNotEmpty() => itemObj != null;
     public Item GetItem() => item;
 
-    public void SetItemObject(Item _item)
+    public void SetItem(Item _item)
     {
-        itemObj = _item.gameObject;
+        if (!_item) { return; }
+
         item = _item;
+        itemObj = _item.gameObject;
 
         itemObj.transform.position = transform.position;
         itemObj.transform.SetParent(transform);

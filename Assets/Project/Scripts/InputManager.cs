@@ -59,11 +59,11 @@ public class InputManager : MonoBehaviour
 
         if (ConveyorManager.IsLayerAtWorldPos(Layers.Tilemap, mousePosWorld))
         {
-            ConveyorManager.CreateConveyorAt(mousePosWorld);
+            ConveyorManager.CreateConveyorAtWorldPos(mousePosWorld);
         }
     }
 
-    private void OnRightClick() => ConveyorManager.DestroyConveyorAt(mousePosWorld);
+    private void OnRightClick() => ConveyorManager.DestroyConveyorAtWorldPos(mousePosWorld);
 
     private void OnQ()
     {
