@@ -15,20 +15,20 @@ public class Conveyor : MonoBehaviour
     public Queue<ConveyorSlot> SlotQueue;
 
     [Header("References")]
-    public Tilemap Tilemap;
-    [SerializeField] private GameObject SlotPrefab;
+    [SerializeField] private ConveyorManager conveyorManager;
+    [SerializeField] private GameObject slotPrefab;
 
     [Header("Debug")]
-    [SerializeField] private bool ShowSlotGraphics;
+    [SerializeField] private bool showSlotGraphics;
 
     private void Awake()
     {
         for (int i = 0; i < SlotCount; i++)
         {
             Vector3 _positionOffset = new Vector3(-0.5f + ((1f/SlotCount) * (i + 1f)), 0f, 0f);
-            GameObject slotObj = Instantiate(SlotPrefab, transform.position + _positionOffset, Quaternion.identity);
+            GameObject slotObj = Instantiate(slotPrefab, transform.position + _positionOffset, Quaternion.identity);
             slotObj.transform.parent = transform;
-            slotObj.name = SlotPrefab.name + "_" + i;
+            slotObj.name = slotPrefab.name + "_" + i;
             slotObj.transform.localScale = new Vector3(
                 slotObj.transform.localScale.x /  SlotCount,
                 slotObj.transform.localScale.y,
@@ -45,13 +45,13 @@ public class Conveyor : MonoBehaviour
 
     private void FixedUpdate()
     {
+        ToggleSlotSprites();
         MoveSlotsAlongConveyor();
-        DrawSlotSprites();
     }
 
-    private void DrawSlotSprites()
+    private void ToggleSlotSprites()
     {
-        if (ShowSlotGraphics)
+        if (showSlotGraphics)
         {
             foreach (ConveyorSlot slot in SlotQueue)
             {
@@ -67,6 +67,8 @@ public class Conveyor : MonoBehaviour
         }
     }
 
+    // ITEM MOVEMENT
+
     private void MoveSlotsAlongConveyor()
     {
         for (int i = 0; i < SlotCount; i++)
@@ -77,6 +79,7 @@ public class Conveyor : MonoBehaviour
         }
 
         ConveyorSlot first = SlotQueue.Peek();
+
         if (first.transform.localPosition.x >= .5f)
         {
             first = SlotQueue.Dequeue();
@@ -92,8 +95,6 @@ public class Conveyor : MonoBehaviour
         }
     }
 
-    // ITEM MOVEMENT
-
     public void PlaceItem(Item _item)
     {
         // shuffle all but last slot
@@ -107,12 +108,12 @@ public class Conveyor : MonoBehaviour
         ConveyorSlot lastSlot = SlotQueue.Dequeue();
         lastSlot.SetItemObject(_item);
 
-        RefreshConnections();
+        RefreshConveyorConnections();
 
         SlotQueue.Enqueue(lastSlot);
     }
 
-    public void RefreshConnections()
+    public void RefreshConveyorConnections()
     {
         PushingTo = null;
 
@@ -133,6 +134,35 @@ public class Conveyor : MonoBehaviour
         Facing = (CardinalDirection) newDir;
         transform.Rotate(new Vector3(0, 0, -90));
 
-        RefreshConnections();
+        RefreshConveyorConnections();
+    }
+
+    // HELPERS
+
+    public void SetReferences(ConveyorManager _convManager)
+    {
+        conveyorManager = _convManager;
+    }
+
+    public bool CanReceiveItem()
+    {
+        bool _receivable = false;
+
+        // shuffle all but last slot
+        for (int i = 0; i < SlotCount - 1; i++)
+        {
+            ConveyorSlot slotToShuffle = SlotQueue.Dequeue();
+            SlotQueue.Enqueue(slotToShuffle);
+        }
+
+        // add item to last slot
+        ConveyorSlot lastSlot = SlotQueue.Dequeue();
+        if (lastSlot.IsEmpty())
+        {
+            _receivable = true;
+        }
+        SlotQueue.Enqueue(lastSlot);
+
+        return _receivable;
     }
 }

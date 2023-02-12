@@ -10,7 +10,6 @@ public class InputManager : MonoBehaviour
     private Vector2 mousePosScreen;
     private Vector3 mousePosWorld;
 
-
     [Header("Inputs")]
     private InputAction leftClick;
     private InputAction rightClick;
@@ -19,7 +18,8 @@ public class InputManager : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private Tilemap _tilemap;
-    [SerializeField] private GameObject conveyerPrefab;
+    [SerializeField] private ConveyorManager ConveyorManager;
+
     [SerializeField] private GameObject itemPrefab;
 
     private void Awake()
@@ -43,6 +43,7 @@ public class InputManager : MonoBehaviour
     private void Update()
     {
         mousePosScreen = mousePosition.ReadValue<Vector2>();
+
         mousePosWorld = Camera.main.ScreenToWorldPoint(mousePosScreen);
         mousePosWorld.z = 0f; 
     }
@@ -51,98 +52,32 @@ public class InputManager : MonoBehaviour
 
     private void OnLeftClick()
     {
-        if (RayToConveyor(mousePosScreen))
+        if (ConveyorManager.IsLayerAtWorldPos(Layers.Conveyer, mousePosWorld))
         {
-            GetConveyor().RotateClockwise();
+            ConveyorManager.GetConveyorAtWorldPos(mousePosWorld)?.RotateClockwise();
         }
 
-        if (RayToTilemap(mousePosScreen))
+        if (ConveyorManager.IsLayerAtWorldPos(Layers.Tilemap, mousePosWorld))
         {
-            Vector3 offsetCorrection = new Vector3(.5f, .5f, 0);
-            Vector3Int cell = _tilemap.WorldToCell(mousePosWorld);
-
-            Conveyor conv = Instantiate(conveyerPrefab, _tilemap.CellToWorld(cell) + offsetCorrection, Quaternion.identity).GetComponent<Conveyor>();
-            conv.Tilemap = _tilemap;
-            RefreshConveyorsInBlock(cell);
+            ConveyorManager.CreateConveyorAt(mousePosWorld);
         }
     }
 
-    private void RefreshConveyorsInBlock(Vector3Int cell)
-    {
-        for (int i = -1; i <= 1; i++)
-        {
-            for (int j = -1; j <= 1; j++)
-            {
-                Vector3 offset = new Vector3(i, j, 0);
-                Conveyor adjConv = GetConveyorAtWorldPos(cell + offset);
-
-                if (adjConv)
-                    adjConv.RefreshConnections();
-            }
-        }
-    }
-
-    private void OnRightClick()
-    {
-        Conveyor conv = GetConveyor();
-        
-        if (conv)
-            Destroy(conv.gameObject);
-    }
+    private void OnRightClick() => ConveyorManager.DestroyConveyorAt(mousePosWorld);
 
     private void OnQ()
     {
-        Conveyor conv = GetConveyor();
-        if (conv == null) { return; }
-        if (!conv.SlotQueue.Peek().IsEmpty()) { return; }
-
-        GameObject itemObj = Instantiate(itemPrefab, Vector3.zero, Quaternion.identity);
-        conv.PlaceItem(itemObj.GetComponent<Item>());
-
-        Color randomColor = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f));
-        itemObj.GetComponent<SpriteRenderer>().color = randomColor;
-    }
-
-    // HELPERS
-
-    private Conveyor GetConveyorAtWorldPos(Vector3 _pos)
-    {
-        RaycastHit2D hit = Physics2D.Raycast(_pos, Vector2.up);
-
-        if (hit && hit.transform.gameObject.layer == (int) Layers.Conveyer)
-        {
-            return hit.transform.GetComponent<Conveyor>();
-        }
+        Conveyor _conv = ConveyorManager.GetConveyorAtWorldPos(mousePosWorld);
+        if (!_conv) { return; }
         
-        return null;
-    }
+        // TODO: delegate this somewhere else later
+        Color randomColor = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f));
+        Item item = Instantiate(itemPrefab, Vector3.zero, Quaternion.identity).GetComponent<Item>();
+        item.gameObject.GetComponent<SpriteRenderer>().color = randomColor;
 
-    private Conveyor GetConveyor()
-    {
-        Ray ray = Camera.main.ScreenPointToRay(mousePosScreen);
-        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, 100f);
-
-        if (hit && hit.transform.gameObject.layer == (int) Layers.Conveyer)
+        if (_conv.CanReceiveItem())
         {
-            return hit.transform.GetComponent<Conveyor>();
+            _conv.PlaceItem(item);
         }
-
-        return null;
-    }
-
-    private bool RayToTilemap(Vector2 pos)
-    {
-        Ray ray = Camera.main.ScreenPointToRay(pos);
-        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, 100f);
-
-        return (hit && hit.transform.gameObject.layer == (int) Layers.Tilemap);
-    }
-
-    private bool RayToConveyor(Vector2 pos)
-    {
-        Ray ray = Camera.main.ScreenPointToRay(pos);
-        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, 100f);
-
-        return (hit && hit.transform.gameObject.layer == (int) Layers.Conveyer);
     }
 }

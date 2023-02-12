@@ -14,19 +14,8 @@ public class ConveyorSlot : MonoBehaviour
         _sr = GetComponent<SpriteRenderer>();
     }
 
-    public bool IsEmpty()
-    {
-        return itemObj == null;
-    }
-
-    public void Clear()
-    {
-        itemObj = null;
-        item = null;
-    }
-
+    public bool IsEmpty() => itemObj == null;
     public Item GetItem() => item;
-    public GameObject GetItemObject() => itemObj;
 
     public void SetItemObject(Item _item)
     {
@@ -36,6 +25,14 @@ public class ConveyorSlot : MonoBehaviour
         itemObj.transform.position = transform.position;
         itemObj.transform.SetParent(transform);
     }
+
+    public void Clear()
+    {
+        itemObj = null;
+        item = null;
+    }
+
+    // DRAWING
 
     public void ShowSprite() => _sr.enabled = true;
     public void HideSprite() => _sr.enabled = false;
