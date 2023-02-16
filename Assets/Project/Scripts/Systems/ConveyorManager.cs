@@ -18,7 +18,7 @@ public class ConveyorManager : MonoBehaviour
     {
         Vector3Int _cellPos = _tilemap.WorldToCell(_worldPos);
 
-        GameObject _convObj = Instantiate(conveyerPrefab, WorldPosCentredOnTile(_worldPos), Quaternion.identity);
+        GameObject _convObj = Instantiate(conveyerPrefab, TileAnchorFromWorldPos(_worldPos), Quaternion.identity);
         Conveyor _conv = _convObj.GetComponent<Conveyor>();
         _conv.name = "Conveyor: " + _cellPos;
         _conv.SetReferences(this, _cellPos);
@@ -65,7 +65,7 @@ public class ConveyorManager : MonoBehaviour
         return (_hit && _hit.transform.gameObject.layer == (int) _layer);
     }
 
-    private Vector3 WorldPosCentredOnTile(Vector3 _worldPos)
+    public Vector3 TileAnchorFromWorldPos(Vector3 _worldPos)
     {
         Vector3Int _cellPos = _tilemap.WorldToCell(_worldPos);
         Vector3 _baseTilemapOffset = new Vector3(.5f, .5f, 0);

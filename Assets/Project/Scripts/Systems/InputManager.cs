@@ -18,7 +18,8 @@ public class InputManager : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private Tilemap _tilemap;
-    [SerializeField] private ConveyorManager ConveyorManager;
+    [SerializeField] private ConveyorManager conveyorManager;
+    [SerializeField] private TileCursor tileCursor;
 
     [SerializeField] private GameObject itemPrefab;
 
@@ -45,29 +46,44 @@ public class InputManager : MonoBehaviour
         mousePosScreen = mousePosition.ReadValue<Vector2>();
 
         mousePosWorld = Camera.main.ScreenToWorldPoint(mousePosScreen);
-        mousePosWorld.z = 0f; 
+        mousePosWorld.z = 0f;
+
+        HandleTileCursor();
+    }
+
+    private void HandleTileCursor()
+    {
+        if (conveyorManager.IsLayerAtWorldPos(Layers.Tilemap, mousePosWorld))
+        {
+            tileCursor.Visible = true;
+            tileCursor.UpdatePosition(conveyorManager.TileAnchorFromWorldPos(mousePosWorld));
+        }
+        else
+        {
+            tileCursor.Visible = false;
+        }
     }
 
     // BUTTONS
 
     private void OnLeftClick()
     {
-        if (ConveyorManager.IsLayerAtWorldPos(Layers.Conveyer, mousePosWorld))
+        if (conveyorManager.IsLayerAtWorldPos(Layers.Conveyer, mousePosWorld))
         {
-            ConveyorManager.GetConveyorAtWorldPos(mousePosWorld)?.RotateClockwise();
+            conveyorManager.GetConveyorAtWorldPos(mousePosWorld)?.RotateClockwise();
         }
 
-        if (ConveyorManager.IsLayerAtWorldPos(Layers.Tilemap, mousePosWorld))
+        if (conveyorManager.IsLayerAtWorldPos(Layers.Tilemap, mousePosWorld))
         {
-            ConveyorManager.CreateConveyorAtWorldPos(mousePosWorld);
+            conveyorManager.CreateConveyorAtWorldPos(mousePosWorld);
         }
     }
 
-    private void OnRightClick() => ConveyorManager.DestroyConveyorAtWorldPos(mousePosWorld);
+    private void OnRightClick() => conveyorManager.DestroyConveyorAtWorldPos(mousePosWorld);
 
     private void OnQ()
     {
-        Conveyor _conv = ConveyorManager.GetConveyorAtWorldPos(mousePosWorld);
+        Conveyor _conv = conveyorManager.GetConveyorAtWorldPos(mousePosWorld);
         if (!_conv) { return; }
         
         // TODO: delegate this somewhere else later

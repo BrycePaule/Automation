@@ -16,4 +16,6 @@ public enum Layers
 
     Conveyer = 20,
 
+    CellHighlight = 28,
+
 }
