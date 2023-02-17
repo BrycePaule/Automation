@@ -5,14 +5,23 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEditor;
 
+[RequireComponent(typeof(Rotatable))]
+[RequireComponent(typeof(ConveyorConnectable))]
+[RequireComponent(typeof(ConveyorReceivable))]
 public class Conveyor : MonoBehaviour
 {
+    /*
+        For a 5 block Conveyor:
+
+        5 4 3 2 1
+
+        Travelling in >>>> direction
+    */
+
     public int SlotCount;
     public float ItemsMovedPerSecond;
 
-    public Conveyor NextConveyor;
-    public CardinalDirection Facing = CardinalDirection.East;
-    public Queue<ConveyorSlot> SlotQueue;
+    private Queue<ConveyorSlot> Slots;
 
     private Vector3Int cellPos;
 
@@ -20,10 +29,17 @@ public class Conveyor : MonoBehaviour
     [SerializeField] private ConveyorManager conveyorManager;
     [SerializeField] private GameObject slotPrefab;
 
+    private ConveyorConnectable conveyorConnectable;
+
     [Header("Debug")]
     [SerializeField] private bool showSlotGraphics;
 
     private void Awake()
+    {
+        conveyorConnectable = GetComponent<ConveyorConnectable>();
+    }
+
+    private void Start()
     {
         CreateAndPlaceSlots();
         EstablishSlotQueue();
@@ -39,22 +55,26 @@ public class Conveyor : MonoBehaviour
 
     private void MoveSlotsAlongConveyor()
     {
+        // something problematic where if it fails to move item to next belt
+        // then it just permanently resets to the back and the item is stuck on the belt
+
+
         // move all slots along
         for (int i = 0; i < SlotCount; i++)
         {
-            ConveyorSlot slot = SlotQueue.Dequeue();
-            slot.transform.localPosition += new Vector3((ItemsMovedPerSecond / SlotQueue.Count) * Time.deltaTime, 0f, 0f);
-            SlotQueue.Enqueue(slot);
+            ConveyorSlot slot = Slots.Dequeue();
+            slot.transform.localPosition += new Vector3((ItemsMovedPerSecond / Slots.Count) * Time.deltaTime, 0f, 0f);
+            Slots.Enqueue(slot);
         }
 
-        ConveyorSlot _frontSlot = SlotQueue.Peek();
+        ConveyorSlot _frontSlot = Slots.Peek();
         if (_frontSlot.transform.localPosition.x <= .5f) { return; }
 
         if (_frontSlot.IsNotEmpty())
         {
-            if (NextConveyor) // item at front moving to next belt
+            if (conveyorConnectable.NextConveyor != null) // item at front moving to next belt
             {
-                NextConveyor.PlaceItem(_frontSlot.GetItem());
+                conveyorConnectable.NextConveyor.PlaceItem(_frontSlot.GetItem());
                 _frontSlot.Clear();
             }
             else // item stuck at front with no next belt
@@ -64,8 +84,8 @@ public class Conveyor : MonoBehaviour
         }
 
         _frontSlot.transform.localPosition -= new Vector3(1f, 0f, 0f);
-        SlotQueue.Dequeue();
-        SlotQueue.Enqueue(_frontSlot);
+        Slots.Dequeue();
+        Slots.Enqueue(_frontSlot);
     }
 
     public void PlaceItem(Item _item)
@@ -73,29 +93,18 @@ public class Conveyor : MonoBehaviour
         // shuffle all but last slot
         for (int i = 0; i < SlotCount - 1; i++)
         {
-            ConveyorSlot slotToShuffle = SlotQueue.Dequeue();
-            SlotQueue.Enqueue(slotToShuffle);
+            ConveyorSlot slotToShuffle = Slots.Dequeue();
+            Slots.Enqueue(slotToShuffle);
         }
 
         // add item to last slot
-        ConveyorSlot lastSlot = SlotQueue.Dequeue();
+        ConveyorSlot lastSlot = Slots.Dequeue();
         lastSlot.SetItem(_item);
 
-        RefreshConveyorConnections();
-
-        SlotQueue.Enqueue(lastSlot);
+        GetComponent<ConveyorConnectable>().RefreshPushConnection();
+        Slots.Enqueue(lastSlot);
     }
 
-    public void RefreshConveyorConnections()
-    {
-        NextConveyor = null;
-
-        RaycastHit2D hit = Physics2D.Raycast(transform.position + Utils.DirToVector(Facing), Vector2.up);
-        if (hit && hit.transform.gameObject.layer == (int) Layers.Conveyer)
-        {
-            NextConveyor = hit.transform.GetComponent<Conveyor>();
-        }
-    }
 
     private void ShuffleAllItemsBackOne()
     {
@@ -105,38 +114,26 @@ public class Conveyor : MonoBehaviour
         Item itemNext;
 
 
-        slotCurr = SlotQueue.Dequeue();
+        slotCurr = Slots.Dequeue();
         itemCurr = slotCurr.GetItem();
         slotCurr.Clear();
 
         for (int i = SlotCount - 2; i >= 0; i--)
         {
-            slotNext = SlotQueue.Dequeue();
+            slotNext = Slots.Dequeue();
             itemNext = slotNext.GetItem();
             slotNext.Clear();
 
             slotNext.SetItem(itemCurr);
-            SlotQueue.Enqueue(slotCurr);
+            Slots.Enqueue(slotCurr);
 
             itemCurr = itemNext;
             slotCurr = slotNext;
         }
 
-        SlotQueue.Enqueue(slotCurr);
+        Slots.Enqueue(slotCurr);
     }
 
-    // ROTATION
-
-    public void RotateClockwise()
-    {
-        int currDir = (int) Facing;
-        int newDir = (currDir + 1) % 4;
-
-        Facing = (CardinalDirection) newDir;
-        transform.Rotate(new Vector3(0, 0, -90));
-
-        conveyorManager.RefreshConveyorConnectionsAroundWorldPos(cellPos);
-    }
 
     // HELPERS
 
@@ -153,17 +150,17 @@ public class Conveyor : MonoBehaviour
         // shuffle all but last slot
         for (int i = 0; i < SlotCount - 1; i++)
         {
-            ConveyorSlot slotToShuffle = SlotQueue.Dequeue();
-            SlotQueue.Enqueue(slotToShuffle);
+            ConveyorSlot slotToShuffle = Slots.Dequeue();
+            Slots.Enqueue(slotToShuffle);
         }
 
         // add item to last slot
-        ConveyorSlot lastSlot = SlotQueue.Dequeue();
+        ConveyorSlot lastSlot = Slots.Dequeue();
         if (lastSlot.IsEmpty())
         {
             _receivable = true;
         }
-        SlotQueue.Enqueue(lastSlot);
+        Slots.Enqueue(lastSlot);
 
         return _receivable;
     }
@@ -185,12 +182,12 @@ public class Conveyor : MonoBehaviour
 
     private void EstablishSlotQueue()
     {
-        SlotQueue = new Queue<ConveyorSlot>(SlotCount);
+        Slots = new Queue<ConveyorSlot>(SlotCount);
 
         ConveyorSlot[] _slots = GetComponentsInChildren<ConveyorSlot>();
         for (int i = SlotCount - 1; i >= 0; i--)
         {
-            SlotQueue.Enqueue(_slots[i])   ;
+            Slots.Enqueue(_slots[i])   ;
         }
     }
 
@@ -198,14 +195,14 @@ public class Conveyor : MonoBehaviour
     {
         if (showSlotGraphics)
         {
-            foreach (ConveyorSlot slot in SlotQueue)
+            foreach (ConveyorSlot slot in Slots)
             {
                 slot.ShowSprite();
             }
         }
         else
         {
-            foreach (ConveyorSlot slot in SlotQueue)
+            foreach (ConveyorSlot slot in Slots)
             {
                 slot.HideSprite();
             }

@@ -36,7 +36,7 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\Editor\GameEventEditor_Int.cs" />
+     <Compile Include="Assets\Editor\EditorWindows\GameEventEditor_Int.cs" />
     <Reference Include="UnityEngine">
         <HintPath>C:\Unity\2020.3.44f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>

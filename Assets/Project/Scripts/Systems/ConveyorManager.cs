@@ -7,7 +7,7 @@ public class ConveyorManager : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private Tilemap _tilemap;
-
+    [SerializeField] private TilemapManager tilemapManager;
     [SerializeField] private GameObject conveyerPrefab;
     [SerializeField] private GameObject markerPrefab;
 
@@ -18,7 +18,7 @@ public class ConveyorManager : MonoBehaviour
     {
         Vector3Int _cellPos = _tilemap.WorldToCell(_worldPos);
 
-        GameObject _convObj = Instantiate(conveyerPrefab, TileAnchorFromWorldPos(_worldPos), Quaternion.identity);
+        GameObject _convObj = Instantiate(conveyerPrefab, tilemapManager.TileAnchorFromWorldPos(_worldPos), Quaternion.identity);
         Conveyor _conv = _convObj.GetComponent<Conveyor>();
         _conv.name = "Conveyor: " + _cellPos;
         _conv.SetReferences(this, _cellPos);
@@ -57,21 +57,6 @@ public class ConveyorManager : MonoBehaviour
         return GetConveyorAtWorldPos(_worldPos);
     }
 
-    // HELPERS
-    
-    public bool IsLayerAtWorldPos(Layers _layer, Vector3 _worldPos)
-    {
-        RaycastHit2D _hit = Physics2D.Raycast(_worldPos, Vector2.up);
-        return (_hit && _hit.transform.gameObject.layer == (int) _layer);
-    }
-
-    public Vector3 TileAnchorFromWorldPos(Vector3 _worldPos)
-    {
-        Vector3Int _cellPos = _tilemap.WorldToCell(_worldPos);
-        Vector3 _baseTilemapOffset = new Vector3(.5f, .5f, 0);
-
-        return _tilemap.CellToWorld(_cellPos) + _baseTilemapOffset;
-    }
 
     // CONNECTIONS
 
@@ -86,7 +71,7 @@ public class ConveyorManager : MonoBehaviour
 
                 if (_conv)
                 {
-                    _conv.RefreshConveyorConnections();
+                    _conv.GetComponent<ConveyorConnectable>().RefreshPushConnection();
                 }
             }
         }

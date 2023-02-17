@@ -19,6 +19,7 @@ public class InputManager : MonoBehaviour
     [Header("References")]
     [SerializeField] private Tilemap _tilemap;
     [SerializeField] private ConveyorManager conveyorManager;
+    [SerializeField] private TilemapManager tilemapManager;
     [SerializeField] private TileCursor tileCursor;
 
     [SerializeField] private GameObject itemPrefab;
@@ -53,10 +54,10 @@ public class InputManager : MonoBehaviour
 
     private void HandleTileCursor()
     {
-        if (conveyorManager.IsLayerAtWorldPos(Layers.Tilemap, mousePosWorld))
+        if (tilemapManager.IsLayerAtWorldPos(Layers.Tilemap, mousePosWorld))
         {
             tileCursor.Visible = true;
-            tileCursor.UpdatePosition(conveyorManager.TileAnchorFromWorldPos(mousePosWorld));
+            tileCursor.UpdatePosition(tilemapManager.TileAnchorFromWorldPos(mousePosWorld));
         }
         else
         {
@@ -68,12 +69,14 @@ public class InputManager : MonoBehaviour
 
     private void OnLeftClick()
     {
-        if (conveyorManager.IsLayerAtWorldPos(Layers.Conveyer, mousePosWorld))
+        RaycastHit2D _hit = Physics2D.Raycast(mousePosWorld, Vector2.up);
+
+        if (_hit)
         {
-            conveyorManager.GetConveyorAtWorldPos(mousePosWorld)?.RotateClockwise();
+            _hit.transform.gameObject.GetComponent<Rotatable>()?.RotateClockwise();
         }
 
-        if (conveyorManager.IsLayerAtWorldPos(Layers.Tilemap, mousePosWorld))
+        if (tilemapManager.IsLayerAtWorldPos(Layers.Tilemap, mousePosWorld))
         {
             conveyorManager.CreateConveyorAtWorldPos(mousePosWorld);
         }
@@ -91,9 +94,6 @@ public class InputManager : MonoBehaviour
         Item item = Instantiate(itemPrefab, Vector3.zero, Quaternion.identity).GetComponent<Item>();
         item.gameObject.GetComponent<SpriteRenderer>().color = randomColor;
 
-        if (_conv.CanReceiveItem())
-        {
-            _conv.PlaceItem(item);
-        }
+        _conv.PlaceItem(item);
     }
 }
