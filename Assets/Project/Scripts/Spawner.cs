@@ -2,15 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spawner : MonoBehaviour, IConveyorConnectable, IConveyorReceivable
+[RequireComponent(typeof(ConveyorConnectable))]
+[RequireComponent(typeof(Rotatable))]
+public class Spawner : MonoBehaviour
 {
 
     public float SpawnCadence;
     public GameObject ItemToSpawn;
 
     private float timer;
-    public Conveyor NextConveyor;
+    private ConveyorConnectable convConnectable;
 
+    private void Awake()
+    {
+        convConnectable = GetComponent<ConveyorConnectable>();
+    }
 
     private void FixedUpdate()
     {
@@ -19,30 +25,15 @@ public class Spawner : MonoBehaviour, IConveyorConnectable, IConveyorReceivable
         if (timer >= SpawnCadence)
         {
             timer -= SpawnCadence;
-
+            Spawn();
         }
     }
 
-    private void SpawnItem()
+    private void Spawn()
     {
-        if (NextConveyor == null) { return; }
+        if (convConnectable.NextConveyor == null) { return; }
+        if (!convConnectable.NextConveyor.CanReceiveItem()) { return; }
         
-        Item item = ItemToSpawn.GetComponent<Item>();
-    }
-
-
-    public void RefreshPushConnection()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public bool CanReceiveItem()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void PlaceItem(Item _item)
-    {
-        throw new System.NotImplementedException();
+        convConnectable.NextConveyor.PlaceItem(ItemToSpawn.GetComponent<Item>());
     }
 }

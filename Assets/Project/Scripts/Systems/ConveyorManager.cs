@@ -21,11 +21,21 @@ public class ConveyorManager : MonoBehaviour
         GameObject _convObj = Instantiate(conveyerPrefab, tilemapManager.TileAnchorFromWorldPos(_worldPos), Quaternion.identity);
         Conveyor _conv = _convObj.GetComponent<Conveyor>();
         _conv.name = "Conveyor: " + _cellPos;
-        _conv.SetReferences(this, _cellPos);
 
-        RefreshConveyorConnectionsAroundWorldPos(_worldPos);
+        RefreshConnectionsAroundWorldPos(_worldPos);
 
         return _conv;
+    }
+
+    public void CreateConnectableAtWorldPos(GameObject _prefab, Vector3 _worldPos)
+    {
+        Vector3Int _cellPos = _tilemap.WorldToCell(_worldPos);
+
+        GameObject _connectable = Instantiate(_prefab, tilemapManager.TileAnchorFromWorldPos(_worldPos), Quaternion.identity);
+        _connectable.name = _prefab.name + " " + _cellPos;
+
+        RefreshConnectionsAroundWorldPos(_worldPos);
+
     }
 
     public void DestroyConveyorAtWorldPos(Vector3 _worldPos)
@@ -35,7 +45,7 @@ public class ConveyorManager : MonoBehaviour
         if (_conv)
         {
             Destroy(_conv.gameObject);
-            RefreshConveyorConnectionsAroundWorldPos(_worldPos);
+            RefreshConnectionsAroundWorldPos(_worldPos);
         }
     }
 
@@ -57,17 +67,30 @@ public class ConveyorManager : MonoBehaviour
         return GetConveyorAtWorldPos(_worldPos);
     }
 
+    public ConveyorConnectable GetConnectableAtWorldPos(Vector3 _worldPos)
+    {
+        ConveyorConnectable _connectable;
+
+        RaycastHit2D _hit = Physics2D.Raycast(_worldPos, Vector2.up);
+        if (_hit)
+        {
+            _hit.transform.TryGetComponent<ConveyorConnectable>(out _connectable);
+        }
+        
+        return null;
+    }
+
 
     // CONNECTIONS
 
-    public void RefreshConveyorConnectionsAroundWorldPos(Vector3 _worldPos)
+    public void RefreshConnectionsAroundWorldPos(Vector3 _worldPos)
     {
         for (int i = -1; i <= 1; i++)
         {
             for (int j = -1; j <= 1; j++)
             {
                 Vector3 _offset = new Vector3(i, j, 0);
-                Conveyor _conv = GetConveyorAtWorldPos(_worldPos + _offset);
+                ConveyorConnectable _conv = GetConnectableAtWorldPos(_worldPos + _offset);
 
                 if (_conv)
                 {

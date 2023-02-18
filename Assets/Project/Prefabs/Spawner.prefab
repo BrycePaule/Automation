@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 6108006747988503943}
   - component: {fileID: 3735473126708155306}
   - component: {fileID: 4146213135551611994}
+  - component: {fileID: 2794842332992342708}
+  - component: {fileID: 8876462888289927295}
   m_Layer: 19
   m_Name: Spawner
   m_TagString: Untagged
@@ -122,4 +124,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81e737bfeb8320a41ad670a27e0ef958, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SpawnCadence: 1
+  ItemToSpawn: {fileID: 1412769314480690462, guid: 04aa86c169b21624d88e8148edff3091, type: 3}
+  NextConveyor: {fileID: 0}
+--- !u!114 &2794842332992342708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4146213135551611995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eccfd6c314020c2498cef52151ac9d5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NextConveyor: {fileID: 0}
   Facing: 1
+--- !u!114 &8876462888289927295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4146213135551611995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7584ac9cb1e4a7540809412910140aab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

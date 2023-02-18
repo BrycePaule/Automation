@@ -62,6 +62,15 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""W"",
+                    ""type"": ""Button"",
+                    ""id"": ""e6d1dea8-17d5-4be5-a2c7-2a08793915ce"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -108,6 +117,17 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""action"": ""Q"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fe1a30d7-664d-42cb-9724-43d35566bad0"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""W"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -120,6 +140,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_Player_LeftClick = m_Player.FindAction("LeftClick", throwIfNotFound: true);
         m_Player_RightClick = m_Player.FindAction("RightClick", throwIfNotFound: true);
         m_Player_Q = m_Player.FindAction("Q", throwIfNotFound: true);
+        m_Player_W = m_Player.FindAction("W", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -183,6 +204,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_LeftClick;
     private readonly InputAction m_Player_RightClick;
     private readonly InputAction m_Player_Q;
+    private readonly InputAction m_Player_W;
     public struct PlayerActions
     {
         private @PlayerInput m_Wrapper;
@@ -191,6 +213,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         public InputAction @LeftClick => m_Wrapper.m_Player_LeftClick;
         public InputAction @RightClick => m_Wrapper.m_Player_RightClick;
         public InputAction @Q => m_Wrapper.m_Player_Q;
+        public InputAction @W => m_Wrapper.m_Player_W;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -212,6 +235,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Q.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnQ;
                 @Q.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnQ;
                 @Q.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnQ;
+                @W.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnW;
+                @W.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnW;
+                @W.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnW;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -228,6 +254,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Q.started += instance.OnQ;
                 @Q.performed += instance.OnQ;
                 @Q.canceled += instance.OnQ;
+                @W.started += instance.OnW;
+                @W.performed += instance.OnW;
+                @W.canceled += instance.OnW;
             }
         }
     }
@@ -238,5 +267,6 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         void OnLeftClick(InputAction.CallbackContext context);
         void OnRightClick(InputAction.CallbackContext context);
         void OnQ(InputAction.CallbackContext context);
+        void OnW(InputAction.CallbackContext context);
     }
 }

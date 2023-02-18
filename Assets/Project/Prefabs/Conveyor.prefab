@@ -127,9 +127,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SlotCount: 5
   ItemsMovedPerSecond: 3
-  conveyorManager: {fileID: 0}
+  convManager: {fileID: 0}
   slotPrefab: {fileID: 9181417097715480746, guid: a65204ea818758e479541772cddec69c, type: 3}
-  showSlotGraphics: 1
+  showSlotGraphics: 0
 --- !u!114 &6508085055607174282
 MonoBehaviour:
   m_ObjectHideFlags: 0

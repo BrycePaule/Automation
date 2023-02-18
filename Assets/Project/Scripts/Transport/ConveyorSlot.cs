@@ -29,7 +29,7 @@ public class ConveyorSlot : MonoBehaviour
         itemObj.transform.SetParent(transform);
     }
 
-    public void Clear()
+    public void ClearItem()
     {
         itemObj = null;
         item = null;

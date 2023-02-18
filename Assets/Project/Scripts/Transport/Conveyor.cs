@@ -13,7 +13,8 @@ public class Conveyor : MonoBehaviour
     /*
         For a 5 block Conveyor:
 
-        5 4 3 2 1
+        x o o x x
+        4 3 2 1 0
 
         Travelling in >>>> direction
     */
@@ -21,22 +22,22 @@ public class Conveyor : MonoBehaviour
     public int SlotCount;
     public float ItemsMovedPerSecond;
 
+    private Vector3Int cellPos;
     private Queue<ConveyorSlot> Slots;
 
-    private Vector3Int cellPos;
-
     [Header("References")]
-    [SerializeField] private ConveyorManager conveyorManager;
+    [SerializeField] private ConveyorManager convManager;
     [SerializeField] private GameObject slotPrefab;
 
-    private ConveyorConnectable conveyorConnectable;
+    private ConveyorConnectable convConnectable;
+    int stackedItems = 0;
 
     [Header("Debug")]
     [SerializeField] private bool showSlotGraphics;
 
     private void Awake()
     {
-        conveyorConnectable = GetComponent<ConveyorConnectable>();
+        convConnectable = GetComponent<ConveyorConnectable>();
     }
 
     private void Start()
@@ -55,37 +56,84 @@ public class Conveyor : MonoBehaviour
 
     private void MoveSlotsAlongConveyor()
     {
-        // something problematic where if it fails to move item to next belt
-        // then it just permanently resets to the back and the item is stuck on the belt
+        Vector3 _moveOffset = new Vector3((ItemsMovedPerSecond / Slots.Count) * Time.deltaTime, 0f, 0f);
+        Vector3 _resetPos = new Vector3(-0.5f, 0f, 0f);
+        float _xResetThreshold = 1f;
 
-
-        // move all slots along
-        for (int i = 0; i < SlotCount; i++)
+        // CALCULATE STACKED ITEMS
+        stackedItems = 0;
+        if (!CanOffloadItem())
         {
-            ConveyorSlot slot = Slots.Dequeue();
-            slot.transform.localPosition += new Vector3((ItemsMovedPerSecond / Slots.Count) * Time.deltaTime, 0f, 0f);
-            Slots.Enqueue(slot);
+            stackedItems = CountItemsStackedAtFront();
         }
 
-        ConveyorSlot _frontSlot = Slots.Peek();
-        if (_frontSlot.transform.localPosition.x <= .5f) { return; }
+        _xResetThreshold = 0.5f - ((1f / SlotCount) * stackedItems);
 
-        if (_frontSlot.IsNotEmpty())
+        List<ConveyorSlot> _slotCache = new List<ConveyorSlot>();
+        ConveyorSlot _resetSlot = null;
+
+        // UPDATE SLOTS AND MOVE ITEMS
+        for (int i = 0; i <= SlotCount - 1; i++)
         {
-            if (conveyorConnectable.NextConveyor != null) // item at front moving to next belt
+            ConveyorSlot _slot = Slots.Dequeue();
+
+            if (i < stackedItems)
             {
-                conveyorConnectable.NextConveyor.PlaceItem(_frontSlot.GetItem());
-                _frontSlot.Clear();
+                _slotCache.Add(_slot);
+                continue;
             }
-            else // item stuck at front with no next belt
+
+            if (_slot.transform.localPosition.x >= _xResetThreshold)
             {
-                ShuffleAllItemsBackOne();
+                if (convConnectable.NextConveyor != null)
+                {
+                    convConnectable.NextConveyor.PlaceItem(_slot.GetItem());
+                    _slot.ClearItem();
+                }
+
+                _slot.transform.localPosition = _resetPos;
+                _resetSlot = _slot;
+            }
+            else
+            {
+                _slot.transform.localPosition += _moveOffset;
+                _slotCache.Add(_slot);
             }
         }
 
-        _frontSlot.transform.localPosition -= new Vector3(1f, 0f, 0f);
-        Slots.Dequeue();
-        Slots.Enqueue(_frontSlot);
+        // ENQUEUE SLOTS IS NEW ORDER
+        foreach (ConveyorSlot _slot in _slotCache)
+        {
+            if (_slot != null)
+            {
+                Slots.Enqueue(_slot);
+            }
+        }
+
+        if (_resetSlot != null)
+        {
+            Slots.Enqueue(_resetSlot);
+        }
+
+    }
+
+    private int CountItemsStackedAtFront()
+    {
+        int _stackedItems = 0;
+
+        for (int i = 0; i <= SlotCount - 1; i++)
+        {
+            ConveyorSlot _slot = Slots.Dequeue();
+
+            if (_slot.IsNotEmpty() && _stackedItems == i)
+            {
+                _stackedItems += 1;
+            }
+
+            Slots.Enqueue(_slot);
+        }
+
+        return _stackedItems;
     }
 
     public void PlaceItem(Item _item)
@@ -93,8 +141,7 @@ public class Conveyor : MonoBehaviour
         // shuffle all but last slot
         for (int i = 0; i < SlotCount - 1; i++)
         {
-            ConveyorSlot slotToShuffle = Slots.Dequeue();
-            Slots.Enqueue(slotToShuffle);
+            Slots.Enqueue(Slots.Dequeue());
         }
 
         // add item to last slot
@@ -105,62 +152,25 @@ public class Conveyor : MonoBehaviour
         Slots.Enqueue(lastSlot);
     }
 
-
-    private void ShuffleAllItemsBackOne()
-    {
-        ConveyorSlot slotCurr;
-        ConveyorSlot slotNext;
-        Item itemCurr;
-        Item itemNext;
-
-
-        slotCurr = Slots.Dequeue();
-        itemCurr = slotCurr.GetItem();
-        slotCurr.Clear();
-
-        for (int i = SlotCount - 2; i >= 0; i--)
-        {
-            slotNext = Slots.Dequeue();
-            itemNext = slotNext.GetItem();
-            slotNext.Clear();
-
-            slotNext.SetItem(itemCurr);
-            Slots.Enqueue(slotCurr);
-
-            itemCurr = itemNext;
-            slotCurr = slotNext;
-        }
-
-        Slots.Enqueue(slotCurr);
-    }
-
-
     // HELPERS
-
-    public void SetReferences(ConveyorManager _convManager, Vector3Int _cellPos)
-    {
-        conveyorManager = _convManager;
-        cellPos = _cellPos;
-    }
 
     public bool CanReceiveItem()
     {
         bool _receivable = false;
 
-        // shuffle all but last slot
+        // shuffle all but back slot
         for (int i = 0; i < SlotCount - 1; i++)
         {
-            ConveyorSlot slotToShuffle = Slots.Dequeue();
-            Slots.Enqueue(slotToShuffle);
+            Slots.Enqueue(Slots.Dequeue());
         }
 
-        // add item to last slot
-        ConveyorSlot lastSlot = Slots.Dequeue();
-        if (lastSlot.IsEmpty())
+        // add item to back slot
+        ConveyorSlot _backSlot = Slots.Dequeue();
+        if (_backSlot.IsEmpty())
         {
             _receivable = true;
         }
-        Slots.Enqueue(lastSlot);
+        Slots.Enqueue(_backSlot);
 
         return _receivable;
     }
@@ -207,6 +217,15 @@ public class Conveyor : MonoBehaviour
                 slot.HideSprite();
             }
         }
+    }
+
+    private bool CanOffloadItem()
+    {
+        Conveyor _nextConv = convConnectable.NextConveyor;
+        if (_nextConv == null) { return false; }
+        if (!_nextConv.CanReceiveItem()) { return false; }
+
+        return true;
     }
 
 }

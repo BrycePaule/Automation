@@ -15,6 +15,7 @@ public class InputManager : MonoBehaviour
     private InputAction rightClick;
     private InputAction mousePosition;
     private InputAction key_Q;
+    private InputAction key_W;
 
     [Header("References")]
     [SerializeField] private Tilemap _tilemap;
@@ -22,6 +23,7 @@ public class InputManager : MonoBehaviour
     [SerializeField] private TilemapManager tilemapManager;
     [SerializeField] private TileCursor tileCursor;
 
+    [SerializeField] private GameObject spawnerPrefab;
     [SerializeField] private GameObject itemPrefab;
 
     private void Awake()
@@ -38,6 +40,9 @@ public class InputManager : MonoBehaviour
 
         key_Q = _playerInput.Player.Q;
         key_Q.performed += ctx => OnQ();
+
+        key_W = _playerInput.Player.W;
+        key_W.performed += ctx => OnW();
 
         mousePosition = _playerInput.Player.MousePosition;
     }
@@ -88,6 +93,7 @@ public class InputManager : MonoBehaviour
     {
         Conveyor _conv = conveyorManager.GetConveyorAtWorldPos(mousePosWorld);
         if (!_conv) { return; }
+        if (!_conv.CanReceiveItem()) { return; }
         
         // TODO: delegate this somewhere else later
         Color randomColor = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f));
@@ -95,5 +101,13 @@ public class InputManager : MonoBehaviour
         item.gameObject.GetComponent<SpriteRenderer>().color = randomColor;
 
         _conv.PlaceItem(item);
+    }
+
+    private void OnW()
+    {
+        if (tilemapManager.IsLayerAtWorldPos(Layers.Tilemap, mousePosWorld))
+        {
+            conveyorManager.CreateConnectableAtWorldPos(spawnerPrefab, mousePosWorld);
+        }
     }
 }
