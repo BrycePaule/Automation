@@ -125,11 +125,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1be420a59878634bbc518bea2a514dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SlotCount: 5
   ItemsMovedPerSecond: 3
   convManager: {fileID: 0}
   slotPrefab: {fileID: 9181417097715480746, guid: a65204ea818758e479541772cddec69c, type: 3}
-  showSlotGraphics: 0
+  showSlotGraphics: 1
 --- !u!114 &6508085055607174282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,3 +167,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13caf8e2e897e8b45a71f9f9d26cd563, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InventorySize: 5

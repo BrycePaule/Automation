@@ -5,9 +5,9 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEditor;
 
-[RequireComponent(typeof(Rotatable))]
-[RequireComponent(typeof(ConveyorConnectable))]
-[RequireComponent(typeof(ConveyorReceivable))]
+[RequireComponent(typeof(TSystemRotate))]
+[RequireComponent(typeof(TSystemConnector))]
+[RequireComponent(typeof(TSystemQueueReceiver))]
 public class Conveyor : MonoBehaviour
 {
     /*
@@ -19,17 +19,16 @@ public class Conveyor : MonoBehaviour
         Travelling in >>>> direction
     */
 
-    public int SlotCount;
     public float ItemsMovedPerSecond;
 
     private Vector3Int cellPos;
-    private Queue<ConveyorSlot> Slots;
 
     [Header("References")]
-    [SerializeField] private ConveyorManager convManager;
+    [SerializeField] private TSystemManager convManager;
     [SerializeField] private GameObject slotPrefab;
 
-    private ConveyorConnectable convConnectable;
+    private TSystemConnector convConnectable;
+    private TSystemQueueReceiver convReceivable;
     int stackedItems = 0;
 
     [Header("Debug")]
@@ -37,7 +36,8 @@ public class Conveyor : MonoBehaviour
 
     private void Awake()
     {
-        convConnectable = GetComponent<ConveyorConnectable>();
+        convConnectable = GetComponent<TSystemConnector>();
+        convReceivable = GetComponent<TSystemQueueReceiver>();
     }
 
     private void Start()
@@ -56,7 +56,7 @@ public class Conveyor : MonoBehaviour
 
     private void MoveSlotsAlongConveyor()
     {
-        Vector3 _moveOffset = new Vector3((ItemsMovedPerSecond / Slots.Count) * Time.deltaTime, 0f, 0f);
+        Vector3 _moveOffset = new Vector3((ItemsMovedPerSecond / convReceivable.InventorySize) * Time.deltaTime, 0f, 0f);
         Vector3 _resetPos = new Vector3(-0.5f, 0f, 0f);
         float _xResetThreshold = 1f;
 
@@ -67,15 +67,15 @@ public class Conveyor : MonoBehaviour
             stackedItems = CountItemsStackedAtFront();
         }
 
-        _xResetThreshold = 0.5f - ((1f / SlotCount) * stackedItems);
+        _xResetThreshold = 0.5f - ((1f / convReceivable.InventorySize) * stackedItems);
 
         List<ConveyorSlot> _slotCache = new List<ConveyorSlot>();
         ConveyorSlot _resetSlot = null;
 
         // UPDATE SLOTS AND MOVE ITEMS
-        for (int i = 0; i <= SlotCount - 1; i++)
+        for (int i = 0; i <= convReceivable.InventorySize - 1; i++)
         {
-            ConveyorSlot _slot = Slots.Dequeue();
+            ConveyorSlot _slot = convReceivable.Inventory.Dequeue();
 
             if (i < stackedItems)
             {
@@ -87,7 +87,7 @@ public class Conveyor : MonoBehaviour
             {
                 if (convConnectable.NextConveyor != null)
                 {
-                    convConnectable.NextConveyor.PlaceItem(_slot.GetItem());
+                    convConnectable.NextConveyor.GetComponent<TSystemQueueReceiver>().PlaceItem(_slot.GetItem());
                     _slot.ClearItem();
                 }
 
@@ -104,15 +104,12 @@ public class Conveyor : MonoBehaviour
         // ENQUEUE SLOTS IS NEW ORDER
         foreach (ConveyorSlot _slot in _slotCache)
         {
-            if (_slot != null)
-            {
-                Slots.Enqueue(_slot);
-            }
+            convReceivable.Inventory.Enqueue(_slot);
         }
 
         if (_resetSlot != null)
         {
-            Slots.Enqueue(_resetSlot);
+            convReceivable.Inventory.Enqueue(_resetSlot);
         }
 
     }
@@ -121,70 +118,32 @@ public class Conveyor : MonoBehaviour
     {
         int _stackedItems = 0;
 
-        for (int i = 0; i <= SlotCount - 1; i++)
+        for (int i = 0; i <= convReceivable.InventorySize - 1; i++)
         {
-            ConveyorSlot _slot = Slots.Dequeue();
+            ConveyorSlot _slot = convReceivable.Inventory.Dequeue();
 
             if (_slot.IsNotEmpty() && _stackedItems == i)
             {
                 _stackedItems += 1;
             }
 
-            Slots.Enqueue(_slot);
+            convReceivable.Inventory.Enqueue(_slot);
         }
 
         return _stackedItems;
     }
 
-    public void PlaceItem(Item _item)
-    {
-        // shuffle all but last slot
-        for (int i = 0; i < SlotCount - 1; i++)
-        {
-            Slots.Enqueue(Slots.Dequeue());
-        }
-
-        // add item to last slot
-        ConveyorSlot lastSlot = Slots.Dequeue();
-        lastSlot.SetItem(_item);
-
-        GetComponent<ConveyorConnectable>().RefreshPushConnection();
-        Slots.Enqueue(lastSlot);
-    }
-
-    // HELPERS
-
-    public bool CanReceiveItem()
-    {
-        bool _receivable = false;
-
-        // shuffle all but back slot
-        for (int i = 0; i < SlotCount - 1; i++)
-        {
-            Slots.Enqueue(Slots.Dequeue());
-        }
-
-        // add item to back slot
-        ConveyorSlot _backSlot = Slots.Dequeue();
-        if (_backSlot.IsEmpty())
-        {
-            _receivable = true;
-        }
-        Slots.Enqueue(_backSlot);
-
-        return _receivable;
-    }
 
     private void CreateAndPlaceSlots()
     {
-        for (int i = 0; i < SlotCount; i++)
+        for (int i = 0; i < convReceivable.InventorySize; i++)
         {
-            Vector3 _positionOffset = new Vector3(-0.5f + ((1f / SlotCount) * (i + 1f)), 0f, 0f);
+            Vector3 _positionOffset = new Vector3(-0.5f + ((1f / convReceivable.InventorySize) * (i + 1f)), 0f, 0f);
             GameObject slotObj = Instantiate(slotPrefab, transform.position + _positionOffset, Quaternion.identity);
             slotObj.transform.parent = transform;
             slotObj.name = slotPrefab.name + "_" + i;
             slotObj.transform.localScale = new Vector3(
-                slotObj.transform.localScale.x / SlotCount,
+                slotObj.transform.localScale.x / convReceivable.InventorySize,
                 slotObj.transform.localScale.y,
                 slotObj.transform.localScale.z);
         }
@@ -192,12 +151,12 @@ public class Conveyor : MonoBehaviour
 
     private void EstablishSlotQueue()
     {
-        Slots = new Queue<ConveyorSlot>(SlotCount);
+        convReceivable.Inventory = new Queue<ConveyorSlot>(convReceivable.InventorySize);
 
         ConveyorSlot[] _slots = GetComponentsInChildren<ConveyorSlot>();
-        for (int i = SlotCount - 1; i >= 0; i--)
+        for (int i = convReceivable.InventorySize - 1; i >= 0; i--)
         {
-            Slots.Enqueue(_slots[i])   ;
+            convReceivable.Inventory.Enqueue(_slots[i])   ;
         }
     }
 
@@ -205,14 +164,14 @@ public class Conveyor : MonoBehaviour
     {
         if (showSlotGraphics)
         {
-            foreach (ConveyorSlot slot in Slots)
+            foreach (ConveyorSlot slot in convReceivable.Inventory)
             {
                 slot.ShowSprite();
             }
         }
         else
         {
-            foreach (ConveyorSlot slot in Slots)
+            foreach (ConveyorSlot slot in convReceivable.Inventory)
             {
                 slot.HideSprite();
             }
@@ -223,7 +182,7 @@ public class Conveyor : MonoBehaviour
     {
         Conveyor _nextConv = convConnectable.NextConveyor;
         if (_nextConv == null) { return false; }
-        if (!_nextConv.CanReceiveItem()) { return false; }
+        if (!_nextConv.GetComponent<TSystemQueueReceiver>().CanReceiveItem()) { return false; }
 
         return true;
     }

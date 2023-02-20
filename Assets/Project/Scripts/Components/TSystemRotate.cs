@@ -2,15 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(ConveyorConnectable))]
-public class Rotatable : MonoBehaviour
+[RequireComponent(typeof(TSystemConnector))]
+public class TSystemRotate : MonoBehaviour, ITSystemRotatable
 {
-
-    private ConveyorConnectable conveyorConnectable;
+    private TSystemConnector conveyorConnectable;
 
     private void Awake()
     {
-        conveyorConnectable = GetComponent<ConveyorConnectable>();
+        conveyorConnectable = GetComponent<TSystemConnector>();
     }
 
     public void RotateClockwise()

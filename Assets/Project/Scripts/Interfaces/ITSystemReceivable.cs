@@ -2,10 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// DEPRECIATED - DO NOT USE
-// Use ConveyorReceivable component on the object instead
-
-public interface IConveyorReceivable
+public interface ITSystemReceivable
 {
     public bool CanReceiveItem();
     public void PlaceItem(Item _item);

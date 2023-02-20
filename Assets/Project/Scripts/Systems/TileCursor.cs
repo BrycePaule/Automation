@@ -11,7 +11,7 @@ public class TileCursor : MonoBehaviour
     private SpriteRenderer spriteRenderer;
 
     [Header("References")]
-    [SerializeField] private ConveyorManager conveyorManager;
+    [SerializeField] private TSystemManager conveyorManager;
 
 
     private void Awake()

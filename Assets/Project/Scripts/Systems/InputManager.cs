@@ -16,14 +16,17 @@ public class InputManager : MonoBehaviour
     private InputAction mousePosition;
     private InputAction key_Q;
     private InputAction key_W;
+    private InputAction key_E;
 
     [Header("References")]
     [SerializeField] private Tilemap _tilemap;
-    [SerializeField] private ConveyorManager conveyorManager;
+    [SerializeField] private TSystemManager TSysManager;
     [SerializeField] private TilemapManager tilemapManager;
     [SerializeField] private TileCursor tileCursor;
 
+    [SerializeField] private GameObject conveyorPrefab;
     [SerializeField] private GameObject spawnerPrefab;
+    [SerializeField] private GameObject sinkPrefab;
     [SerializeField] private GameObject itemPrefab;
 
     private void Awake()
@@ -43,6 +46,9 @@ public class InputManager : MonoBehaviour
 
         key_W = _playerInput.Player.W;
         key_W.performed += ctx => OnW();
+
+        key_E = _playerInput.Player.E;
+        key_E.performed += ctx => OnE();
 
         mousePosition = _playerInput.Player.MousePosition;
     }
@@ -78,36 +84,44 @@ public class InputManager : MonoBehaviour
 
         if (_hit)
         {
-            _hit.transform.gameObject.GetComponent<Rotatable>()?.RotateClockwise();
+            _hit.transform.gameObject.GetComponent<TSystemRotate>()?.RotateClockwise();
         }
 
         if (tilemapManager.IsLayerAtWorldPos(Layers.Tilemap, mousePosWorld))
         {
-            conveyorManager.CreateConveyorAtWorldPos(mousePosWorld);
+            TSysManager.CreateConnectableAtWorldPos(conveyorPrefab, mousePosWorld);
         }
     }
 
-    private void OnRightClick() => conveyorManager.DestroyConveyorAtWorldPos(mousePosWorld);
+    private void OnRightClick() => TSysManager.DestroyConnectableAtWorldPos(mousePosWorld);
 
     private void OnQ()
     {
-        Conveyor _conv = conveyorManager.GetConveyorAtWorldPos(mousePosWorld);
-        if (!_conv) { return; }
-        if (!_conv.CanReceiveItem()) { return; }
+        TSystemConnector _connectable = TSysManager.GetConnectableAtWorldPos(mousePosWorld);
+        if (!_connectable) { return; }
+        if (!_connectable.GetComponent<TSystemQueueReceiver>().CanReceiveItem()) { return; }
         
         // TODO: delegate this somewhere else later
         Color randomColor = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f));
         Item item = Instantiate(itemPrefab, Vector3.zero, Quaternion.identity).GetComponent<Item>();
         item.gameObject.GetComponent<SpriteRenderer>().color = randomColor;
 
-        _conv.PlaceItem(item);
+        _connectable.GetComponent<TSystemQueueReceiver>().PlaceItem(item);
     }
 
     private void OnW()
     {
         if (tilemapManager.IsLayerAtWorldPos(Layers.Tilemap, mousePosWorld))
         {
-            conveyorManager.CreateConnectableAtWorldPos(spawnerPrefab, mousePosWorld);
+            TSysManager.CreateConnectableAtWorldPos(spawnerPrefab, mousePosWorld);
+        }
+    }
+
+    private void OnE()
+    {
+        if (tilemapManager.IsLayerAtWorldPos(Layers.Tilemap, mousePosWorld))
+        {
+            TSysManager.CreateConnectableAtWorldPos(sinkPrefab, mousePosWorld);
         }
     }
 }

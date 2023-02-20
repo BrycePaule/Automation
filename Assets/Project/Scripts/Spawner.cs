@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(ConveyorConnectable))]
-[RequireComponent(typeof(Rotatable))]
+[RequireComponent(typeof(TSystemConnector))]
+[RequireComponent(typeof(TSystemRotate))]
 public class Spawner : MonoBehaviour
 {
 
@@ -11,11 +11,11 @@ public class Spawner : MonoBehaviour
     public GameObject ItemToSpawn;
 
     private float timer;
-    private ConveyorConnectable convConnectable;
+    private TSystemConnector convConnectable;
 
     private void Awake()
     {
-        convConnectable = GetComponent<ConveyorConnectable>();
+        convConnectable = GetComponent<TSystemConnector>();
     }
 
     private void FixedUpdate()
@@ -32,8 +32,9 @@ public class Spawner : MonoBehaviour
     private void Spawn()
     {
         if (convConnectable.NextConveyor == null) { return; }
-        if (!convConnectable.NextConveyor.CanReceiveItem()) { return; }
-        
-        convConnectable.NextConveyor.PlaceItem(ItemToSpawn.GetComponent<Item>());
+        if (!convConnectable.NextConveyor.GetComponent<TSystemQueueReceiver>().CanReceiveItem()) { return; }
+
+        Item _item = Instantiate(ItemToSpawn, transform.position, Quaternion.identity).GetComponent<Item>();
+        convConnectable.NextConveyor.GetComponent<TSystemQueueReceiver>().PlaceItem(_item);
     }
 }
