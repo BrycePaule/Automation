@@ -14,7 +14,8 @@ GameObject:
   - component: {fileID: 4777317935077955141}
   - component: {fileID: 2228342786834029151}
   - component: {fileID: 4830788216208871572}
-  - component: {fileID: 9023914638246682663}
+  - component: {fileID: 4915130908473216780}
+  - component: {fileID: 5452952600120360059}
   m_Layer: 19
   m_Name: Sink
   m_TagString: Untagged
@@ -137,7 +138,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eccfd6c314020c2498cef52151ac9d5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NextConveyor: {fileID: 0}
   Facing: 1
 --- !u!114 &4830788216208871572
 MonoBehaviour:
@@ -151,7 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7584ac9cb1e4a7540809412910140aab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &9023914638246682663
+--- !u!114 &4915130908473216780
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -160,6 +160,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 121493144518562992}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13caf8e2e897e8b45a71f9f9d26cd563, type: 3}
+  m_Script: {fileID: 11500000, guid: 7452dc2762b73254ab35912904921e78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5452952600120360059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 121493144518562992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faf0a3e71b37fea438137dc1300d811b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PrefabType: 0

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 6508085055607174282}
   - component: {fileID: 6513914186719948946}
   - component: {fileID: 7592894856203907874}
+  - component: {fileID: 3665970570168745604}
   m_Layer: 20
   m_Name: Conveyor
   m_TagString: Untagged
@@ -126,7 +127,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ItemsMovedPerSecond: 3
-  convManager: {fileID: 0}
   slotPrefab: {fileID: 9181417097715480746, guid: a65204ea818758e479541772cddec69c, type: 3}
   showSlotGraphics: 1
 --- !u!114 &6508085055607174282
@@ -153,7 +153,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eccfd6c314020c2498cef52151ac9d5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NextConveyor: {fileID: 0}
   Facing: 1
 --- !u!114 &7592894856203907874
 MonoBehaviour:
@@ -167,4 +166,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13caf8e2e897e8b45a71f9f9d26cd563, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InventorySize: 5
+  QueueSize: 5
+--- !u!114 &3665970570168745604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4196235035966897580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faf0a3e71b37fea438137dc1300d811b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PrefabType: 0

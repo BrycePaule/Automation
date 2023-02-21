@@ -167,7 +167,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tilemap: {fileID: 1163442512}
-  conveyorManager: {fileID: 1622861341}
+  TSysManager: {fileID: 1622861341}
   tilemapManager: {fileID: 953423768}
   tileCursor: {fileID: 138122005}
   conveyorPrefab: {fileID: 4196235035966897580, guid: eff56da9a8174d74da03724cb19a7306, type: 3}

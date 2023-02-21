@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(TSystemConnector))]
-[RequireComponent(typeof(TSystemRotate))]
+[RequireComponent(typeof(TSystemRotator))]
 public class Spawner : MonoBehaviour
 {
 
@@ -32,9 +32,9 @@ public class Spawner : MonoBehaviour
     private void Spawn()
     {
         if (convConnectable.NextConveyor == null) { return; }
-        if (!convConnectable.NextConveyor.GetComponent<TSystemQueueReceiver>().CanReceiveItem()) { return; }
+        if (!((Component) convConnectable.NextConveyor).GetComponent<TSystemQueueReceiver>().CanReceiveItem()) { return; }
 
         Item _item = Instantiate(ItemToSpawn, transform.position, Quaternion.identity).GetComponent<Item>();
-        convConnectable.NextConveyor.GetComponent<TSystemQueueReceiver>().PlaceItem(_item);
+        ((Component) convConnectable.NextConveyor).GetComponent<TSystemQueueReceiver>().PlaceItem(_item);
     }
 }

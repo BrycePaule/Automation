@@ -84,7 +84,7 @@ public class InputManager : MonoBehaviour
 
         if (_hit)
         {
-            _hit.transform.gameObject.GetComponent<TSystemRotate>()?.RotateClockwise();
+            _hit.transform.gameObject.GetComponent<TSystemRotator>()?.RotateClockwise();
         }
 
         if (tilemapManager.IsLayerAtWorldPos(Layers.Tilemap, mousePosWorld))

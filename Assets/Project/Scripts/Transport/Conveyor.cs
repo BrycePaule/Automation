@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEditor;
 
-[RequireComponent(typeof(TSystemRotate))]
+[RequireComponent(typeof(TSystemRotator))]
 [RequireComponent(typeof(TSystemConnector))]
 [RequireComponent(typeof(TSystemQueueReceiver))]
 public class Conveyor : MonoBehaviour
@@ -24,7 +24,6 @@ public class Conveyor : MonoBehaviour
     private Vector3Int cellPos;
 
     [Header("References")]
-    [SerializeField] private TSystemManager convManager;
     [SerializeField] private GameObject slotPrefab;
 
     private TSystemConnector convConnectable;
@@ -56,7 +55,7 @@ public class Conveyor : MonoBehaviour
 
     private void MoveSlotsAlongConveyor()
     {
-        Vector3 _moveOffset = new Vector3((ItemsMovedPerSecond / convReceivable.InventorySize) * Time.deltaTime, 0f, 0f);
+        Vector3 _moveOffset = new Vector3((ItemsMovedPerSecond / convReceivable.QueueSize) * Time.deltaTime, 0f, 0f);
         Vector3 _resetPos = new Vector3(-0.5f, 0f, 0f);
         float _xResetThreshold = 1f;
 
@@ -67,15 +66,15 @@ public class Conveyor : MonoBehaviour
             stackedItems = CountItemsStackedAtFront();
         }
 
-        _xResetThreshold = 0.5f - ((1f / convReceivable.InventorySize) * stackedItems);
+        _xResetThreshold = 0.5f - ((1f / convReceivable.QueueSize) * stackedItems);
 
         List<ConveyorSlot> _slotCache = new List<ConveyorSlot>();
         ConveyorSlot _resetSlot = null;
 
         // UPDATE SLOTS AND MOVE ITEMS
-        for (int i = 0; i <= convReceivable.InventorySize - 1; i++)
+        for (int i = 0; i <= convReceivable.QueueSize - 1; i++)
         {
-            ConveyorSlot _slot = convReceivable.Inventory.Dequeue();
+            ConveyorSlot _slot = convReceivable.QueueSlots.Dequeue();
 
             if (i < stackedItems)
             {
@@ -87,7 +86,7 @@ public class Conveyor : MonoBehaviour
             {
                 if (convConnectable.NextConveyor != null)
                 {
-                    convConnectable.NextConveyor.GetComponent<TSystemQueueReceiver>().PlaceItem(_slot.GetItem());
+                    ((Component) convConnectable.NextConveyor).GetComponent<TSystemQueueReceiver>().PlaceItem(_slot.GetItem());
                     _slot.ClearItem();
                 }
 
@@ -104,12 +103,12 @@ public class Conveyor : MonoBehaviour
         // ENQUEUE SLOTS IS NEW ORDER
         foreach (ConveyorSlot _slot in _slotCache)
         {
-            convReceivable.Inventory.Enqueue(_slot);
+            convReceivable.QueueSlots.Enqueue(_slot);
         }
 
         if (_resetSlot != null)
         {
-            convReceivable.Inventory.Enqueue(_resetSlot);
+            convReceivable.QueueSlots.Enqueue(_resetSlot);
         }
 
     }
@@ -118,16 +117,16 @@ public class Conveyor : MonoBehaviour
     {
         int _stackedItems = 0;
 
-        for (int i = 0; i <= convReceivable.InventorySize - 1; i++)
+        for (int i = 0; i <= convReceivable.QueueSize - 1; i++)
         {
-            ConveyorSlot _slot = convReceivable.Inventory.Dequeue();
+            ConveyorSlot _slot = convReceivable.QueueSlots.Dequeue();
 
             if (_slot.IsNotEmpty() && _stackedItems == i)
             {
                 _stackedItems += 1;
             }
 
-            convReceivable.Inventory.Enqueue(_slot);
+            convReceivable.QueueSlots.Enqueue(_slot);
         }
 
         return _stackedItems;
@@ -136,14 +135,14 @@ public class Conveyor : MonoBehaviour
 
     private void CreateAndPlaceSlots()
     {
-        for (int i = 0; i < convReceivable.InventorySize; i++)
+        for (int i = 0; i < convReceivable.QueueSize; i++)
         {
-            Vector3 _positionOffset = new Vector3(-0.5f + ((1f / convReceivable.InventorySize) * (i + 1f)), 0f, 0f);
+            Vector3 _positionOffset = new Vector3(-0.5f + ((1f / convReceivable.QueueSize) * (i + 1f)), 0f, 0f);
             GameObject slotObj = Instantiate(slotPrefab, transform.position + _positionOffset, Quaternion.identity);
             slotObj.transform.parent = transform;
             slotObj.name = slotPrefab.name + "_" + i;
             slotObj.transform.localScale = new Vector3(
-                slotObj.transform.localScale.x / convReceivable.InventorySize,
+                slotObj.transform.localScale.x / convReceivable.QueueSize,
                 slotObj.transform.localScale.y,
                 slotObj.transform.localScale.z);
         }
@@ -151,12 +150,12 @@ public class Conveyor : MonoBehaviour
 
     private void EstablishSlotQueue()
     {
-        convReceivable.Inventory = new Queue<ConveyorSlot>(convReceivable.InventorySize);
+        convReceivable.QueueSlots = new Queue<ConveyorSlot>(convReceivable.QueueSize);
 
         ConveyorSlot[] _slots = GetComponentsInChildren<ConveyorSlot>();
-        for (int i = convReceivable.InventorySize - 1; i >= 0; i--)
+        for (int i = convReceivable.QueueSize - 1; i >= 0; i--)
         {
-            convReceivable.Inventory.Enqueue(_slots[i])   ;
+            convReceivable.QueueSlots.Enqueue(_slots[i])   ;
         }
     }
 
@@ -164,14 +163,14 @@ public class Conveyor : MonoBehaviour
     {
         if (showSlotGraphics)
         {
-            foreach (ConveyorSlot slot in convReceivable.Inventory)
+            foreach (ConveyorSlot slot in convReceivable.QueueSlots)
             {
                 slot.ShowSprite();
             }
         }
         else
         {
-            foreach (ConveyorSlot slot in convReceivable.Inventory)
+            foreach (ConveyorSlot slot in convReceivable.QueueSlots)
             {
                 slot.HideSprite();
             }
@@ -180,9 +179,9 @@ public class Conveyor : MonoBehaviour
 
     private bool CanOffloadItem()
     {
-        Conveyor _nextConv = convConnectable.NextConveyor;
+        ITSystemConnectable _nextConv = convConnectable.NextConveyor;
         if (_nextConv == null) { return false; }
-        if (!_nextConv.GetComponent<TSystemQueueReceiver>().CanReceiveItem()) { return false; }
+        if (!((Component) _nextConv).GetComponent<TSystemQueueReceiver>().CanReceiveItem()) { return false; }
 
         return true;
     }

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3357815693190370444}
   - component: {fileID: 8406944401568445998}
   - component: {fileID: 5707424377458752897}
+  - component: {fileID: 5848947148498508906}
   m_Layer: 20
   m_Name: ConveyorSlot
   m_TagString: Untagged
@@ -70,7 +71,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1454918563
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.5882353}
@@ -97,3 +98,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemObj: {fileID: 0}
   item: {fileID: 0}
+--- !u!114 &5848947148498508906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9181417097715480746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faf0a3e71b37fea438137dc1300d811b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PrefabType: 1
