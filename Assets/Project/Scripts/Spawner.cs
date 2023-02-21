@@ -6,7 +6,6 @@ using UnityEngine;
 [RequireComponent(typeof(TSystemRotator))]
 public class Spawner : MonoBehaviour
 {
-
     public float SpawnCadence;
     public GameObject ItemToSpawn;
 

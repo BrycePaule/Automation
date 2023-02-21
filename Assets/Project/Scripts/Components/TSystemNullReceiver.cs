@@ -10,5 +10,4 @@ public class TSystemNullReceiver : MonoBehaviour, ITSystemReceivable
     {
         Destroy(_item.gameObject);
     }
-
 }

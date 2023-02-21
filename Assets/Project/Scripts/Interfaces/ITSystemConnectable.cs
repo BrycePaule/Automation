@@ -9,5 +9,6 @@ public interface ITSystemConnectable
 
 
     public void RefreshPushConnection();
+    public bool CanOffloadItem();
     
 }

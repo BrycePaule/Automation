@@ -19,16 +19,15 @@ public class Conveyor : MonoBehaviour
         Travelling in >>>> direction
     */
 
+    // potentially to think of a way that this movespeed doesn't scale with the amount of slots
+    // currently if you bump up the amount of slots, items take significantly longer 
+    // to move across a single conveyor
     public float ItemsMovedPerSecond;
 
-    private Vector3Int cellPos;
-
-    [Header("References")]
-    [SerializeField] private GameObject slotPrefab;
+    private int stackedItems = 0;
 
     private TSystemConnector connector;
     private TSystemQueueReceiver receiver;
-    int stackedItems = 0;
 
     [Header("Debug")]
     [SerializeField] private bool showSlotGraphics;
@@ -57,19 +56,18 @@ public class Conveyor : MonoBehaviour
     {
         Vector3 _moveOffset = new Vector3((ItemsMovedPerSecond / receiver.SlotCount) * Time.deltaTime, 0f, 0f);
         Vector3 _resetPos = new Vector3(-0.5f, 0f, 0f);
-        float _xResetThreshold = 1f;
 
-        // CALCULATE STACKED ITEMS
+        // If nowhere to send items, count how many stacked at the front
         stackedItems = 0;
-        if (!CanOffloadItem())
+        if (!connector.CanOffloadItem())
         {
             stackedItems = CountItemsStackedAtFront();
         }
 
-        _xResetThreshold = 0.5f - ((1f / receiver.SlotCount) * stackedItems);
+        float _xResetThreshold = 0.5f - ((1f / receiver.SlotCount) * stackedItems);
 
         List<ConveyorSlot> _slotCache = new List<ConveyorSlot>();
-        ConveyorSlot _resetSlot = null;
+        ConveyorSlot _resetSlotCache = null;
 
         // UPDATE SLOTS AND MOVE ITEMS
         for (int i = 0; i <= receiver.SlotCount - 1; i++)
@@ -84,14 +82,15 @@ public class Conveyor : MonoBehaviour
 
             if (_slot.transform.localPosition.x >= _xResetThreshold)
             {
-                if (connector.ConnectedTo != null)
+                if (_slot.IsNotEmpty() && connector.CanOffloadItem())
                 {
-                    ((Component) connector.ConnectedTo).GetComponent<ITSystemReceivable>().PlaceItem(_slot.GetItem());
+                    ITSystemReceivable _nextReceiver = ((Component) connector.ConnectedTo).GetComponent<ITSystemReceivable>();
+                    _nextReceiver.PlaceItem(_slot.GetItem());
                     _slot.ClearItem();
                 }
 
                 _slot.transform.localPosition = _resetPos;
-                _resetSlot = _slot;
+                _resetSlotCache = _slot;
             }
             else
             {
@@ -106,9 +105,9 @@ public class Conveyor : MonoBehaviour
             receiver.Slots.Enqueue(_slot);
         }
 
-        if (_resetSlot != null)
+        if (_resetSlotCache != null)
         {
-            receiver.Slots.Enqueue(_resetSlot);
+            receiver.Slots.Enqueue(_resetSlotCache);
         }
 
     }
@@ -135,16 +134,25 @@ public class Conveyor : MonoBehaviour
 
     private void CreateAndPlaceSlots()
     {
-        for (int i = 0; i < receiver.SlotCount; i++)
+        GameObject _slotPrefab = GetComponentInChildren<ConveyorSlot>().gameObject;
+        _slotPrefab.transform.position = transform.position + new Vector3(-0.5f + ((1f / receiver.SlotCount) * (receiver.SlotCount + 1f)), 0f, 0f);
+
+        for (int i = 0; i < receiver.SlotCount - 1; i++)
         {
             Vector3 _positionOffset = new Vector3(-0.5f + ((1f / receiver.SlotCount) * (i + 1f)), 0f, 0f);
-            GameObject slotObj = Instantiate(slotPrefab, transform.position + _positionOffset, Quaternion.identity);
+            GameObject slotObj = Instantiate(_slotPrefab, transform.position + _positionOffset, Quaternion.identity);
             slotObj.transform.parent = transform;
-            slotObj.name = slotPrefab.name + "_" + i;
-            slotObj.transform.localScale = new Vector3(
-                slotObj.transform.localScale.x / receiver.SlotCount,
-                slotObj.transform.localScale.y,
-                slotObj.transform.localScale.z);
+        }
+
+        ConveyorSlot[] _slots = GetComponentsInChildren<ConveyorSlot>();
+
+        for (int i = 0; i < receiver.SlotCount; i++)
+        {
+            _slots[i].transform.name = _slotPrefab.name + "_" + i;
+            _slots[i].transform.localScale = new Vector3(
+                _slots[i].transform.localScale.x / receiver.SlotCount,
+                _slots[i].transform.localScale.y,
+                _slots[i].transform.localScale.z);
         }
     }
 
@@ -177,13 +185,5 @@ public class Conveyor : MonoBehaviour
         }
     }
 
-    private bool CanOffloadItem()
-    {
-        ITSystemConnectable _nextConv = connector.ConnectedTo;
-        if (_nextConv == null) { return false; }
-        if (!((Component) _nextConv).GetComponent<ITSystemReceivable>().CanReceiveItem()) { return false; }
-
-        return true;
-    }
 
 }

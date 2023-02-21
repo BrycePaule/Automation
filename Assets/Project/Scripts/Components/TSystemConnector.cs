@@ -30,6 +30,18 @@ public class TSystemConnector : MonoBehaviour, ITSystemConnectable
         UpdateConnectionDebugFlag();
     }
 
+    public bool CanOffloadItem()
+    {
+        if (ConnectedTo == null) { return false; }
+
+        ITSystemReceivable _nextReceiver = ((Component) ConnectedTo).GetComponent<ITSystemReceivable>();
+
+        if (_nextReceiver == null) { return false; }
+        if (!_nextReceiver.CanReceiveItem()) { return false; }
+
+        return true;
+    }
+
     private void UpdateConnectionDebugFlag()
     {
         if (ConnectedTo == null)
