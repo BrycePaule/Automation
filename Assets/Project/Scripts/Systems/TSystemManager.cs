@@ -13,7 +13,7 @@ public class TSystemManager : MonoBehaviour
 
     // CREATION, REMOVAL, INTERACTION
 
-    public void CreateConnectableAtWorldPos(GameObject _prefab, Vector3 _worldPos)
+    public void PlaceTSystemObjectAtWorldPos(GameObject _prefab, Vector3 _worldPos)
     {
         Vector3Int _cellPos = tilemap.WorldToCell(_worldPos);
 
@@ -24,24 +24,24 @@ public class TSystemManager : MonoBehaviour
 
     }
 
-    public void DestroyConnectableAtWorldPos(Vector3 _worldPos)
+    public void DestroyTSystemObjectAtWorldPos(Vector3 _worldPos)
     {
-        ITSystemConnectable _connectable = GetConnectableAtWorldPos(_worldPos);
+        Component _connectable = GetTSystemObjectAtWorldPos(_worldPos);
 
         if (_connectable != null)
         {
-            Destroy(((Component) _connectable).gameObject);
+            Destroy(_connectable.gameObject);
             RefreshConnectionsAroundWorldPos(_worldPos);
         }
     }
 
-    public ITSystemConnectable GetConnectableAtWorldPos(Vector3 _worldPos)
+    public Component GetTSystemObjectAtWorldPos(Vector3 _worldPos)
     {
 
         RaycastHit2D _hit = Physics2D.Raycast(_worldPos, Vector2.up);
         if (_hit.transform.GetComponent<ITSystemConnectable>() != null)
         {
-           return _hit.transform.GetComponent<ITSystemConnectable>();
+           return (Component) _hit.transform.GetComponent<ITSystemConnectable>();
         }
         
         return null;
@@ -57,11 +57,11 @@ public class TSystemManager : MonoBehaviour
             for (int j = -1; j <= 1; j++)
             {
                 Vector3 _offset = new Vector3(i, j, 0);
-                ITSystemConnectable _connectable = GetConnectableAtWorldPos(_worldPos + _offset);
+                Component _connectable = GetTSystemObjectAtWorldPos(_worldPos + _offset);
 
                 if (_connectable != null)
                 {
-                    ((Component) _connectable).GetComponent<TSystemConnector>().RefreshPushConnection();
+                    _connectable.GetComponent<TSystemConnector>().RefreshPushConnection();
                 }
             }
         }

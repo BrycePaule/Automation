@@ -166,14 +166,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f4e66232266e224aa4bff0a3cf7a284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _tilemap: {fileID: 1163442512}
-  TSysManager: {fileID: 1622861341}
+  tilemap: {fileID: 1163442512}
+  tSysManager: {fileID: 1622861341}
   tilemapManager: {fileID: 953423768}
   tileCursor: {fileID: 138122005}
-  conveyorPrefab: {fileID: 4196235035966897580, guid: eff56da9a8174d74da03724cb19a7306, type: 3}
-  spawnerPrefab: {fileID: 4146213135551611995, guid: b63cb1f4e64ae7c4798ad75a1e895d88, type: 3}
-  sinkPrefab: {fileID: 121493144518562992, guid: 8f27b8ce517b9c847b47c78982bdfca1, type: 3}
-  itemPrefab: {fileID: 1412769314480690462, guid: 04aa86c169b21624d88e8148edff3091, type: 3}
+  prefabLibrary: {fileID: 11400000, guid: 95c2e54c1950512469a670c193eef790, type: 2}
 --- !u!1 &138122003
 GameObject:
   m_ObjectHideFlags: 0
@@ -930,7 +927,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae869756343ecdf4ca25ecacef2a7456, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _tilemap: {fileID: 1163442512}
+  tilemap: {fileID: 1163442512}
   tilemapManager: {fileID: 953423768}
   markerPrefab: {fileID: 943398273586386519, guid: 296b2a2b9af1fe54cb9a49cac8b8dfce, type: 3}
 --- !u!1 &2060888018

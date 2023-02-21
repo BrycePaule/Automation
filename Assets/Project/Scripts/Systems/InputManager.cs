@@ -20,7 +20,7 @@ public class InputManager : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private Tilemap tilemap;
-    [SerializeField] private TSystemManager TSysManager;
+    [SerializeField] private TSystemManager tSysManager;
     [SerializeField] private TilemapManager tilemapManager;
     [SerializeField] private TileCursor tileCursor;
     [SerializeField] private PrefabLibrary prefabLibrary;
@@ -85,31 +85,37 @@ public class InputManager : MonoBehaviour
 
         if (tilemapManager.IsLayerAtWorldPos(Layers.Tilemap, mousePosWorld))
         {
-            TSysManager.CreateConnectableAtWorldPos(prefabLibrary.GetPrefabOfType(PrefabType.Conveyor), mousePosWorld);
+            tSysManager.PlaceTSystemObjectAtWorldPos(prefabLibrary.GetPrefabOfType(PrefabType.Conveyor), mousePosWorld);
         }
     }
 
-    private void OnRightClick() => TSysManager.DestroyConnectableAtWorldPos(mousePosWorld);
+    private void OnRightClick() 
+    {
+        tSysManager.DestroyTSystemObjectAtWorldPos(mousePosWorld);
+    }
 
     private void OnQ()
     {
-        ITSystemConnectable _connectable = TSysManager.GetConnectableAtWorldPos(mousePosWorld);
-        if (_connectable != null) { return; }
-        if (! ((Component) _connectable).GetComponent<TSystemQueueReceiver>().CanReceiveItem()) { return; }
-        
+        Component _connector = tSysManager.GetTSystemObjectAtWorldPos(mousePosWorld);
+        ITSystemReceivable _receiver = _connector.GetComponent<ITSystemReceivable>();
+
+        if (_connector == null) { return; }
+        if (_receiver == null) { return; }
+        if (!_receiver.CanReceiveItem()) { return; }
+
         // TODO: delegate this somewhere else later
         Color randomColor = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f));
         Item item = Instantiate(prefabLibrary.GetPrefabOfType(PrefabType.Item), Vector3.zero, Quaternion.identity).GetComponent<Item>();
         item.gameObject.GetComponent<SpriteRenderer>().color = randomColor;
 
-        ((Component) _connectable).GetComponent<TSystemQueueReceiver>().PlaceItem(item);
+        _receiver.PlaceItem(item);
     }
 
     private void OnW()
     {
         if (tilemapManager.IsLayerAtWorldPos(Layers.Tilemap, mousePosWorld))
         {
-            TSysManager.CreateConnectableAtWorldPos(prefabLibrary.GetPrefabOfType(PrefabType.Spawner), mousePosWorld);
+            tSysManager.PlaceTSystemObjectAtWorldPos(prefabLibrary.GetPrefabOfType(PrefabType.Spawner), mousePosWorld);
         }
     }
 
@@ -117,7 +123,7 @@ public class InputManager : MonoBehaviour
     {
         if (tilemapManager.IsLayerAtWorldPos(Layers.Tilemap, mousePosWorld))
         {
-            TSysManager.CreateConnectableAtWorldPos(prefabLibrary.GetPrefabOfType(PrefabType.Sink), mousePosWorld);
+            tSysManager.PlaceTSystemObjectAtWorldPos(prefabLibrary.GetPrefabOfType(PrefabType.Sink), mousePosWorld);
         }
     }
 }
