@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 public class TSystemManager : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private Tilemap _tilemap;
+    [SerializeField] private Tilemap tilemap;
     [SerializeField] private TilemapManager tilemapManager;
     [SerializeField] private GameObject markerPrefab;
 
@@ -15,7 +15,7 @@ public class TSystemManager : MonoBehaviour
 
     public void CreateConnectableAtWorldPos(GameObject _prefab, Vector3 _worldPos)
     {
-        Vector3Int _cellPos = _tilemap.WorldToCell(_worldPos);
+        Vector3Int _cellPos = tilemap.WorldToCell(_worldPos);
 
         GameObject _connectable = Instantiate(_prefab, tilemapManager.TileAnchorFromWorldPos(_worldPos), Quaternion.identity);
         _connectable.name = _prefab.name + " " + _cellPos;

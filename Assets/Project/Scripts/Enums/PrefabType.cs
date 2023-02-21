@@ -4,12 +4,15 @@ using UnityEngine;
 
 public enum PrefabType
 {
-    Conveyor,
-    ConveyorSlot,
-    Sink,
-    Spawner,
+    NOT_SELECTED = 0,
+    NOT_SELECT = 1,
 
-    Item,
+    Conveyor = 100,
+    ConveyorSlot = 101,
+    Sink = 102,
+    Spawner = 103,
 
-    Marker,
+    Item = 200,
+
+    Marker = 900,
 }

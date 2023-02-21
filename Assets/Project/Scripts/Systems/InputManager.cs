@@ -19,15 +19,11 @@ public class InputManager : MonoBehaviour
     private InputAction key_E;
 
     [Header("References")]
-    [SerializeField] private Tilemap _tilemap;
+    [SerializeField] private Tilemap tilemap;
     [SerializeField] private TSystemManager TSysManager;
     [SerializeField] private TilemapManager tilemapManager;
     [SerializeField] private TileCursor tileCursor;
-
-    [SerializeField] private GameObject conveyorPrefab;
-    [SerializeField] private GameObject spawnerPrefab;
-    [SerializeField] private GameObject sinkPrefab;
-    [SerializeField] private GameObject itemPrefab;
+    [SerializeField] private PrefabLibrary prefabLibrary;
 
     private void Awake()
     {
@@ -89,7 +85,7 @@ public class InputManager : MonoBehaviour
 
         if (tilemapManager.IsLayerAtWorldPos(Layers.Tilemap, mousePosWorld))
         {
-            TSysManager.CreateConnectableAtWorldPos(conveyorPrefab, mousePosWorld);
+            TSysManager.CreateConnectableAtWorldPos(prefabLibrary.GetPrefabOfType(PrefabType.Conveyor), mousePosWorld);
         }
     }
 
@@ -103,7 +99,7 @@ public class InputManager : MonoBehaviour
         
         // TODO: delegate this somewhere else later
         Color randomColor = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f));
-        Item item = Instantiate(itemPrefab, Vector3.zero, Quaternion.identity).GetComponent<Item>();
+        Item item = Instantiate(prefabLibrary.GetPrefabOfType(PrefabType.Item), Vector3.zero, Quaternion.identity).GetComponent<Item>();
         item.gameObject.GetComponent<SpriteRenderer>().color = randomColor;
 
         _connectable.GetComponent<TSystemQueueReceiver>().PlaceItem(item);
@@ -113,7 +109,7 @@ public class InputManager : MonoBehaviour
     {
         if (tilemapManager.IsLayerAtWorldPos(Layers.Tilemap, mousePosWorld))
         {
-            TSysManager.CreateConnectableAtWorldPos(spawnerPrefab, mousePosWorld);
+            TSysManager.CreateConnectableAtWorldPos(prefabLibrary.GetPrefabOfType(PrefabType.Spawner), mousePosWorld);
         }
     }
 
@@ -121,7 +117,7 @@ public class InputManager : MonoBehaviour
     {
         if (tilemapManager.IsLayerAtWorldPos(Layers.Tilemap, mousePosWorld))
         {
-            TSysManager.CreateConnectableAtWorldPos(sinkPrefab, mousePosWorld);
+            TSysManager.CreateConnectableAtWorldPos(prefabLibrary.GetPrefabOfType(PrefabType.Sink), mousePosWorld);
         }
     }
 }
