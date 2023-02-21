@@ -11,11 +11,11 @@ public class Spawner : MonoBehaviour
     public GameObject ItemToSpawn;
 
     private float timer;
-    private TSystemConnector convConnectable;
+    private TSystemConnector tSysConnector;
 
     private void Awake()
     {
-        convConnectable = GetComponent<TSystemConnector>();
+        tSysConnector = GetComponent<TSystemConnector>();
     }
 
     private void FixedUpdate()
@@ -31,10 +31,12 @@ public class Spawner : MonoBehaviour
 
     private void Spawn()
     {
-        if (convConnectable.NextConveyor == null) { return; }
-        if (!((Component) convConnectable.NextConveyor).GetComponent<TSystemQueueReceiver>().CanReceiveItem()) { return; }
+        if (!tSysConnector.HasConnection) { return; }
+
+        Component _connectedObj = (Component) tSysConnector.ConnectedTo;
+        if (!_connectedObj.GetComponent<TSystemQueueReceiver>().CanReceiveItem()) { return; }
 
         Item _item = Instantiate(ItemToSpawn, transform.position, Quaternion.identity).GetComponent<Item>();
-        ((Component) convConnectable.NextConveyor).GetComponent<TSystemQueueReceiver>().PlaceItem(_item);
+        _connectedObj.GetComponent<TSystemQueueReceiver>().PlaceItem(_item);
     }
 }

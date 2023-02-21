@@ -93,16 +93,16 @@ public class InputManager : MonoBehaviour
 
     private void OnQ()
     {
-        TSystemConnector _connectable = TSysManager.GetConnectableAtWorldPos(mousePosWorld);
-        if (!_connectable) { return; }
-        if (!_connectable.GetComponent<TSystemQueueReceiver>().CanReceiveItem()) { return; }
+        ITSystemConnectable _connectable = TSysManager.GetConnectableAtWorldPos(mousePosWorld);
+        if (_connectable != null) { return; }
+        if (! ((Component) _connectable).GetComponent<TSystemQueueReceiver>().CanReceiveItem()) { return; }
         
         // TODO: delegate this somewhere else later
         Color randomColor = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f));
         Item item = Instantiate(prefabLibrary.GetPrefabOfType(PrefabType.Item), Vector3.zero, Quaternion.identity).GetComponent<Item>();
         item.gameObject.GetComponent<SpriteRenderer>().color = randomColor;
 
-        _connectable.GetComponent<TSystemQueueReceiver>().PlaceItem(item);
+        ((Component) _connectable).GetComponent<TSystemQueueReceiver>().PlaceItem(item);
     }
 
     private void OnW()

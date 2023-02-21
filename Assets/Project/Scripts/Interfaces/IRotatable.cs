@@ -4,6 +4,6 @@ using UnityEngine;
 
 public interface ITSystemRotatable
 {
-    public void RotateClockwise();
+    public void RotateClockwise(bool _reverse);
     public void RotateAntiClockwise();
 }

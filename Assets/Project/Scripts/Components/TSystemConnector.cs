@@ -2,31 +2,45 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(TSystemRotator))]
 public class TSystemConnector : MonoBehaviour, ITSystemConnectable
 {
-    public ITSystemConnectable NextConveyor;
+    public ITSystemConnectable ConnectedTo;
     public CardinalDirection Facing = CardinalDirection.East;
+    public bool HasConnection;
 
-    private TSystemRotator rotatable;
+    // For debugging as interface is not serializable
+    [SerializeField] private string NextConveyorName;
 
-    private void Awake()
+    private void Update()
     {
-        rotatable = GetComponent<TSystemRotator>();
+        UpdateConnectionDebugFlag();
     }
 
     public void RefreshPushConnection()
     {
-        NextConveyor = null;
+        ConnectedTo = null;
 
-        if (rotatable)
+        RaycastHit2D _hit = Physics2D.Raycast(transform.position + Utils.DirToVector(Facing), Vector2.up);
+
+        if (_hit.transform.GetComponent<ITSystemConnectable>() != null)
         {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position + Utils.DirToVector(Facing), Vector2.up);
-            if (hit && hit.transform.gameObject.layer == (int) Layers.Conveyer)
-            {
-                NextConveyor = hit.transform.GetComponent<ITSystemConnectable>();
-            }
+            ConnectedTo = _hit.transform.GetComponent<ITSystemConnectable>();
         }
 
+        UpdateConnectionDebugFlag();
+    }
+
+    private void UpdateConnectionDebugFlag()
+    {
+        if (ConnectedTo == null)
+        { 
+            HasConnection = false;
+            NextConveyorName = "N/A";
+        }
+        else
+        {
+            HasConnection = true;
+            NextConveyorName = ConnectedTo.ToString();
+        }
     }
 }

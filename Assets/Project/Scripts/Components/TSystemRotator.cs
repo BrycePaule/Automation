@@ -5,33 +5,33 @@ using UnityEngine;
 [RequireComponent(typeof(TSystemConnector))]
 public class TSystemRotator : MonoBehaviour, ITSystemRotatable
 {
-    private TSystemConnector conveyorConnectable;
+    private TSystemConnector connector;
 
     private void Awake()
     {
-        conveyorConnectable = GetComponent<TSystemConnector>();
+        connector = GetComponent<TSystemConnector>();
     }
 
-    public void RotateClockwise()
+    public void RotateClockwise(bool _reverse = false)
     {
-        int currDir = (int) conveyorConnectable.Facing;
-        int newDir = (currDir + 1) % 4;
+        int _currDir = (int) connector.Facing;
+        int _newDir = (_currDir + 1) % 4;
+        connector.Facing = (CardinalDirection) _newDir;
 
-        conveyorConnectable.Facing = (CardinalDirection) newDir;
-        transform.Rotate(new Vector3(0, 0, -90));
+        if (_reverse)
+        {
+            transform.Rotate(new Vector3(0, 0, 90));
+        }
+        else
+        {
+            transform.Rotate(new Vector3(0, 0, -90));
+        }
 
-        conveyorConnectable.RefreshPushConnection();
+        connector.RefreshPushConnection();
     }
 
     public void RotateAntiClockwise()
     {
-        int currDir = (int) conveyorConnectable.Facing;
-        int newDir = (currDir + 3) % 4;
-
-        conveyorConnectable.Facing = (CardinalDirection) newDir;
-        transform.Rotate(new Vector3(0, 0, 90));
-
-        conveyorConnectable.RefreshPushConnection();
+        RotateClockwise(_reverse: true);
     }
-
 }

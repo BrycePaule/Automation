@@ -26,38 +26,25 @@ public class TSystemManager : MonoBehaviour
 
     public void DestroyConnectableAtWorldPos(Vector3 _worldPos)
     {
-        TSystemConnector _connectable = GetConnectableAtWorldPos(_worldPos);
+        ITSystemConnectable _connectable = GetConnectableAtWorldPos(_worldPos);
 
-        if (_connectable)
+        if (_connectable != null)
         {
-            Destroy(_connectable.gameObject);
+            Destroy(((Component) _connectable).gameObject);
             RefreshConnectionsAroundWorldPos(_worldPos);
         }
     }
 
-    public Conveyor GetConveyorAtWorldPos(Vector3 _worldPos)
+    public ITSystemConnectable GetConnectableAtWorldPos(Vector3 _worldPos)
     {
-        RaycastHit2D _hit = Physics2D.Raycast(_worldPos, Vector2.up);
 
-        if (_hit && _hit.transform.gameObject.layer == (int) Layers.Conveyer)
+        RaycastHit2D _hit = Physics2D.Raycast(_worldPos, Vector2.up);
+        if (_hit.transform.GetComponent<ITSystemConnectable>() != null)
         {
-            return _hit.transform.GetComponent<Conveyor>();
+           return _hit.transform.GetComponent<ITSystemConnectable>();
         }
         
         return null;
-    }
-
-    public TSystemConnector GetConnectableAtWorldPos(Vector3 _worldPos)
-    {
-        TSystemConnector _connectable = null;
-
-        RaycastHit2D _hit = Physics2D.Raycast(_worldPos, Vector2.up);
-        if (_hit)
-        {
-            _hit.transform.TryGetComponent<TSystemConnector>(out _connectable);
-        }
-        
-        return _connectable;
     }
 
 
@@ -70,11 +57,11 @@ public class TSystemManager : MonoBehaviour
             for (int j = -1; j <= 1; j++)
             {
                 Vector3 _offset = new Vector3(i, j, 0);
-                TSystemConnector _conv = GetConnectableAtWorldPos(_worldPos + _offset);
+                ITSystemConnectable _connectable = GetConnectableAtWorldPos(_worldPos + _offset);
 
-                if (_conv)
+                if (_connectable != null)
                 {
-                    _conv.GetComponent<TSystemConnector>().RefreshPushConnection();
+                    ((Component) _connectable).GetComponent<TSystemConnector>().RefreshPushConnection();
                 }
             }
         }

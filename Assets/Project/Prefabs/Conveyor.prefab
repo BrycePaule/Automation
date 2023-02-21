@@ -154,6 +154,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Facing: 1
+  HasConnection: 0
+  NextConveyorName: 
 --- !u!114 &7592894856203907874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,7 +168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13caf8e2e897e8b45a71f9f9d26cd563, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  QueueSize: 5
+  SlotCount: 5
 --- !u!114 &3665970570168745604
 MonoBehaviour:
   m_ObjectHideFlags: 0

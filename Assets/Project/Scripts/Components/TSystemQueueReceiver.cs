@@ -2,52 +2,44 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(TSystemConnector))]
 public class TSystemQueueReceiver : MonoBehaviour, ITSystemReceivable
 {
-    public int QueueSize;
-    public Queue<ConveyorSlot> QueueSlots;
-
-    private TSystemConnector tSysConnector;
-
-    private void Awake()
-    {
-        tSysConnector = GetComponent<TSystemConnector>();
-    }
+    public int SlotCount;
+    public Queue<ConveyorSlot> Slots;
 
     public void PlaceItem(Item _item)
     {
         // shuffle all but last slot
-        for (int i = 0; i < QueueSize - 1; i++)
+        for (int i = 0; i < SlotCount - 1; i++)
         {
-            QueueSlots.Enqueue(QueueSlots.Dequeue());
+            Slots.Enqueue(Slots.Dequeue());
         }
 
         // add item to last slot
-        ConveyorSlot lastSlot = QueueSlots.Dequeue();
-        lastSlot.SetItem(_item);
+        ConveyorSlot _lastSlot = Slots.Dequeue();
 
-        tSysConnector.RefreshPushConnection();
-        QueueSlots.Enqueue(lastSlot);
+        _lastSlot.SetItem(_item);
+        Slots.Enqueue(_lastSlot);
     }
 
     public bool CanReceiveItem()
     {
-        bool _receivable = false;
-
         // shuffle all but back slot
-        for (int i = 0; i < QueueSize - 1; i++)
+        for (int i = 0; i < SlotCount - 1; i++)
         {
-            QueueSlots.Enqueue(QueueSlots.Dequeue());
+            Slots.Enqueue(Slots.Dequeue());
         }
 
         // add item to back slot
-        ConveyorSlot _backSlot = QueueSlots.Dequeue();
-        if (_backSlot.IsEmpty())
+        ConveyorSlot _lastSlot = Slots.Dequeue();
+
+        bool _receivable = false;
+        if (_lastSlot.IsEmpty())
         {
             _receivable = true;
         }
-        QueueSlots.Enqueue(_backSlot);
+
+        Slots.Enqueue(_lastSlot);
 
         return _receivable;
     }
