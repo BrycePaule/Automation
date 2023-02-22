@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 4830788216208871572}
   - component: {fileID: 4915130908473216780}
   - component: {fileID: 5452952600120360059}
+  - component: {fileID: -8068181376038991531}
   m_Layer: 19
   m_Name: Sink
   m_TagString: Untagged
@@ -139,6 +140,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Facing: 1
+  HasConnection: 0
+  NextConveyorName: 
 --- !u!114 &4830788216208871572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,3 +179,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PrefabType: 102
+--- !u!114 &-8068181376038991531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 121493144518562992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eec64ed4c80442f48a535226fda11469, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

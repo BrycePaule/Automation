@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Item : MonoBehaviour
+[RequireComponent(typeof(ITSystemReceivable))]
+public class TSystemReceiptFilter : MonoBehaviour
 {
     public ItemType ItemType;
 }

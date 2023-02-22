@@ -58,11 +58,7 @@ public class Conveyor : MonoBehaviour
         Vector3 _resetPos = new Vector3(-0.5f, 0f, 0f);
 
         // If nowhere to send items, count how many stacked at the front
-        stackedItems = 0;
-        if (!connector.CanOffloadItem())
-        {
-            stackedItems = CountItemsStackedAtFront();
-        }
+        stackedItems = CountItemsStackedAtFront();
 
         float _xResetThreshold = 0.5f - ((1f / receiver.SlotCount) * stackedItems);
 
@@ -76,19 +72,19 @@ public class Conveyor : MonoBehaviour
 
             if (i < stackedItems)
             {
+                if (_slot.IsNotEmpty() && connector.CanOffloadItem(_slot.GetItem()))
+                {
+                    ITSystemReceivable _nextReceiver = ((Component) connector.ConnectedTo).GetComponent<ITSystemReceivable>();
+                    _nextReceiver.PlaceItem(_slot.GetItem());
+                    _slot.ClearItem();
+                }
+                
                 _slotCache.Add(_slot);
                 continue;
             }
 
             if (_slot.transform.localPosition.x >= _xResetThreshold)
             {
-                if (_slot.IsNotEmpty() && connector.CanOffloadItem())
-                {
-                    ITSystemReceivable _nextReceiver = ((Component) connector.ConnectedTo).GetComponent<ITSystemReceivable>();
-                    _nextReceiver.PlaceItem(_slot.GetItem());
-                    _slot.ClearItem();
-                }
-
                 _slot.transform.localPosition = _resetPos;
                 _resetSlotCache = _slot;
             }

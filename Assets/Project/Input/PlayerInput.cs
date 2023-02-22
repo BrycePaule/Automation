@@ -55,27 +55,27 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Q"",
+                    ""name"": ""1"",
                     ""type"": ""Button"",
-                    ""id"": ""70762d76-22ab-41d2-946e-6af91f0b1b9b"",
+                    ""id"": ""792f73a4-ac16-4cc9-950e-759ac7b7622e"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""W"",
+                    ""name"": ""2"",
                     ""type"": ""Button"",
-                    ""id"": ""e6d1dea8-17d5-4be5-a2c7-2a08793915ce"",
+                    ""id"": ""41fb9706-c5d1-4a75-97cc-5fc1e743d39a"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""E"",
+                    ""name"": ""3"",
                     ""type"": ""Button"",
-                    ""id"": ""450da485-a30e-497f-9dbd-9235e3e94514"",
+                    ""id"": ""d49586ee-d950-4a12-882d-0e54a22e4c99"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -118,36 +118,150 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""e105cff7-33cc-46c6-8afa-3ba1e0cbbd99"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""id"": ""4e9158ea-f9cc-49bb-9654-4213ff402982"",
+                    ""path"": ""<Keyboard>/1"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Q"",
+                    ""action"": ""1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""fe1a30d7-664d-42cb-9724-43d35566bad0"",
+                    ""id"": ""2f2f7fe3-78ef-4012-9551-4afe7f0ce4ac"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""75c54a10-209e-4dec-9324-3da36e0730ce"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Camera"",
+            ""id"": ""3729986b-318d-4fb2-8733-20c3228a3495"",
+            ""actions"": [
+                {
+                    ""name"": ""Pan"",
+                    ""type"": ""Value"",
+                    ""id"": ""d2d98088-efb5-43a8-81f1-dce4d66ee841"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Zoom"",
+                    ""type"": ""Value"",
+                    ""id"": ""deeb4f19-dfcb-48c3-93b7-1cd40e207aa3"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""35ed990a-c6fb-49cb-a1f3-4d5a0f6c4341"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pan"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""4362aea6-9a52-48df-af43-b11afda491e6"",
                     ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""W"",
+                    ""action"": ""Pan"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": false
+                    ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""1893ac40-0abc-4743-bb19-3bdafd1b7662"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""name"": ""down"",
+                    ""id"": ""978d35e7-50a2-4df0-b50b-974e77821420"",
+                    ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""E"",
+                    ""action"": ""Pan"",
                     ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""e1d0a9d2-3a95-4290-8c99-0bdea619a9f0"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pan"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""84371432-3f60-4c8d-ac9a-5ce4837142f6"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pan"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""66043841-4b38-4fea-b432-2e678c779383"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": true,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""c4810d11-36c7-4cc9-b845-360cfb23b039"",
+                    ""path"": ""<Mouse>/scroll/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""c3198841-f651-4140-8aaf-0a123da6356c"",
+                    ""path"": ""<Mouse>/scroll/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -159,9 +273,13 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_Player_MousePosition = m_Player.FindAction("MousePosition", throwIfNotFound: true);
         m_Player_LeftClick = m_Player.FindAction("LeftClick", throwIfNotFound: true);
         m_Player_RightClick = m_Player.FindAction("RightClick", throwIfNotFound: true);
-        m_Player_Q = m_Player.FindAction("Q", throwIfNotFound: true);
-        m_Player_W = m_Player.FindAction("W", throwIfNotFound: true);
-        m_Player_E = m_Player.FindAction("E", throwIfNotFound: true);
+        m_Player__1 = m_Player.FindAction("1", throwIfNotFound: true);
+        m_Player__2 = m_Player.FindAction("2", throwIfNotFound: true);
+        m_Player__3 = m_Player.FindAction("3", throwIfNotFound: true);
+        // Camera
+        m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
+        m_Camera_Pan = m_Camera.FindAction("Pan", throwIfNotFound: true);
+        m_Camera_Zoom = m_Camera.FindAction("Zoom", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -224,9 +342,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_MousePosition;
     private readonly InputAction m_Player_LeftClick;
     private readonly InputAction m_Player_RightClick;
-    private readonly InputAction m_Player_Q;
-    private readonly InputAction m_Player_W;
-    private readonly InputAction m_Player_E;
+    private readonly InputAction m_Player__1;
+    private readonly InputAction m_Player__2;
+    private readonly InputAction m_Player__3;
     public struct PlayerActions
     {
         private @PlayerInput m_Wrapper;
@@ -234,9 +352,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         public InputAction @MousePosition => m_Wrapper.m_Player_MousePosition;
         public InputAction @LeftClick => m_Wrapper.m_Player_LeftClick;
         public InputAction @RightClick => m_Wrapper.m_Player_RightClick;
-        public InputAction @Q => m_Wrapper.m_Player_Q;
-        public InputAction @W => m_Wrapper.m_Player_W;
-        public InputAction @E => m_Wrapper.m_Player_E;
+        public InputAction @_1 => m_Wrapper.m_Player__1;
+        public InputAction @_2 => m_Wrapper.m_Player__2;
+        public InputAction @_3 => m_Wrapper.m_Player__3;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -255,15 +373,15 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @RightClick.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRightClick;
                 @RightClick.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRightClick;
                 @RightClick.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRightClick;
-                @Q.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnQ;
-                @Q.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnQ;
-                @Q.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnQ;
-                @W.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnW;
-                @W.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnW;
-                @W.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnW;
-                @E.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnE;
-                @E.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnE;
-                @E.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnE;
+                @_1.started -= m_Wrapper.m_PlayerActionsCallbackInterface.On_1;
+                @_1.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.On_1;
+                @_1.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.On_1;
+                @_2.started -= m_Wrapper.m_PlayerActionsCallbackInterface.On_2;
+                @_2.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.On_2;
+                @_2.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.On_2;
+                @_3.started -= m_Wrapper.m_PlayerActionsCallbackInterface.On_3;
+                @_3.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.On_3;
+                @_3.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.On_3;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -277,26 +395,72 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @RightClick.started += instance.OnRightClick;
                 @RightClick.performed += instance.OnRightClick;
                 @RightClick.canceled += instance.OnRightClick;
-                @Q.started += instance.OnQ;
-                @Q.performed += instance.OnQ;
-                @Q.canceled += instance.OnQ;
-                @W.started += instance.OnW;
-                @W.performed += instance.OnW;
-                @W.canceled += instance.OnW;
-                @E.started += instance.OnE;
-                @E.performed += instance.OnE;
-                @E.canceled += instance.OnE;
+                @_1.started += instance.On_1;
+                @_1.performed += instance.On_1;
+                @_1.canceled += instance.On_1;
+                @_2.started += instance.On_2;
+                @_2.performed += instance.On_2;
+                @_2.canceled += instance.On_2;
+                @_3.started += instance.On_3;
+                @_3.performed += instance.On_3;
+                @_3.canceled += instance.On_3;
             }
         }
     }
     public PlayerActions @Player => new PlayerActions(this);
+
+    // Camera
+    private readonly InputActionMap m_Camera;
+    private ICameraActions m_CameraActionsCallbackInterface;
+    private readonly InputAction m_Camera_Pan;
+    private readonly InputAction m_Camera_Zoom;
+    public struct CameraActions
+    {
+        private @PlayerInput m_Wrapper;
+        public CameraActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Pan => m_Wrapper.m_Camera_Pan;
+        public InputAction @Zoom => m_Wrapper.m_Camera_Zoom;
+        public InputActionMap Get() { return m_Wrapper.m_Camera; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(CameraActions set) { return set.Get(); }
+        public void SetCallbacks(ICameraActions instance)
+        {
+            if (m_Wrapper.m_CameraActionsCallbackInterface != null)
+            {
+                @Pan.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnPan;
+                @Pan.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnPan;
+                @Pan.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnPan;
+                @Zoom.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnZoom;
+                @Zoom.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnZoom;
+                @Zoom.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnZoom;
+            }
+            m_Wrapper.m_CameraActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Pan.started += instance.OnPan;
+                @Pan.performed += instance.OnPan;
+                @Pan.canceled += instance.OnPan;
+                @Zoom.started += instance.OnZoom;
+                @Zoom.performed += instance.OnZoom;
+                @Zoom.canceled += instance.OnZoom;
+            }
+        }
+    }
+    public CameraActions @Camera => new CameraActions(this);
     public interface IPlayerActions
     {
         void OnMousePosition(InputAction.CallbackContext context);
         void OnLeftClick(InputAction.CallbackContext context);
         void OnRightClick(InputAction.CallbackContext context);
-        void OnQ(InputAction.CallbackContext context);
-        void OnW(InputAction.CallbackContext context);
-        void OnE(InputAction.CallbackContext context);
+        void On_1(InputAction.CallbackContext context);
+        void On_2(InputAction.CallbackContext context);
+        void On_3(InputAction.CallbackContext context);
+    }
+    public interface ICameraActions
+    {
+        void OnPan(InputAction.CallbackContext context);
+        void OnZoom(InputAction.CallbackContext context);
     }
 }

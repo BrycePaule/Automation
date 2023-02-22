@@ -7,8 +7,8 @@ public interface ITSystemConnectable
 
     // Ensure all classess that implement this have a 'NextConveyor' variable
 
-
     public void RefreshPushConnection();
-    public bool CanOffloadItem();
+
+    public bool CanOffloadItem(Item _item);
     
 }

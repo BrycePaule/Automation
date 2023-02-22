@@ -18,9 +18,10 @@ public class TSystemConnector : MonoBehaviour, ITSystemConnectable
 
     public void RefreshPushConnection()
     {
-        ConnectedTo = null;
-
         RaycastHit2D _hit = Physics2D.Raycast(transform.position + Utils.DirToVector(Facing), Vector2.up);
+        if (!_hit) { return; }
+
+        ConnectedTo = null;
 
         if (_hit.transform.GetComponent<ITSystemConnectable>() != null)
         {
@@ -30,14 +31,15 @@ public class TSystemConnector : MonoBehaviour, ITSystemConnectable
         UpdateConnectionDebugFlag();
     }
 
-    public bool CanOffloadItem()
+    public bool CanOffloadItem(Item _item)
     {
+        if (_item == null) { return false; }
         if (ConnectedTo == null) { return false; }
 
         ITSystemReceivable _nextReceiver = ((Component) ConnectedTo).GetComponent<ITSystemReceivable>();
 
         if (_nextReceiver == null) { return false; }
-        if (!_nextReceiver.CanReceiveItem()) { return false; }
+        if (!_nextReceiver.CanReceiveItem(_item)) { return false; }
 
         return true;
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(TSystemRotator))]
 [RequireComponent(typeof(TSystemConnector))]
-[RequireComponent(typeof(TSystemNullReceiver))]
+[RequireComponent(typeof(TSystemDeleteReceiver))]
 public class Sink : MonoBehaviour
 {
 

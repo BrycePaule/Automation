@@ -33,27 +33,27 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Q",
+                    "name": "1",
                     "type": "Button",
-                    "id": "70762d76-22ab-41d2-946e-6af91f0b1b9b",
+                    "id": "792f73a4-ac16-4cc9-950e-759ac7b7622e",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "W",
+                    "name": "2",
                     "type": "Button",
-                    "id": "e6d1dea8-17d5-4be5-a2c7-2a08793915ce",
+                    "id": "41fb9706-c5d1-4a75-97cc-5fc1e743d39a",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "E",
+                    "name": "3",
                     "type": "Button",
-                    "id": "450da485-a30e-497f-9dbd-9235e3e94514",
+                    "id": "d49586ee-d950-4a12-882d-0e54a22e4c99",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -96,36 +96,150 @@
                 },
                 {
                     "name": "",
-                    "id": "e105cff7-33cc-46c6-8afa-3ba1e0cbbd99",
-                    "path": "<Keyboard>/q",
+                    "id": "4e9158ea-f9cc-49bb-9654-4213ff402982",
+                    "path": "<Keyboard>/1",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Q",
+                    "action": "1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "fe1a30d7-664d-42cb-9724-43d35566bad0",
+                    "id": "2f2f7fe3-78ef-4012-9551-4afe7f0ce4ac",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "75c54a10-209e-4dec-9324-3da36e0730ce",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "3",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Camera",
+            "id": "3729986b-318d-4fb2-8733-20c3228a3495",
+            "actions": [
+                {
+                    "name": "Pan",
+                    "type": "Value",
+                    "id": "d2d98088-efb5-43a8-81f1-dce4d66ee841",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Zoom",
+                    "type": "Value",
+                    "id": "deeb4f19-dfcb-48c3-93b7-1cd40e207aa3",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "2D Vector",
+                    "id": "35ed990a-c6fb-49cb-a1f3-4d5a0f6c4341",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pan",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "4362aea6-9a52-48df-af43-b11afda491e6",
                     "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "W",
+                    "action": "Pan",
                     "isComposite": false,
-                    "isPartOfComposite": false
+                    "isPartOfComposite": true
                 },
                 {
-                    "name": "",
-                    "id": "1893ac40-0abc-4743-bb19-3bdafd1b7662",
-                    "path": "<Keyboard>/e",
+                    "name": "down",
+                    "id": "978d35e7-50a2-4df0-b50b-974e77821420",
+                    "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "E",
+                    "action": "Pan",
                     "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "e1d0a9d2-3a95-4290-8c99-0bdea619a9f0",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pan",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "84371432-3f60-4c8d-ac9a-5ce4837142f6",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pan",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "1D Axis",
+                    "id": "66043841-4b38-4fea-b432-2e678c779383",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Zoom",
+                    "isComposite": true,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "positive",
+                    "id": "c4810d11-36c7-4cc9-b845-360cfb23b039",
+                    "path": "<Mouse>/scroll/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Zoom",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "negative",
+                    "id": "c3198841-f651-4140-8aaf-0a123da6356c",
+                    "path": "<Mouse>/scroll/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Zoom",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         }

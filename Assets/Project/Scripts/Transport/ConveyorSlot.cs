@@ -9,18 +9,25 @@ public class ConveyorSlot : MonoBehaviour
 
     private SpriteRenderer _sr;
 
+    private bool Empty;
+
     private void Awake()
     {
         _sr = GetComponent<SpriteRenderer>();
     }
 
-    public bool IsEmpty() => itemObj == null;
-    public bool IsNotEmpty() => itemObj != null;
+    public bool IsEmpty() => item == null;
+    public bool IsNotEmpty() => item != null;
     public Item GetItem() => item;
+
+    private void Update()
+    {
+        Empty = IsEmpty();
+    }
 
     public void SetItem(Item _item)
     {
-        if (!_item) { return; }
+        if (_item == null) { return; }
 
         item = _item;
         itemObj = _item.gameObject;

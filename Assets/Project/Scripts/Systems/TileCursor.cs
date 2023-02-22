@@ -10,10 +10,6 @@ public class TileCursor : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
 
-    [Header("References")]
-    [SerializeField] private TSystemManager conveyorManager;
-
-
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();

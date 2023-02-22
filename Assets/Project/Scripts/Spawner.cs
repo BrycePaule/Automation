@@ -33,9 +33,16 @@ public class Spawner : MonoBehaviour
         if (!tSysConnector.HasConnection) { return; }
 
         Component _connectedObj = (Component) tSysConnector.ConnectedTo;
-        if (!_connectedObj.GetComponent<TSystemQueueReceiver>().CanReceiveItem()) { return; }
+        if (_connectedObj == null) { return; }
 
         Item _item = Instantiate(ItemToSpawn, transform.position, Quaternion.identity).GetComponent<Item>();
+
+        if (!_connectedObj.GetComponent<TSystemQueueReceiver>().CanReceiveItem(_item))
+        {
+            Destroy(_item.gameObject);
+            return;
+        }
+
         _connectedObj.GetComponent<TSystemQueueReceiver>().PlaceItem(_item);
     }
 }
