@@ -163,13 +163,13 @@ public class InputManager : MonoBehaviour
         Item _item = Instantiate(prefabLibrary.GetPrefabOfType(PrefabType.Item), Vector3.zero, Quaternion.identity).GetComponent<Item>();
         _item.gameObject.GetComponent<SpriteRenderer>().color = randomColor;
 
-        if (!_receiver.CanReceiveItem(_item)) 
+        if (!_receiver.CanReceive(_item)) 
         {
             Destroy(_item.gameObject);
             return;
         }
 
-        _receiver.PlaceItem(_item);
+        _receiver.Give(_item);
     }
 
     private void On2()

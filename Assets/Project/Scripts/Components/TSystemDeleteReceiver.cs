@@ -4,26 +4,23 @@ using UnityEngine;
 
 public class TSystemDeleteReceiver : MonoBehaviour, ITSystemReceivable
 {
-    public void PlaceItem(Item _item)
+    public void Give(Item _item)
     {
         Destroy(_item.gameObject);
     }
 
-    public bool CanReceiveItem(Item _item)
+    public bool CanReceive(Item _item)
     {
-        if (!ItemPassesFilter(_item)) { return false; }
+        if (!ItemMatchesFilter(_item)) { return false; }
 
         return true;
     }
 
-    public bool ItemPassesFilter(Item _item)
+    public bool ItemMatchesFilter(Item _item)
     {
         TSystemReceiptFilter _filter = transform.GetComponent<TSystemReceiptFilter>();
-
-        if (_filter == null) { return true; } // no filter component
-        if (_filter.ItemType == ItemType.Any) { return true; } // filter accepts anything
-        if (_filter.ItemType == _item.ItemType) { return true; } // filter set to item
-
-        return false;
+        if (_filter == null) { return true; }
+    
+        return _filter.Check(_item);
     }
 }

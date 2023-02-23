@@ -27,7 +27,7 @@ public class TSystemRotator : MonoBehaviour, ITSystemRotatable
             transform.Rotate(new Vector3(0, 0, -90));
         }
 
-        connector.RefreshPushConnection();
+        connector.RefreshTSysConnection();
     }
 
     public void RotateAntiClockwise()

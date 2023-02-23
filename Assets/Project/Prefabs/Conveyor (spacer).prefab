@@ -11,13 +11,13 @@ GameObject:
   - component: {fileID: 8101000113016533205}
   - component: {fileID: 6302141920924472432}
   - component: {fileID: 3486167011735841373}
-  - component: {fileID: 6866093381385168736}
   - component: {fileID: 6508085055607174282}
   - component: {fileID: 6513914186719948946}
-  - component: {fileID: 7592894856203907874}
   - component: {fileID: 3665970570168745604}
+  - component: {fileID: 5745023214444970979}
+  - component: {fileID: 1566095677751510220}
   m_Layer: 20
-  m_Name: Conveyor
+  m_Name: Conveyor (spacer)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -115,20 +115,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &6866093381385168736
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4196235035966897580}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1be420a59878634bbc518bea2a514dd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ItemsMovedPerSecond: 3
-  showSlotGraphics: 1
 --- !u!114 &6508085055607174282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -156,19 +142,6 @@ MonoBehaviour:
   Facing: 1
   HasValidConnection: 0
   TSysConnectionName: 
---- !u!114 &7592894856203907874
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4196235035966897580}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13caf8e2e897e8b45a71f9f9d26cd563, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SlotCount: 3
 --- !u!114 &3665970570168745604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -182,6 +155,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PrefabType: 100
+--- !u!114 &5745023214444970979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4196235035966897580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f29ed1c066bf596449320915be8b49ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxItems: 3
+  Items: []
+  gapWidth: 0
+--- !u!114 &1566095677751510220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4196235035966897580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a806fa20e7c4e2042a0fc12be59309e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Movespeed: 1
 --- !u!1001 &3221921169808766889
 PrefabInstance:
   m_ObjectHideFlags: 0

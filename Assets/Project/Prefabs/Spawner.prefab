@@ -125,8 +125,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81e737bfeb8320a41ad670a27e0ef958, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawnCadence: 1
-  ItemToSpawn: {fileID: 1412769314480690462, guid: 04aa86c169b21624d88e8148edff3091, type: 3}
+  SpawnCadence: 0.1
+  ItemToSpawn: {fileID: 1412769314480690462, guid: 1ba56e2fc24acc1419e636c15eb6b1ab, type: 3}
 --- !u!114 &2794842332992342708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,6 +140,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Facing: 1
+  HasValidConnection: 0
+  TSysConnectionName: 
 --- !u!114 &8876462888289927295
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -4,42 +4,31 @@ using UnityEngine;
 
 public class ConveyorSlot : MonoBehaviour
 {
-    [SerializeField] private GameObject itemObj;
-    [SerializeField] private Item item;
+    public Item Item;
 
     private SpriteRenderer _sr;
-
-    private bool Empty;
 
     private void Awake()
     {
         _sr = GetComponent<SpriteRenderer>();
     }
 
-    public bool IsEmpty() => item == null;
-    public bool IsNotEmpty() => item != null;
-    public Item GetItem() => item;
-
-    private void Update()
-    {
-        Empty = IsEmpty();
-    }
+    public bool IsEmpty() => Item == null;
+    public bool IsNotEmpty() => Item != null;
 
     public void SetItem(Item _item)
     {
         if (_item == null) { return; }
 
-        item = _item;
-        itemObj = _item.gameObject;
+        Item = _item;
 
-        itemObj.transform.position = transform.position;
-        itemObj.transform.SetParent(transform);
+        Item.transform.position = transform.position;
+        Item.transform.SetParent(transform);
     }
 
     public void ClearItem()
     {
-        itemObj = null;
-        item = null;
+        Item = null;
     }
 
     // DRAWING

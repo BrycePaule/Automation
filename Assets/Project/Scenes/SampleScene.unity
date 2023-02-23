@@ -166,7 +166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f4e66232266e224aa4bff0a3cf7a284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CameraPanningSpeed: 10
+  CameraPanningSpeed: 20
   MinimumZoomLevel: 1
   MaximumZoomLevel: 15
   tilemap: {fileID: 1163442512}
@@ -469,7 +469,7 @@ Camera:
   far clip plane: 50
   field of view: 60
   orthographic: 1
-  orthographic size: 8
+  orthographic size: 15
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -812,7 +812,7 @@ MonoBehaviour:
   m_Follow: {fileID: 1968400425}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 8
+    OrthographicSize: 15
     NearClipPlane: 0.3
     FarClipPlane: 50
     Dutch: 0

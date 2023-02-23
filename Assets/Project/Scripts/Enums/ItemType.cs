@@ -6,4 +6,6 @@ public enum ItemType
 {
     Any = 0,
 
+    Stick = 1,
+
 }

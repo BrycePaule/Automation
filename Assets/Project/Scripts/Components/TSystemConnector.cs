@@ -6,24 +6,24 @@ public class TSystemConnector : MonoBehaviour, ITSystemConnectable
 {
     public ITSystemConnectable ConnectedTo;
     public CardinalDirection Facing = CardinalDirection.East;
-    public bool HasConnection;
 
-    // For debugging as interface is not serializable
-    [SerializeField] private string NextConveyorName;
+    public bool HasValidConnection;
 
-    private void Update()
+    // DEBUG ONLY
+    [SerializeField] private string TSysConnectionName;
+
+    private void FixedUpdate()
     {
         UpdateConnectionDebugFlag();
     }
 
-    public void RefreshPushConnection()
+    public void RefreshTSysConnection()
     {
-        RaycastHit2D _hit = Physics2D.Raycast(transform.position + Utils.DirToVector(Facing), Vector2.up);
-        if (!_hit) { return; }
-
         ConnectedTo = null;
 
-        if (_hit.transform.GetComponent<ITSystemConnectable>() != null)
+        RaycastHit2D _hit = Physics2D.Raycast(transform.position + Utils.DirToVector(Facing), Vector2.up);
+
+        if (_hit && _hit.transform.GetComponent<ITSystemConnectable>() != null)
         {
             ConnectedTo = _hit.transform.GetComponent<ITSystemConnectable>();
         }
@@ -34,27 +34,37 @@ public class TSystemConnector : MonoBehaviour, ITSystemConnectable
     public bool CanOffloadItem(Item _item)
     {
         if (_item == null) { return false; }
-        if (ConnectedTo == null) { return false; }
+        if (!HasValidConnection) { return false; }
 
-        ITSystemReceivable _nextReceiver = ((Component) ConnectedTo).GetComponent<ITSystemReceivable>();
+        ITSystemReceivable _nextReceiver = GetConnectedReceiver();
 
         if (_nextReceiver == null) { return false; }
-        if (!_nextReceiver.CanReceiveItem(_item)) { return false; }
+        if (!_nextReceiver.CanReceive(_item)) { return false; }
 
         return true;
     }
 
+    public ITSystemReceivable GetConnectedReceiver()
+    {
+        if (!HasValidConnection) { return null; }
+
+        ITSystemReceivable _receiver = ((Component) ConnectedTo).GetComponent<ITSystemReceivable>();
+        return _receiver;
+    }
+
+
+    // DEBUG ONLY
     private void UpdateConnectionDebugFlag()
     {
         if (ConnectedTo == null)
         { 
-            HasConnection = false;
-            NextConveyorName = "N/A";
+            HasValidConnection = false;
+            TSysConnectionName = "N/A";
         }
         else
         {
-            HasConnection = true;
-            NextConveyorName = ConnectedTo.ToString();
+            HasValidConnection = true;
+            TSysConnectionName = ConnectedTo.ToString();
         }
     }
 }

@@ -5,7 +5,6 @@ using UnityEngine;
 public enum PrefabType
 {
     NOT_SELECTED = 0,
-    NOT_SELECT = 1,
 
     Conveyor = 100,
     ConveyorSlot = 101,

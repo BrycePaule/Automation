@@ -4,11 +4,9 @@ using UnityEngine;
 
 public interface ITSystemConnectable
 {
+    public void RefreshTSysConnection();
+    public ITSystemReceivable GetConnectedReceiver();
 
-    // Ensure all classess that implement this have a 'NextConveyor' variable
-
-    public void RefreshPushConnection();
-
+    // CHECKERS
     public bool CanOffloadItem(Item _item);
-    
 }

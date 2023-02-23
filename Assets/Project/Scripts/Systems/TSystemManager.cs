@@ -63,7 +63,7 @@ public class TSystemManager : MonoBehaviour
 
                 if (_connectable != null)
                 {
-                    _connectable.GetComponent<TSystemConnector>().RefreshPushConnection();
+                    _connectable.GetComponent<TSystemConnector>().RefreshTSysConnection();
                 }
             }
         }

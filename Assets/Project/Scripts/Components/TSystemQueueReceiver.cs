@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class TSystemQueueReceiver : MonoBehaviour, ITSystemReceivable
 {
-    public int SlotCount;
     public Queue<ConveyorSlot> Slots;
+    public int SlotCount;
 
-    public void PlaceItem(Item _item)
+    public void Give(Item _item)
     {
         // shuffle all but last slot
         for (int i = 0; i < SlotCount - 1; i++)
@@ -22,38 +22,42 @@ public class TSystemQueueReceiver : MonoBehaviour, ITSystemReceivable
         Slots.Enqueue(_lastSlot);
     }
 
-    public bool CanReceiveItem(Item _item)
+    public bool CanReceive(Item _item)
     {
-        if (!ItemPassesFilter(_item)) { return false; }
+        if (!ItemMatchesFilter(_item)) { return false; }
 
-        // shuffle all but last slot
-        for (int i = 0; i < SlotCount - 1; i++)
+        ConveyorSlot _back = null;
+        for (int i = 1; i <= SlotCount; i++)
         {
-            Slots.Enqueue(Slots.Dequeue());
+            ConveyorSlot _curr = Slots.Dequeue();
+            Slots.Enqueue(_curr);
+
+            if (i == SlotCount)
+            {
+                _back = _curr;
+            }
         }
 
-        // add item to last slot
-        ConveyorSlot _lastSlot = Slots.Dequeue();
+        return _back.IsEmpty();
 
-        bool _receivable = false;
-        if (_lastSlot.IsEmpty())
-        {
-            _receivable = true;
-        }
+        // float _leftPickupBound = -0.5f;
+        // float _rightPickupBound = -0.5f + (1 / SlotCount);
 
-        Slots.Enqueue(_lastSlot);
+        // float _backXPos = _back.transform.position.x;
 
-        return _receivable;
+        // if (_backXPos >= _leftPickupBound && _backXPos <= _rightPickupBound)
+        // {
+        //     return _back.IsEmpty();
+        // }
+
+        // return false;
     }
 
-    public bool ItemPassesFilter(Item _item)
+    public bool ItemMatchesFilter(Item _item)
     {
         TSystemReceiptFilter _filter = transform.GetComponent<TSystemReceiptFilter>();
-
-        if (_filter == null) { return true; } // no filter component
-        if (_filter.ItemType == ItemType.Any) { return true; } // filter accepts anything
-        if (_filter.ItemType == _item.ItemType) { return true; } // filter set to item
-
-        return false;
+        if (_filter == null) { return true; }
+    
+        return _filter.Check(_item);
     }
 }

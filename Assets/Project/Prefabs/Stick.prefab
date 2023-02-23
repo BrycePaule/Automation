@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: -6355656812790421821}
   - component: {fileID: 7451841569229492512}
   m_Layer: 0
-  m_Name: Item
+  m_Name: Stick
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -74,7 +74,7 @@ SpriteRenderer:
   m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
-  m_Color: {r: 0.764151, g: 0.12615699, b: 0.12615699, a: 1}
+  m_Color: {r: 0.3207547, g: 0.14304338, b: 0.11044855, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36cbaa10c21197e48a6072bc8d0db3be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ItemType: 0
+  ItemType: 1
 --- !u!114 &7451841569229492512
 MonoBehaviour:
   m_ObjectHideFlags: 0

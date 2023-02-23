@@ -13,8 +13,8 @@ public class Conveyor : MonoBehaviour
     /*
         For a 5 block Conveyor:
 
-        x o o x x
-        4 3 2 1 0
+        back    |   x o o x x   |   front (first slot if you dequeue)
+        back    |   4 3 2 1 0   |   front (first slot if you dequeue)
 
         Travelling in >>>> direction
     */
@@ -57,36 +57,36 @@ public class Conveyor : MonoBehaviour
         Vector3 _moveOffset = new Vector3((ItemsMovedPerSecond / receiver.SlotCount) * Time.deltaTime, 0f, 0f);
         Vector3 _resetPos = new Vector3(-0.5f, 0f, 0f);
 
-        // If nowhere to send items, count how many stacked at the front
-        stackedItems = CountItemsStackedAtFront();
-
+        stackedItems = CountStackedItems();
         float _xResetThreshold = 0.5f - ((1f / receiver.SlotCount) * stackedItems);
 
         List<ConveyorSlot> _slotCache = new List<ConveyorSlot>();
-        ConveyorSlot _resetSlotCache = null;
+        ConveyorSlot _resetSlot = null;
+        ConveyorSlot _front = receiver.Slots.Peek();
 
-        // UPDATE SLOTS AND MOVE ITEMS
         for (int i = 0; i <= receiver.SlotCount - 1; i++)
         {
             ConveyorSlot _slot = receiver.Slots.Dequeue();
 
+            // if slot is part of the front stack
             if (i < stackedItems)
             {
-                if (_slot.IsNotEmpty() && connector.CanOffloadItem(_slot.GetItem()))
+                if (_slot == _front && connector.CanOffloadItem(_slot.Item))
                 {
-                    ITSystemReceivable _nextReceiver = ((Component) connector.ConnectedTo).GetComponent<ITSystemReceivable>();
-                    _nextReceiver.PlaceItem(_slot.GetItem());
+                    connector.GetConnectedReceiver().Give(_slot.Item);
                     _slot.ClearItem();
                 }
-                
+
                 _slotCache.Add(_slot);
                 continue;
             }
 
+            // handling the rest
             if (_slot.transform.localPosition.x >= _xResetThreshold)
             {
                 _slot.transform.localPosition = _resetPos;
-                _resetSlotCache = _slot;
+                _slot.transform.localPosition += _moveOffset;
+                _resetSlot = _slot;
             }
             else
             {
@@ -101,14 +101,13 @@ public class Conveyor : MonoBehaviour
             receiver.Slots.Enqueue(_slot);
         }
 
-        if (_resetSlotCache != null)
+        if (_resetSlot != null)
         {
-            receiver.Slots.Enqueue(_resetSlotCache);
+            receiver.Slots.Enqueue(_resetSlot);
         }
-
     }
 
-    private int CountItemsStackedAtFront()
+    private int CountStackedItems()
     {
         int _stackedItems = 0;
 
@@ -126,7 +125,6 @@ public class Conveyor : MonoBehaviour
 
         return _stackedItems;
     }
-
 
     private void CreateAndPlaceSlots()
     {
