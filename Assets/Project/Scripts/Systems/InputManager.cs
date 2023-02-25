@@ -69,7 +69,7 @@ public class InputManager : MonoBehaviour
 
     private void Start()
     {
-        cameraTarget.position = new Vector3(gameManager.size / 2, gameManager.size / 2, 0f);
+        cameraTarget.position = new Vector3(tilemapManager.size / 2, tilemapManager.size / 2, 0f);
     }
 
     private void Update()
@@ -176,7 +176,7 @@ public class InputManager : MonoBehaviour
     {
         if (tilemapManager.IsLayerAtWorldPos(Layers.Tilemap, mousePosWorld))
         {
-            tSysManager.PlaceTSystemObjectAtWorldPos(prefabLibrary.GetPrefabOfType(PrefabType.Spawner), mousePosWorld);
+            tSysManager.PlaceTSystemObjectAtWorldPos(prefabLibrary.GetPrefabOfType(PrefabType.Drill), mousePosWorld);
         }
     }
 

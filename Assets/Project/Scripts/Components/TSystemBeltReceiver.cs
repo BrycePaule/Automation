@@ -3,16 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(ITSystemConnectable))]
 public class TSystemBeltReceiver : MonoBehaviour, ITSystemReceivable
 {
     public int MaxItems;
     public List<Item> Items;
 
-    private Vector3 resetPos;
     public float gapWidth;
+
+    private TSystemConnector connector;
+    private Vector3 resetPos;
 
     private void Awake()
     {
+        connector = transform.GetComponent<TSystemConnector>();
+
         Items = new List<Item>();
         SetSpacing();
     }
@@ -30,6 +35,9 @@ public class TSystemBeltReceiver : MonoBehaviour, ITSystemReceivable
         _item.transform.SetParent(transform);
         _item.transform.position = transform.position;
         _item.transform.localPosition += resetPos;
+
+        int _rotationMultiplier = (int) connector.Facing - (int) CardinalDirection.East;
+        _item.transform.Rotate(new Vector3(0f, 0f, -90 * _rotationMultiplier));
 
         Items.Add(_item);
     }

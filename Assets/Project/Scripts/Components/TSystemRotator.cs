@@ -6,6 +6,9 @@ using UnityEngine;
 public class TSystemRotator : MonoBehaviour, ITSystemRotatable
 {
     private TSystemConnector connector;
+    private Transform connectionMarker;
+
+    private bool hasMarker;
 
     private void Awake()
     {
@@ -18,13 +21,12 @@ public class TSystemRotator : MonoBehaviour, ITSystemRotatable
         int _newDir = (_currDir + 1) % 4;
         connector.Facing = (CardinalDirection) _newDir;
 
-        if (_reverse)
+        Vector3 _rotateVector = _reverse ? new Vector3(0, 0, 90) : new Vector3(0, 0, -90);
+
+        transform.Rotate(_rotateVector);
+        if (hasMarker)
         {
-            transform.Rotate(new Vector3(0, 0, 90));
-        }
-        else
-        {
-            transform.Rotate(new Vector3(0, 0, -90));
+            connectionMarker.Rotate(_rotateVector);
         }
 
         connector.RefreshTSysConnection();
@@ -33,5 +35,17 @@ public class TSystemRotator : MonoBehaviour, ITSystemRotatable
     public void RotateAntiClockwise()
     {
         RotateClockwise(_reverse: true);
+    }
+
+    private Transform GetConnectionMarker()
+    {
+        Transform _marker = connector.ConnectionMarker;
+
+        if (_marker != null)
+        {
+            hasMarker = true;
+        }
+
+        return _marker;
     }
 }

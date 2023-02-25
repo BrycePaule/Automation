@@ -6,6 +6,7 @@ public class TSystemConnector : MonoBehaviour, ITSystemConnectable
 {
     public ITSystemConnectable ConnectedTo;
     public CardinalDirection Facing = CardinalDirection.East;
+    public Transform ConnectionMarker;
 
     public bool HasValidConnection;
 

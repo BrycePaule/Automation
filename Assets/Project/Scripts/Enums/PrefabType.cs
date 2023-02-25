@@ -10,6 +10,7 @@ public enum PrefabType
     ConveyorSlot = 101,
     Sink = 102,
     Spawner = 103,
+    Drill = 104,
 
     Item = 200,
 

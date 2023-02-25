@@ -26,4 +26,9 @@ public static class Utils
         }
     }
 
+    public static bool Roll(float chance)
+    {
+        return Random.Range(0f, 100f) <= chance;
+    }
+
 }

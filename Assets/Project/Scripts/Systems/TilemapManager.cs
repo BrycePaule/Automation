@@ -5,10 +5,24 @@ using UnityEngine.Tilemaps;
 
 public class TilemapManager : MonoBehaviour
 {
+    [Range(1, 150)] public int size;
+
+    private int[,] map;
 
     [Header("References")]
     [SerializeField] private Tilemap _tilemap;
+    [SerializeField] private Tile _baseTile;
+    [SerializeField] private Tile _rockTile;
 
+    private void Awake()
+    {
+        map = new int[size,size];
+
+        SetMap();
+        CullRocks();
+
+        SetTiles();
+    }
 
     public bool IsLayerAtWorldPos(Layers _layer, Vector3 _worldPos)
     {
@@ -23,4 +37,73 @@ public class TilemapManager : MonoBehaviour
 
         return _tilemap.CellToWorld(_cellPos) + _baseTilemapOffset;
     }
+
+    private void SetTiles()
+    {
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                Vector3Int pos = new Vector3Int(i, j, 0);
+
+                if (map[i, j] == 1)
+                {
+                    _tilemap.SetTile(pos, _rockTile);
+                }
+
+                if (map[i, j] == 0)
+                {
+                    _tilemap.SetTile(pos, _baseTile);
+                }
+            }
+        }
+    }
+
+    private void SetMap()
+    {
+        int _radius = 5;
+
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                if (Utils.Roll(0.05f)) // ROCK
+                {
+                    for (int a = (i-_radius); a <=  (i+_radius); a++)
+                    {
+                        for (int b = (j-_radius); b <= (j+_radius); b++)
+                        {
+                            if (a < 0 || a >= size) { continue; }
+                            if (b < 0 || b >= size) { continue; }
+
+                            map[a, b] = 1;
+                        }
+                    }
+                }
+                else // BASE TILE
+                {
+                    map[i, j] = 0;
+                }
+            }
+        }
+    }
+
+    private void CullRocks()
+    {
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                if (map[i, j] == 1)
+                {
+                    if (Utils.Roll(25f))
+                    {
+                        map[i, j] = 0;
+                    }
+                }
+            }
+        }
+
+    }
+
 }
