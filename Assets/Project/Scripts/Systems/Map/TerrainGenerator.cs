@@ -41,9 +41,11 @@ public class TerrainGenerator : MonoBehaviour
 		if (WriteTextureToSprite)
 		{
 			if (Colours?.Count != HeightThresholds?.Count + 1) { Debug.Log("Needs to be one less Threshold than Colour"); }
-			float[,] terrainMap = GenerateHeightMap();
-			float[,] biomeMap = GenerateHeightMap();
-			SR.sharedMaterial.mainTexture = GenerateTextureBlend(terrainMap, biomeMap);
+			// float[,] terrainMap = GenerateHeightMap();
+			// float[,] biomeMap = GenerateHeightMap();
+			// SR.sharedMaterial.mainTexture = GenerateTextureBlend(terrainMap, biomeMap);
+
+			SR.sharedMaterial.mainTexture = GenerateTexture();
 		}
 	}
 
