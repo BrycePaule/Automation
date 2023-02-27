@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(PerlinNoiseMapGenerator))]
-public class PerlinNoiseMapGeneratorEditor : Editor
+[CustomEditor(typeof(PerlinNoiseMapVisualiser))]
+public class PerlinNoiseMapVisualiserEditor : Editor
 {
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
 
-        PerlinNoiseMapGenerator gen = (PerlinNoiseMapGenerator) target;
+        PerlinNoiseMapVisualiser gen = (PerlinNoiseMapVisualiser) target;
 
         GUILayout.Space(10);
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
@@ -27,9 +27,9 @@ public class PerlinNoiseMapGeneratorEditor : Editor
         EditorGUILayout.EndHorizontal();
     }
 
-    private string GetNameOfCurrentlySelectedSettings(PerlinNoiseMapGenerator gen)
+    private string GetNameOfCurrentlySelectedSettings(PerlinNoiseMapVisualiser gen)
     {
-        NoiseSetting _selected = gen.SelectedSettings;
+        NoiseProfile _selected = gen.SelectedNoiseProfile;
 
         if (_selected == null) { return "Null"; }
 

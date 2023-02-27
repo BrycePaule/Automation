@@ -11,33 +11,38 @@ public class MapGenerator : MonoBehaviour
 	public float XOffset;
 	public float YOffset;
 
-    public NoiseSetting Base;
+    public NoiseProfile Base;
     // public NoiseSetting Biomes;
-    public NoiseSetting Gems;
+    public NoiseProfile Gems;
 
     public Tile BaseTile;
     public Tile AltBaseTile;
     public Tile GemTile;
 
     [Header("References")]
-    [SerializeField] private PerlinNoiseMapGenerator perlinGen;
+    [SerializeField] private PerlinNoiseMapGenerator perlGen;
     [SerializeField] private TilemapManager tilemapManager;
     [SerializeField] private Tilemap tilemap;
 
     private void Awake()
     {
+        // BASE
         List<MapToken> baseTokens = new List<MapToken>();
         baseTokens.Add(MapToken.Ground);
         baseTokens.Add(MapToken.AlternateGround);
 
-        MapToken[,] baseMap = perlinGen.GenerateMap(Base, baseTokens, Seed, MapSize, XOffset, YOffset);
+        perlGen.SetValues(Seed, MapSize, XOffset, YOffset, Base.Scale, Base.NoiseValues, Base.HeightThresholds, Base.Colours);
+        MapToken[,] baseMap = perlGen.GenerateMap(baseTokens);
 
+        // GEMS
         List<MapToken> gemTokens = new List<MapToken>();
         gemTokens.Add(MapToken.Empty);
         gemTokens.Add(MapToken.Gem);
 
-        MapToken[,] gemMap = perlinGen.GenerateMap(Gems, gemTokens, Seed, MapSize, XOffset, YOffset);
+        perlGen.SetValues(Seed, MapSize, XOffset, YOffset, Gems.Scale, Gems.NoiseValues, Gems.HeightThresholds, Gems.Colours);
+        MapToken[,] gemMap = perlGen.GenerateMap(gemTokens);
 
+        // BLENDING
         List<MapToken[,]> maps = new List<MapToken[,]>();
         maps.Add(baseMap);
         maps.Add(gemMap);
@@ -53,7 +58,6 @@ public class MapGenerator : MonoBehaviour
             {
                 Vector3Int pos = new Vector3Int(y, x, 0);
 
-                // if (map[y, x] == "0") { tilemap.SetTile(pos, BaseTile); }
                 if (map[y, x] == MapToken.Ground) { tilemap.SetTile(pos, BaseTile); }
                 if (map[y, x] == MapToken.AlternateGround) { tilemap.SetTile(pos, AltBaseTile); }
                 if (map[y, x] == MapToken.Gem) { tilemap.SetTile(pos, GemTile); }

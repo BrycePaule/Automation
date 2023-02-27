@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8cc09b80222b0d4a8b40b52bc09e723, type: 3}
   m_Name: Base
   m_EditorClassIdentifier: 
-  Seed: 4.96
+  Seed: 0
   MapSize: 256
   Scale: 6.14
-  XOffset: 128.71
-  YOffset: 60.74
+  XOffset: 0
+  YOffset: 0
   NoiseValues:
   - Frequency: 0.21
     Amplitude: 0.5

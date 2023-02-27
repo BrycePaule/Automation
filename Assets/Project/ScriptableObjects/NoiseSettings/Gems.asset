@@ -15,8 +15,8 @@ MonoBehaviour:
   Seed: 0
   MapSize: 256
   Scale: 5.05
-  XOffset: 1.53
-  YOffset: 2.58
+  XOffset: 0
+  YOffset: 0
   NoiseValues:
   - Frequency: 0.77
     Amplitude: 0.98
