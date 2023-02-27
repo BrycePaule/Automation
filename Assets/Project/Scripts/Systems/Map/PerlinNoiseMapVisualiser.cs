@@ -57,7 +57,7 @@ public class PerlinNoiseMapVisualiser : MonoBehaviour
     }
 
     //	Visualisation
-    public Texture2D GenerateTexture()
+    private Texture2D GenerateTexture()
     {
         Texture2D tex = new Texture2D(MapSize, MapSize);
         float[,] heightMap = perlinGen.GenerateHeightMap();
@@ -117,7 +117,7 @@ public class PerlinNoiseMapVisualiser : MonoBehaviour
         }
     }
 
-    public Color GetTerrainColour(float terrainHeight, float biomeHeight)
+    private Color GetTerrainColour(float terrainHeight, float biomeHeight)
     {
         for (int i = 0; i < HeightThresholds.Count; i++)
         {

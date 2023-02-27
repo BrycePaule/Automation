@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c8cc09b80222b0d4a8b40b52bc09e723, type: 3}
-  m_Name: Gems
+  m_Name: Tester (gems)
   m_EditorClassIdentifier: 
-  Seed: 0
+  Seed: 7.37
   MapSize: 256
   XOffset: 0
   YOffset: 0
@@ -21,7 +21,7 @@ MonoBehaviour:
   - Frequency: 0.77
     Amplitude: 0.98
   HeightThresholds:
-  - Value: 0.83
+  - Value: 0.9
   Colours:
   - {r: 1, g: 1, b: 1, a: 1}
   - {r: 0, g: 0, b: 0, a: 1}
