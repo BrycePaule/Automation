@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 715198830901024525}
   - component: {fileID: 8808228902737252289}
   - component: {fileID: 1452876697222341344}
+  - component: {fileID: 2659509074459425212}
   m_Layer: 0
   m_Name: Drill
   m_TagString: Untagged
@@ -141,7 +142,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5db7716222480b48964a78d4023072b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  updateEveryXFrames: 30
+--- !u!114 &2659509074459425212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4545999447416434855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5beea72c87bc4a840a042b0e2bcf2a9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  framesPerSprite: 30
   sprites:
   - {fileID: 21300000, guid: 695008f3ba5528549ae2814439c7612d, type: 3}
   - {fileID: 21300000, guid: 60a8395a53ffb8240b0d144f2c123294, type: 3}
