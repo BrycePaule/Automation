@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-[CreateAssetMenu(fileName = "New Prefab Library")]
+[CreateAssetMenu(menuName = "Scriptables/Prefab Library", fileName = "New Prefab Library")]
 public class PrefabLibrary : ScriptableObject
 {
     // [Header("Transport System")]

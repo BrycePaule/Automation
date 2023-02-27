@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 [System.Serializable]
-[CreateAssetMenu(menuName="Map/OffGrid Map", fileName="New Map")]
+[CreateAssetMenu(menuName="Scriptables/Map/Map", fileName="New Map")]
 public class MapAsset : ScriptableObject
 {
 	public Tilemap Tilemap;

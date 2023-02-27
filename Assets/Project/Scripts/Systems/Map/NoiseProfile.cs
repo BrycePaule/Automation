@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CreateAssetMenu(menuName = "Map/Noise Profile", fileName = "New Noise Profile")]
+[CreateAssetMenu(menuName = "Scriptables/Map/Noise Profile", fileName = "New Noise Profile")]
 public class NoiseProfile : ScriptableObject
 {
     public float Seed;

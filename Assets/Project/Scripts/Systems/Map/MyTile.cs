@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 [System.Serializable]
-[CreateAssetMenu(menuName="Map/OffGrid Tile", fileName="New Tile")]
+[CreateAssetMenu(menuName="Scriptables/Map/MyTile", fileName="New MyTile")]
 public class MyTile : TileBase
 {
 
