@@ -15,4 +15,5 @@ public enum PrefabType
     Item = 200,
 
     Marker = 900,
+    ConnectionMarker = 901,
 }

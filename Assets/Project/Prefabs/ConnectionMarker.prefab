@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 944261940123645774}
   - component: {fileID: 6367902511392254087}
   - component: {fileID: 8909963811842813644}
+  - component: {fileID: 2339827327977922780}
   m_Layer: 0
   m_Name: ConnectionMarker
   m_TagString: Untagged
@@ -119,3 +120,16 @@ MonoBehaviour:
   Jiggle: {x: 0.1, y: 0, z: 0}
   Speed: 1
   SineSmoothing: 1
+--- !u!114 &2339827327977922780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9178490532338573691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faf0a3e71b37fea438137dc1300d811b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PrefabType: 901

@@ -10,13 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 12f038ecaca124d439580170fe8e17d0, type: 3}
-  m_Name: PrefabLibrary
+  m_Name: Prefab Library
   m_EditorClassIdentifier: 
   Prefabs:
+  - {fileID: 9178490532338573691, guid: 535b2ba1504c49843b698f25279cbb71, type: 3}
   - {fileID: 4196235035966897580, guid: 07ae321ab3595cb4cbcc5bd0ed6e5ab4, type: 3}
   - {fileID: 9181417097715480746, guid: a65204ea818758e479541772cddec69c, type: 3}
+  - {fileID: 4545999447416434855, guid: 52f6d683f3b14d64c82c488c09074dc7, type: 3}
   - {fileID: 1412769314480690462, guid: 04aa86c169b21624d88e8148edff3091, type: 3}
   - {fileID: 943398273586386519, guid: 296b2a2b9af1fe54cb9a49cac8b8dfce, type: 3}
   - {fileID: 121493144518562992, guid: 8f27b8ce517b9c847b47c78982bdfca1, type: 3}
   - {fileID: 4146213135551611995, guid: b63cb1f4e64ae7c4798ad75a1e895d88, type: 3}
-  - {fileID: 4545999447416434855, guid: 52f6d683f3b14d64c82c488c09074dc7, type: 3}
+  - {fileID: 1412769314480690462, guid: 1ba56e2fc24acc1419e636c15eb6b1ab, type: 3}

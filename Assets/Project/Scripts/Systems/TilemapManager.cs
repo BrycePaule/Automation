@@ -16,12 +16,12 @@ public class TilemapManager : MonoBehaviour
 
     private void Awake()
     {
-        map = new int[size,size];
+        // map = new int[size,size];
 
-        SetMap();
-        CullRocks();
+        // SetMap();
+        // CullRocks();
 
-        SetTiles();
+        // SetTiles();
     }
 
     public bool IsLayerAtWorldPos(Layers _layer, Vector3 _worldPos)
@@ -40,18 +40,18 @@ public class TilemapManager : MonoBehaviour
 
     private void SetTiles()
     {
-        for (int i = 0; i < size; i++)
+        for (int y = 0; y < size; y++)
         {
-            for (int j = 0; j < size; j++)
+            for (int x = 0; x < size; x++)
             {
-                Vector3Int pos = new Vector3Int(i, j, 0);
+                Vector3Int pos = new Vector3Int(y, x, 0);
 
-                if (map[i, j] == 1)
+                if (map[y, x] == 1)
                 {
                     _tilemap.SetTile(pos, _rockTile);
                 }
 
-                if (map[i, j] == 0)
+                if (map[y, x] == 0)
                 {
                     _tilemap.SetTile(pos, _baseTile);
                 }
