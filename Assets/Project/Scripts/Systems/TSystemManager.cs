@@ -37,7 +37,7 @@ public class TSystemManager : MonoBehaviour
 
     public Component GetTSystemObjectAtWorldPos(Vector3 _worldPos)
     {
-        RaycastHit2D _hit = Physics2D.Raycast(_worldPos, Vector2.up);
+        RaycastHit2D _hit = Physics2D.Raycast(_worldPos, Vector2.zero);
 
         if (!_hit) { return null; }
 

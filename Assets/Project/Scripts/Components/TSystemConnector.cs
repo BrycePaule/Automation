@@ -22,7 +22,7 @@ public class TSystemConnector : MonoBehaviour, ITSystemConnectable
     {
         ConnectedTo = null;
 
-        RaycastHit2D _hit = Physics2D.Raycast(transform.position + Utils.DirToVector(Facing), Vector2.up);
+        RaycastHit2D _hit = Physics2D.Raycast(transform.position + Utils.DirToVector(Facing), Vector2.zero);
 
         if (_hit && _hit.transform.GetComponent<ITSystemConnectable>() != null)
         {

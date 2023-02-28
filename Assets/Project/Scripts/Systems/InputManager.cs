@@ -131,15 +131,13 @@ public class InputManager : MonoBehaviour
 
     private void OnLeftClick()
     {
-        RaycastHit2D _hit = Physics2D.Raycast(mousePosWorld, Vector2.up);
+        RaycastHit2D _hit = Physics2D.Raycast(mousePosWorld, Vector2.zero);
 
         if (_hit)
         {
-            print(_hit.transform);
             _hit.transform.gameObject.GetComponent<TSystemRotator>()?.RotateClockwise();
         }
         else
-        // if (tilemapManager.IsLayerAtWorldPos(Layers.Tilemap, mousePosWorld))
         {
             tSysManager.PlaceTSystemObjectAtWorldPos(prefabLibrary.GetPrefabOfType(PrefabType.Conveyor), mousePosWorld);
         }
@@ -147,7 +145,7 @@ public class InputManager : MonoBehaviour
 
     private void OnRightClick() 
     {
-        RaycastHit2D _hit = Physics2D.Raycast(mousePosWorld, Vector2.up);
+        RaycastHit2D _hit = Physics2D.Raycast(mousePosWorld, Vector2.zero);
         if (_hit)
         {
             tSysManager.DestroyTSystemObjectAtWorldPos(mousePosWorld);
@@ -178,7 +176,7 @@ public class InputManager : MonoBehaviour
 
     private void On2()
     {
-        RaycastHit2D _hit = Physics2D.Raycast(mousePosWorld, Vector2.up);
+        RaycastHit2D _hit = Physics2D.Raycast(mousePosWorld, Vector2.zero);
         if (_hit) { return; }
 
         PrefabType buildingToPlace = PrefabType.Drill;
@@ -187,7 +185,7 @@ public class InputManager : MonoBehaviour
 
     private void On3()
     {
-        RaycastHit2D _hit = Physics2D.Raycast(mousePosWorld, Vector2.up);
+        RaycastHit2D _hit = Physics2D.Raycast(mousePosWorld, Vector2.zero);
         if (_hit) { return; }
 
         PrefabType buildingToPlace = PrefabType.Sink;
