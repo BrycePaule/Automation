@@ -15,7 +15,7 @@ public class InputManager : MonoBehaviour
     private Vector2 mousePosScreen;
     private Vector3 mousePosWorld;
 
-    private Vector2 cameraPanDir;
+    private Vector2 moveDir;
     private float cameraZoom;
 
     [Header("Inputs")]
@@ -33,11 +33,14 @@ public class InputManager : MonoBehaviour
     [SerializeField] private Tilemap tilemap;
     [SerializeField] private TSystemManager tSysManager;
     [SerializeField] private TilemapManager tilemapManager;
+    [SerializeField] private MapGenerator mapGenerator;
     [SerializeField] private TileCursor tileCursor;
     [SerializeField] private GameManager gameManager;
     [SerializeField] private PrefabLibrary prefabLibrary;
     [SerializeField] private Transform cameraTarget;
     [SerializeField] private CinemachineVirtualCamera cvCam;
+
+    [SerializeField] private Transform player;
 
     private void Awake()
     {
@@ -69,7 +72,7 @@ public class InputManager : MonoBehaviour
 
     private void Start()
     {
-        cameraTarget.position = new Vector3(tilemapManager.size / 2, tilemapManager.size / 2, 0f);
+        player.position = new Vector3(mapGenerator.MapSize / 2, mapGenerator.MapSize / 2, 0f);
     }
 
     private void Update()
@@ -77,7 +80,7 @@ public class InputManager : MonoBehaviour
         UpdateMousePos();
         HandleTileCursor();
 
-        UpdateCameraPosition();
+        UpdatePlayerPosition();
     }
 
     private void OnCameraZoom()
@@ -95,13 +98,13 @@ public class InputManager : MonoBehaviour
         }
     }
 
-    private void UpdateCameraPosition()
+    private void UpdatePlayerPosition()
     {
-        cameraPanDir = camera_pan.ReadValue<Vector2>();
+        moveDir = camera_pan.ReadValue<Vector2>();
 
-        if (cameraPanDir == Vector2.zero) { return; }
+        if (moveDir == Vector2.zero) { return; }
 
-        cameraTarget.position += ((Vector3) cameraPanDir) * CameraPanningSpeed * Time.deltaTime;
+        player.position += ((Vector3) moveDir) * CameraPanningSpeed * Time.deltaTime;
     }
 
     private void UpdateMousePos()
@@ -132,10 +135,11 @@ public class InputManager : MonoBehaviour
 
         if (_hit)
         {
+            print(_hit.transform);
             _hit.transform.gameObject.GetComponent<TSystemRotator>()?.RotateClockwise();
         }
-
-        if (tilemapManager.IsLayerAtWorldPos(Layers.Tilemap, mousePosWorld))
+        else
+        // if (tilemapManager.IsLayerAtWorldPos(Layers.Tilemap, mousePosWorld))
         {
             tSysManager.PlaceTSystemObjectAtWorldPos(prefabLibrary.GetPrefabOfType(PrefabType.Conveyor), mousePosWorld);
         }
@@ -174,17 +178,19 @@ public class InputManager : MonoBehaviour
 
     private void On2()
     {
-        if (tilemapManager.IsLayerAtWorldPos(Layers.Tilemap, mousePosWorld))
-        {
-            tSysManager.PlaceTSystemObjectAtWorldPos(prefabLibrary.GetPrefabOfType(PrefabType.Drill), mousePosWorld);
-        }
+        RaycastHit2D _hit = Physics2D.Raycast(mousePosWorld, Vector2.up);
+        if (_hit) { return; }
+
+        PrefabType buildingToPlace = PrefabType.Drill;
+        tSysManager.PlaceTSystemObjectAtWorldPos(prefabLibrary.GetPrefabOfType(buildingToPlace), mousePosWorld);
     }
 
     private void On3()
     {
-        if (tilemapManager.IsLayerAtWorldPos(Layers.Tilemap, mousePosWorld))
-        {
-            tSysManager.PlaceTSystemObjectAtWorldPos(prefabLibrary.GetPrefabOfType(PrefabType.Sink), mousePosWorld);
-        }
+        RaycastHit2D _hit = Physics2D.Raycast(mousePosWorld, Vector2.up);
+        if (_hit) { return; }
+
+        PrefabType buildingToPlace = PrefabType.Sink;
+        tSysManager.PlaceTSystemObjectAtWorldPos(prefabLibrary.GetPrefabOfType(buildingToPlace), mousePosWorld);
     }
 }

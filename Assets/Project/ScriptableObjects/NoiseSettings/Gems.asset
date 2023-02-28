@@ -21,7 +21,7 @@ MonoBehaviour:
   - Frequency: 0.77
     Amplitude: 0.98
   HeightThresholds:
-  - Value: 0.83
+  - Value: 0.9
   Colours:
   - {r: 1, g: 1, b: 1, a: 1}
   - {r: 0, g: 0, b: 0, a: 1}

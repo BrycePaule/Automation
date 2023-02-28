@@ -5,19 +5,21 @@ using UnityEngine.Tilemaps;
 
 public class MapGenerator : MonoBehaviour
 {
+    [Header("World Settings")]
     public float Seed;
     public int MapSize;
-
 	public float XOffset;
 	public float YOffset;
 
+    [Header("Noise Profiles")]
     public NoiseProfile Base;
     // public NoiseSetting Biomes;
     public NoiseProfile Gems;
 
-    public Tile BaseTile;
-    public Tile AltBaseTile;
-    public Tile GemTile;
+    [Header("Tiles")]
+    public MyTile BaseTile;
+    public MyTile AltBaseTile;
+    public MyTile GemTile;
 
     [Header("References")]
     [SerializeField] private PerlinNoiseMapGenerator perlGen;

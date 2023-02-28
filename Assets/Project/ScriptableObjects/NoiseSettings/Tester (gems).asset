@@ -16,10 +16,12 @@ MonoBehaviour:
   MapSize: 256
   XOffset: 0
   YOffset: 0
-  Scale: 5.05
+  Scale: 20
   NoiseValues:
   - Frequency: 0.77
-    Amplitude: 0.98
+    Amplitude: 0.88
+  - Frequency: 20.15
+    Amplitude: 0.1
   HeightThresholds:
   - Value: 0.9
   Colours:

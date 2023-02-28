@@ -5,10 +5,6 @@ using UnityEngine.Tilemaps;
 
 public class TilemapManager : MonoBehaviour
 {
-    [Range(1, 150)] public int size;
-
-    private int[,] map;
-
     [Header("References")]
     [SerializeField] private Tilemap _tilemap;
     [SerializeField] private Tile _baseTile;
@@ -38,72 +34,72 @@ public class TilemapManager : MonoBehaviour
         return _tilemap.CellToWorld(_cellPos) + _baseTilemapOffset;
     }
 
-    private void SetTiles()
-    {
-        for (int y = 0; y < size; y++)
-        {
-            for (int x = 0; x < size; x++)
-            {
-                Vector3Int pos = new Vector3Int(y, x, 0);
+    // private void SetTiles()
+    // {
+    //     for (int y = 0; y < size; y++)
+    //     {
+    //         for (int x = 0; x < size; x++)
+    //         {
+    //             Vector3Int pos = new Vector3Int(y, x, 0);
 
-                if (map[y, x] == 1)
-                {
-                    _tilemap.SetTile(pos, _rockTile);
-                }
+    //             if (map[y, x] == 1)
+    //             {
+    //                 _tilemap.SetTile(pos, _rockTile);
+    //             }
 
-                if (map[y, x] == 0)
-                {
-                    _tilemap.SetTile(pos, _baseTile);
-                }
-            }
-        }
-    }
+    //             if (map[y, x] == 0)
+    //             {
+    //                 _tilemap.SetTile(pos, _baseTile);
+    //             }
+    //         }
+    //     }
+    // }
 
-    private void SetMap()
-    {
-        int _radius = 5;
+    // private void SetMap()
+    // {
+    //     int _radius = 5;
 
-        for (int i = 0; i < size; i++)
-        {
-            for (int j = 0; j < size; j++)
-            {
-                if (Utils.Roll(0.05f)) // ROCK
-                {
-                    for (int a = (i-_radius); a <=  (i+_radius); a++)
-                    {
-                        for (int b = (j-_radius); b <= (j+_radius); b++)
-                        {
-                            if (a < 0 || a >= size) { continue; }
-                            if (b < 0 || b >= size) { continue; }
+    //     for (int i = 0; i < size; i++)
+    //     {
+    //         for (int j = 0; j < size; j++)
+    //         {
+    //             if (Utils.Roll(0.05f)) // ROCK
+    //             {
+    //                 for (int a = (i-_radius); a <=  (i+_radius); a++)
+    //                 {
+    //                     for (int b = (j-_radius); b <= (j+_radius); b++)
+    //                     {
+    //                         if (a < 0 || a >= size) { continue; }
+    //                         if (b < 0 || b >= size) { continue; }
 
-                            map[a, b] = 1;
-                        }
-                    }
-                }
-                else // BASE TILE
-                {
-                    map[i, j] = 0;
-                }
-            }
-        }
-    }
+    //                         map[a, b] = 1;
+    //                     }
+    //                 }
+    //             }
+    //             else // BASE TILE
+    //             {
+    //                 map[i, j] = 0;
+    //             }
+    //         }
+    //     }
+    // }
 
-    private void CullRocks()
-    {
-        for (int i = 0; i < size; i++)
-        {
-            for (int j = 0; j < size; j++)
-            {
-                if (map[i, j] == 1)
-                {
-                    if (Utils.Roll(25f))
-                    {
-                        map[i, j] = 0;
-                    }
-                }
-            }
-        }
+    // private void CullRocks()
+    // {
+    //     for (int i = 0; i < size; i++)
+    //     {
+    //         for (int j = 0; j < size; j++)
+    //         {
+    //             if (map[i, j] == 1)
+    //             {
+    //                 if (Utils.Roll(25f))
+    //                 {
+    //                     map[i, j] = 0;
+    //                 }
+    //             }
+    //         }
+    //     }
 
-    }
+    // }
 
 }
