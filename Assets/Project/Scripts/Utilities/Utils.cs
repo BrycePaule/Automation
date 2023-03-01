@@ -4,6 +4,10 @@ using UnityEngine;
 
 public static class Utils 
 {
+    public static CardinalDirection IntToCardinalDirection(int number)
+    {
+        return (CardinalDirection) (number % 4);
+    }
 
     public static Vector3Int DirToVector(CardinalDirection dir)
     {

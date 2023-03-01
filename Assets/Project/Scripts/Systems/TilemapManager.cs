@@ -7,8 +7,8 @@ public class TilemapManager : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private Tilemap _tilemap;
-    [SerializeField] private Tile _baseTile;
-    [SerializeField] private Tile _rockTile;
+    // [SerializeField] private Tile _baseTile;
+    // [SerializeField] private Tile _rockTile;
 
     private void Awake()
     {
@@ -22,7 +22,7 @@ public class TilemapManager : MonoBehaviour
 
     public bool IsLayerAtWorldPos(Layers _layer, Vector3 _worldPos)
     {
-        RaycastHit2D _hit = Physics2D.Raycast(_worldPos, Vector2.up);
+        RaycastHit2D _hit = Physics2D.Raycast(_worldPos, Vector2.zero);
         return (_hit && _hit.transform.gameObject.layer == (int) _layer);
     }
 

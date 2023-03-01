@@ -24,6 +24,17 @@ public class TSystemManager : MonoBehaviour
 
     }
 
+    public void PlaceTSystemObjectAtWorldPos(GameObject _prefab, Vector3 _worldPos, Tilemap _tilemap)
+    {
+        Vector3Int _cellPos = tilemap.WorldToCell(_worldPos);
+
+        GameObject _connectable = Instantiate(_prefab, tilemapManager.TileAnchorFromWorldPos(_worldPos), Quaternion.identity);
+        _connectable.name = _prefab.name + " " + _cellPos;
+        _connectable.GetComponent<ITilemapConnected>().SetTilemap(tilemap);
+        
+        RefreshConnectionsAroundWorldPos(_worldPos);
+    }
+
     public void DestroyTSystemObjectAtWorldPos(Vector3 _worldPos)
     {
         Component _connectable = GetTSystemObjectAtWorldPos(_worldPos);

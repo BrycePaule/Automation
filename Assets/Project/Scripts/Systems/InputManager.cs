@@ -180,7 +180,7 @@ public class InputManager : MonoBehaviour
         if (_hit) { return; }
 
         PrefabType buildingToPlace = PrefabType.Drill;
-        tSysManager.PlaceTSystemObjectAtWorldPos(prefabLibrary.GetPrefabOfType(buildingToPlace), mousePosWorld);
+        tSysManager.PlaceTSystemObjectAtWorldPos(prefabLibrary.GetPrefabOfType(buildingToPlace), mousePosWorld, tilemap);
     }
 
     private void On3()

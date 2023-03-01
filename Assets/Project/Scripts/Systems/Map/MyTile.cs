@@ -11,9 +11,7 @@ public class MyTile : Tile
 
     [Header("Custom Settings")]
     public bool Blocked;
-
-    
-
+    public bool Mineable;
 
     public MyTile(bool blocked)
     {
