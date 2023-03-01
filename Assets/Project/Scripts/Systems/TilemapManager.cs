@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 public class TilemapManager : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private Tilemap _tilemap;
+    [SerializeField] private Tilemap tilemap;
     // [SerializeField] private Tile _baseTile;
     // [SerializeField] private Tile _rockTile;
 
@@ -28,10 +28,41 @@ public class TilemapManager : MonoBehaviour
 
     public Vector3 TileAnchorFromWorldPos(Vector3 _worldPos)
     {
-        Vector3Int _cellPos = _tilemap.WorldToCell(_worldPos);
-        Vector3 _baseTilemapOffset = new Vector3(.5f, .5f, 0);
+        Vector3Int _cellPos = tilemap.WorldToCell(_worldPos);
+        // Vector3 _baseTilemapOffset = new Vector3(.5f, .5f, 0);
 
-        return _tilemap.CellToWorld(_cellPos) + _baseTilemapOffset;
+        return tilemap.CellToWorld(_cellPos) + tilemap.tileAnchor;
+    }
+
+    public Vector3Int CellFromWorldPos(Vector3 worldPos)
+    {
+        return tilemap.WorldToCell(worldPos);
+    }
+    
+    // CHECKERS
+
+    public bool CanBuildAt(Vector3 worldPos)
+    {
+        Vector3Int _cellPos = CellFromWorldPos(worldPos);
+        MyTile _tile = (MyTile) tilemap.GetTile(_cellPos);
+
+        return _tile.Buildable;
+    }
+
+    public bool CanPassAt(Vector3 worldPos)
+    {
+        Vector3Int _cellPos = CellFromWorldPos(worldPos);
+        MyTile _tile = (MyTile) tilemap.GetTile(_cellPos);
+
+        return _tile.Passable;
+    }
+
+    public bool CanDrillAt(Vector3 worldPos)
+    {
+        Vector3Int _cellPos = CellFromWorldPos(worldPos);
+        MyTile _tile = (MyTile) tilemap.GetTile(_cellPos);
+
+        return _tile.Drillable;
     }
 
     // private void SetTiles()

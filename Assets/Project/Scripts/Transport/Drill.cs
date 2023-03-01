@@ -54,7 +54,7 @@ public class Drill : MonoBehaviour, ITilemapConnected
         Vector3Int _pos = tilemap.WorldToCell(transform.position + Utils.DirToVector(drillDirection));
         MyTile _facingTile = (MyTile) tilemap.GetTile(_pos);
 
-        if (_facingTile.Mineable)
+        if (_facingTile.Drillable)
         {
             gem = _facingTile;
         }

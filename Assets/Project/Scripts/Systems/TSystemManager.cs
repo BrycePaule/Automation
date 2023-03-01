@@ -15,18 +15,21 @@ public class TSystemManager : MonoBehaviour
 
     public void PlaceTSystemObjectAtWorldPos(GameObject _prefab, Vector3 _worldPos)
     {
-        Vector3Int _cellPos = tilemap.WorldToCell(_worldPos);
+        if (!tilemapManager.CanBuildAt(_worldPos)) { return; }
+
+        Vector3Int _cellPos = tilemapManager.CellFromWorldPos(_worldPos);
 
         GameObject _connectable = Instantiate(_prefab, tilemapManager.TileAnchorFromWorldPos(_worldPos), Quaternion.identity);
         _connectable.name = _prefab.name + " " + _cellPos;
 
         RefreshConnectionsAroundWorldPos(_worldPos);
-
     }
 
     public void PlaceTSystemObjectAtWorldPos(GameObject _prefab, Vector3 _worldPos, Tilemap _tilemap)
     {
-        Vector3Int _cellPos = tilemap.WorldToCell(_worldPos);
+        if (!tilemapManager.CanBuildAt(_worldPos)) { return; }
+
+        Vector3Int _cellPos = tilemapManager.CellFromWorldPos(_worldPos);
 
         GameObject _connectable = Instantiate(_prefab, tilemapManager.TileAnchorFromWorldPos(_worldPos), Quaternion.identity);
         _connectable.name = _prefab.name + " " + _cellPos;
