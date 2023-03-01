@@ -19,62 +19,53 @@ public class InputManager : MonoBehaviour
     private float cameraZoom;
 
     [Header("Inputs")]
-    private InputAction leftClick;
-    private InputAction rightClick;
-    private InputAction mousePosition;
-    // private InputAction key_1;
-    // private InputAction key_2;
-    // private InputAction key_3;
-    private InputAction hotbarNumbers;
+    private InputAction a_leftClick;
+    private InputAction a_rightClick;
+    private InputAction a_mousePosition;
+    private InputAction a_hotbarNumbers;
 
-    private InputAction camera_pan;
-    private InputAction camera_zoom;
+    private InputAction a_camera_pan;
+    private InputAction a_camera_zoom;
 
     [Header("References")]
+    [SerializeField] private MapGenerator mapGenerator;
     [SerializeField] private Tilemap tilemap;
     [SerializeField] private TSystemManager tSysManager;
     [SerializeField] private TilemapManager tilemapManager;
-    [SerializeField] private MapGenerator mapGenerator;
     [SerializeField] private TileCursor tileCursor;
+
     [SerializeField] private PrefabLibrary prefabLibrary;
+
     [SerializeField] private Transform cameraTarget;
     [SerializeField] private CinemachineVirtualCamera cvCam;
+
+    [SerializeField] private Transform player;
 
     // UI
     [SerializeField] private HotbarManager hotbarManager;
 
 
-    [SerializeField] private Transform player;
 
     private void Awake()
     {
-        PlayerInput _inputAsset = new PlayerInput();
-        _inputAsset.Enable();
+        PlayerInput input = new PlayerInput();
+        input.Enable();
 
-        leftClick = _inputAsset.Player.LeftClick;
-        leftClick.performed += ctx => OnLeftClick();
+        a_leftClick = input.Player.LeftClick;
+        a_leftClick.performed += ctx => OnLeftClick();
 
-        rightClick = _inputAsset.Player.RightClick;
-        rightClick.performed += ctx => OnRightClick();
+        a_rightClick = input.Player.RightClick;
+        a_rightClick.performed += ctx => OnRightClick();
 
-        // key_1 = _inputAsset.Player._1;
-        // key_1.performed += ctx => On1();
+        a_hotbarNumbers = input.Player.HotbarNumbers;
+        a_hotbarNumbers.performed += ctx => OnNumber(ctx);
 
-        // key_2 = _inputAsset.Player._2;
-        // key_2.performed += ctx => On2();
+        a_mousePosition = input.Player.MousePosition;
 
-        // key_3 = _inputAsset.Player._3;
-        // key_3.performed += ctx => On3();
+        a_camera_pan = input.Camera.Pan;
 
-        hotbarNumbers = _inputAsset.Player.HotbarNumbers;
-        hotbarNumbers.performed += ctx => OnNumber(ctx);
-
-        mousePosition = _inputAsset.Player.MousePosition;
-
-        camera_pan = _inputAsset.Camera.Pan;
-
-        camera_zoom = _inputAsset.Camera.Zoom;
-        camera_zoom.performed += ctx => OnCameraZoom();
+        a_camera_zoom = input.Camera.Zoom;
+        a_camera_zoom.performed += ctx => OnCameraZoom();
     }
 
     private void Start()
@@ -91,7 +82,7 @@ public class InputManager : MonoBehaviour
 
     private void OnCameraZoom()
     {
-        cameraZoom = camera_zoom.ReadValue<float>();
+        cameraZoom = a_camera_zoom.ReadValue<float>();
         if (cameraZoom == 0f) { return; }
 
         if (cameraZoom > 0)
@@ -106,7 +97,7 @@ public class InputManager : MonoBehaviour
 
     private void UpdatePlayerPosition()
     {
-        moveDir = camera_pan.ReadValue<Vector2>();
+        moveDir = a_camera_pan.ReadValue<Vector2>();
 
         if (moveDir == Vector2.zero) { return; }
 
@@ -115,7 +106,7 @@ public class InputManager : MonoBehaviour
 
     private void UpdateMousePos()
     {
-        mousePosScreen = mousePosition.ReadValue<Vector2>();
+        mousePosScreen = a_mousePosition.ReadValue<Vector2>();
         mousePosWorld = Camera.main.ScreenToWorldPoint(mousePosScreen);
         mousePosWorld.z = 0f;
     }
@@ -148,7 +139,23 @@ public class InputManager : MonoBehaviour
             PrefabType selectedBuilding = hotbarManager.GetSelected().building;
             if (selectedBuilding == PrefabType.NOT_SELECTED) { return; }
 
-            tSysManager.PlaceTSystemObjectAtWorldPos(prefabLibrary.GetPrefabOfType(selectedBuilding), mousePosWorld);
+            GameObject gObj = prefabLibrary.GetPrefabOfType(selectedBuilding);
+
+            bool needsTilemap = gObj.TryGetComponent<ITilemapConnected>(out _);
+            bool needsPrefabLibrary = gObj.TryGetComponent<IPrefabLibraryConnected>(out _);
+
+            if (needsPrefabLibrary)
+            {
+                tSysManager.PlaceTSystemObjectAtWorldPos(gObj, mousePosWorld, tilemap, prefabLibrary);
+            }
+            else if (needsTilemap)
+            {
+                tSysManager.PlaceTSystemObjectAtWorldPos(gObj, mousePosWorld, tilemap);
+            }
+            else
+            {
+                tSysManager.PlaceTSystemObjectAtWorldPos(gObj, mousePosWorld);
+            }
         }
     }
 

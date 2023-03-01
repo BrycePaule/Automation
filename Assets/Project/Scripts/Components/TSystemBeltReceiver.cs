@@ -35,6 +35,7 @@ public class TSystemBeltReceiver : MonoBehaviour, ITSystemReceivable
         _item.transform.SetParent(transform);
         _item.transform.position = transform.position;
         _item.transform.localPosition += resetPos;
+        _item.transform.localRotation = transform.localRotation;
 
         int _rotationMultiplier = (int) connector.Facing - (int) CardinalDirection.East;
         _item.transform.Rotate(new Vector3(0f, 0f, -90 * _rotationMultiplier));
