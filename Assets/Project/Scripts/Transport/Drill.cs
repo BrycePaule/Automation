@@ -3,15 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class Drill : MonoBehaviour, ITilemapConnected
+// Max drill speed = 10
+
+// To calculate time to drill an item:
+// ((MAX_DRILL_SPEED - DRILL_SPEED) * GEM_HARDNESS) / 10 = TIME_TO_DRILL
+
+// e.g.
+// ((10 - 1) * 1) / 10 = 0.9s
+// (9 * 1) / 10 = 0.9s
+// 9 / 10 = 0.9s
+
+// Each point of hardness adds (scaled drill speed * gem hardness / 10) to time
+
+
+public class Drill : MonoBehaviour, ITilemapConnected, IPrefabLibraryConnected
 {
+    [Range(1, 10)]
+    public int DrillSpeed;
+
     private bool isRunning;
     private bool wasRunningLastFrame;
 
     private CardinalDirection drillDirection;
     private MyTile gem;
+
+    private float timer;
+    private float timeToDrill;
         
     private Tilemap tilemap; 
+    private PrefabLibrary prefabLibrary;
     private TSystemConnector connector;
     private ParticleSystem particles;
 
@@ -24,14 +44,22 @@ public class Drill : MonoBehaviour, ITilemapConnected
         wasRunningLastFrame = false;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         wasRunningLastFrame = isRunning;
+        timer += Time.deltaTime;
 
         RefreshDrillDirection();
         RefreshDrillTile();
 
         StartOrStopRunning();
+
+        if (isRunning && timer >= timeToDrill)
+        {
+            timer = 0f;
+            DrillItem();
+        }
+
     }
 
     private void StartOrStopRunning()
@@ -52,11 +80,12 @@ public class Drill : MonoBehaviour, ITilemapConnected
         if (tilemap == null) { return; }
 
         Vector3Int _pos = tilemap.WorldToCell(transform.position + Utils.DirToVector(drillDirection));
-        MyTile _facingTile = (MyTile) tilemap.GetTile(_pos);
+        MyTile _Tile = (MyTile) tilemap.GetTile(_pos);
 
-        if (_facingTile.Drillable)
+        if (_Tile.Drillable)
         {
-            gem = _facingTile;
+            gem = _Tile;
+            timeToDrill = ((10 - DrillSpeed) * gem.Hardness) / 10;
         }
         else
         {
@@ -75,6 +104,11 @@ public class Drill : MonoBehaviour, ITilemapConnected
         tilemap = _tilemap;
     }
 
+    public void SetPrefabLibrary(PrefabLibrary _prefabLibrary)
+    {
+        prefabLibrary = _prefabLibrary;
+    }
+
     private void SwitchOn()
     {
         isRunning = true;
@@ -85,5 +119,16 @@ public class Drill : MonoBehaviour, ITilemapConnected
     {
         isRunning = false;
         particles.Stop(withChildren: false);
+    }
+
+    private void DrillItem()
+    {
+        GameObject _prefab = prefabLibrary.GetPrefabOfType(gem.ItemReleased);
+
+        if (connector.CanOffloadItem(_prefab.GetComponent<Item>()))
+        {
+            Item _item = Instantiate(_prefab, transform.position, Quaternion.identity).GetComponent<Item>();
+            connector.GetConnectedReceiver().Give(_item);
+        }
     }
 }

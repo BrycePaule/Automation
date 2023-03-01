@@ -35,4 +35,6 @@ MonoBehaviour:
   m_Flags: 0
   m_ColliderType: 0
   Passable: 1
-  Mineable: 0
+  Buildable: 1
+  Drillable: 0
+  ItemOnDrill: 0

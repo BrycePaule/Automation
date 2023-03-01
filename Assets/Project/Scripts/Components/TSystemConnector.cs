@@ -40,7 +40,19 @@ public class TSystemConnector : MonoBehaviour, ITSystemConnectable
         ITSystemReceivable _nextReceiver = GetConnectedReceiver();
 
         if (_nextReceiver == null) { return false; }
-        if (!_nextReceiver.CanReceive(_item)) { return false; }
+        if (!_nextReceiver.CanReceive(_item.ItemType)) { return false; }
+
+        return true;
+    }
+
+    public bool CanOffloadItem(ItemType _itemType)
+    {
+        if (!HasValidConnection) { return false; }
+
+        ITSystemReceivable _nextReceiver = GetConnectedReceiver();
+        if (_nextReceiver == null) { return false; }
+
+        if (!_nextReceiver.CanReceive(_itemType)) { return false; }
 
         return true;
     }

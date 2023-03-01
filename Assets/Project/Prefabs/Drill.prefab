@@ -169,8 +169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5db7716222480b48964a78d4023072b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isRunning: 0
-  wasRunningLastFrame: 0
+  DrillSpeed: 1
 --- !u!114 &2659509074459425212
 MonoBehaviour:
   m_ObjectHideFlags: 0

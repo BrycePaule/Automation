@@ -12,7 +12,11 @@ public class MyTile : Tile
     [Header("Custom Settings")]
     public bool Passable;
     public bool Buildable;
+    
+    [Header("Drillable settings")]
     public bool Drillable;
+    public float Hardness;
+    public PrefabType ItemReleased;
 
     public MyTile(bool blocked)
     {

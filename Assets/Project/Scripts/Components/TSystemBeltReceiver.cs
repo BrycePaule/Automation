@@ -22,9 +22,9 @@ public class TSystemBeltReceiver : MonoBehaviour, ITSystemReceivable
         SetSpacing();
     }
 
-    public bool CanReceive(Item _item)
+    public bool CanReceive(ItemType _itemType)
     {
-        if (!ItemMatchesFilter(_item)) { return false; }
+        if (!ItemMatchesFilter(_itemType)) { return false; }
         if (IsFull()) { return false; }
 
         return true;
@@ -42,12 +42,12 @@ public class TSystemBeltReceiver : MonoBehaviour, ITSystemReceivable
         Items.Add(_item);
     }
 
-    public bool ItemMatchesFilter(Item _item)
+    public bool ItemMatchesFilter(ItemType _itemType)
     {
         TSystemReceiptFilter _filter = transform.GetComponent<TSystemReceiptFilter>();
         if (_filter == null) { return true; }
     
-        return _filter.Check(_item);
+        return _filter.Check(_itemType);
     }
 
     // HELPERS

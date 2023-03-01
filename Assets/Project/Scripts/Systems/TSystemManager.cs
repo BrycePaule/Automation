@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 public class TSystemManager : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private Tilemap tilemap;
+    // [SerializeField] private Tilemap tilemap;
     [SerializeField] private TilemapManager tilemapManager;
     [SerializeField] private GameObject markerPrefab;
 
@@ -33,7 +33,21 @@ public class TSystemManager : MonoBehaviour
 
         GameObject _connectable = Instantiate(_prefab, tilemapManager.TileAnchorFromWorldPos(_worldPos), Quaternion.identity);
         _connectable.name = _prefab.name + " " + _cellPos;
-        _connectable.GetComponent<ITilemapConnected>().SetTilemap(tilemap);
+        _connectable.GetComponent<ITilemapConnected>().SetTilemap(_tilemap);
+        
+        RefreshConnectionsAroundWorldPos(_worldPos);
+    }
+
+    public void PlaceTSystemObjectAtWorldPos(GameObject _prefab, Vector3 _worldPos, Tilemap _tilemap, PrefabLibrary _prefabLibrary)
+    {
+        if (!tilemapManager.CanBuildAt(_worldPos)) { return; }
+
+        Vector3Int _cellPos = tilemapManager.CellFromWorldPos(_worldPos);
+
+        GameObject _connectable = Instantiate(_prefab, tilemapManager.TileAnchorFromWorldPos(_worldPos), Quaternion.identity);
+        _connectable.name = _prefab.name + " " + _cellPos;
+        _connectable.GetComponent<ITilemapConnected>().SetTilemap(_tilemap);
+        _connectable.GetComponent<IPrefabLibraryConnected>().SetPrefabLibrary(_prefabLibrary);
         
         RefreshConnectionsAroundWorldPos(_worldPos);
     }

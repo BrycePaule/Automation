@@ -165,7 +165,7 @@ public class InputManager : MonoBehaviour
         Item _item = Instantiate(prefabLibrary.GetPrefabOfType(PrefabType.Item), Vector3.zero, Quaternion.identity).GetComponent<Item>();
         _item.gameObject.GetComponent<SpriteRenderer>().color = randomColor;
 
-        if (!_receiver.CanReceive(_item)) 
+        if (!_receiver.CanReceive(_item.ItemType)) 
         {
             Destroy(_item.gameObject);
             return;
@@ -180,7 +180,7 @@ public class InputManager : MonoBehaviour
         if (_hit) { return; }
 
         PrefabType buildingToPlace = PrefabType.Drill;
-        tSysManager.PlaceTSystemObjectAtWorldPos(prefabLibrary.GetPrefabOfType(buildingToPlace), mousePosWorld, tilemap);
+        tSysManager.PlaceTSystemObjectAtWorldPos(prefabLibrary.GetPrefabOfType(buildingToPlace), mousePosWorld, tilemap, prefabLibrary);
     }
 
     private void On3()

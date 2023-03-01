@@ -13,6 +13,7 @@ public enum PrefabType
     Drill = 104,
 
     Item = 200,
+    GemPink = 201,
 
     Marker = 900,
     ConnectionMarker = 901,

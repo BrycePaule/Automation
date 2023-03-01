@@ -7,6 +7,6 @@ public interface ITSystemReceivable
     public void Give(Item _item);
 
     // CHECKERS
-    public bool CanReceive(Item _item);
-    public bool ItemMatchesFilter(Item _item);
+    public bool CanReceive(ItemType _itemType);
+    public bool ItemMatchesFilter(ItemType _itemType);
 }
