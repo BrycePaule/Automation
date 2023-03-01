@@ -22,9 +22,10 @@ public class InputManager : MonoBehaviour
     private InputAction leftClick;
     private InputAction rightClick;
     private InputAction mousePosition;
-    private InputAction key_1;
-    private InputAction key_2;
-    private InputAction key_3;
+    // private InputAction key_1;
+    // private InputAction key_2;
+    // private InputAction key_3;
+    private InputAction hotbarNumbers;
 
     private InputAction camera_pan;
     private InputAction camera_zoom;
@@ -35,10 +36,13 @@ public class InputManager : MonoBehaviour
     [SerializeField] private TilemapManager tilemapManager;
     [SerializeField] private MapGenerator mapGenerator;
     [SerializeField] private TileCursor tileCursor;
-    [SerializeField] private GameManager gameManager;
     [SerializeField] private PrefabLibrary prefabLibrary;
     [SerializeField] private Transform cameraTarget;
     [SerializeField] private CinemachineVirtualCamera cvCam;
+
+    // UI
+    [SerializeField] private HotbarManager hotbarManager;
+
 
     [SerializeField] private Transform player;
 
@@ -53,14 +57,17 @@ public class InputManager : MonoBehaviour
         rightClick = _inputAsset.Player.RightClick;
         rightClick.performed += ctx => OnRightClick();
 
-        key_1 = _inputAsset.Player._1;
-        key_1.performed += ctx => On1();
+        // key_1 = _inputAsset.Player._1;
+        // key_1.performed += ctx => On1();
 
-        key_2 = _inputAsset.Player._2;
-        key_2.performed += ctx => On2();
+        // key_2 = _inputAsset.Player._2;
+        // key_2.performed += ctx => On2();
 
-        key_3 = _inputAsset.Player._3;
-        key_3.performed += ctx => On3();
+        // key_3 = _inputAsset.Player._3;
+        // key_3.performed += ctx => On3();
+
+        hotbarNumbers = _inputAsset.Player.HotbarNumbers;
+        hotbarNumbers.performed += ctx => OnNumber(ctx);
 
         mousePosition = _inputAsset.Player.MousePosition;
 
@@ -79,7 +86,6 @@ public class InputManager : MonoBehaviour
     {
         UpdateMousePos();
         HandleTileCursor();
-
         UpdatePlayerPosition();
     }
 
@@ -139,7 +145,10 @@ public class InputManager : MonoBehaviour
         }
         else
         {
-            tSysManager.PlaceTSystemObjectAtWorldPos(prefabLibrary.GetPrefabOfType(PrefabType.Conveyor), mousePosWorld);
+            PrefabType selectedBuilding = hotbarManager.GetSelected().building;
+            if (selectedBuilding == PrefabType.NOT_SELECTED) { return; }
+
+            tSysManager.PlaceTSystemObjectAtWorldPos(prefabLibrary.GetPrefabOfType(selectedBuilding), mousePosWorld);
         }
     }
 
@@ -152,43 +161,55 @@ public class InputManager : MonoBehaviour
         }
     }
 
-    private void On1()
+    // private void On1()
+    // {
+    //     Component _connector = tSysManager.GetTSystemObjectAtWorldPos(mousePosWorld);
+    //     if (_connector == null) { return; }
+
+    //     ITSystemReceivable _receiver = _connector.GetComponent<ITSystemReceivable>();
+    //     if (_receiver == null) { return; }
+
+    //     // TODO: delegate this somewhere else later
+    //     Color randomColor = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f));
+    //     Item _item = Instantiate(prefabLibrary.GetPrefabOfType(PrefabType.Item), Vector3.zero, Quaternion.identity).GetComponent<Item>();
+    //     _item.gameObject.GetComponent<SpriteRenderer>().color = randomColor;
+
+    //     if (!_receiver.CanReceive(_item.ItemType)) 
+    //     {
+    //         Destroy(_item.gameObject);
+    //         return;
+    //     }
+
+    //     _receiver.Give(_item);
+    // }
+
+    // private void On2()
+    // {
+    //     RaycastHit2D _hit = Physics2D.Raycast(mousePosWorld, Vector2.zero);
+    //     if (_hit) { return; }
+
+    //     PrefabType buildingToPlace = PrefabType.Drill;
+    //     tSysManager.PlaceTSystemObjectAtWorldPos(prefabLibrary.GetPrefabOfType(buildingToPlace), mousePosWorld, tilemap, prefabLibrary);
+    // }
+
+    // private void On3()
+    // {
+    //     RaycastHit2D _hit = Physics2D.Raycast(mousePosWorld, Vector2.zero);
+    //     if (_hit) { return; }
+
+    //     PrefabType buildingToPlace = PrefabType.Sink;
+    //     tSysManager.PlaceTSystemObjectAtWorldPos(prefabLibrary.GetPrefabOfType(buildingToPlace), mousePosWorld);
+    // }
+
+    private void OnNumber(InputAction.CallbackContext ctx)
     {
-        Component _connector = tSysManager.GetTSystemObjectAtWorldPos(mousePosWorld);
-        if (_connector == null) { return; }
+        int num;
+        bool valid = int.TryParse(ctx.control.name, out num);
 
-        ITSystemReceivable _receiver = _connector.GetComponent<ITSystemReceivable>();
-        if (_receiver == null) { return; }
-
-        // TODO: delegate this somewhere else later
-        Color randomColor = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f));
-        Item _item = Instantiate(prefabLibrary.GetPrefabOfType(PrefabType.Item), Vector3.zero, Quaternion.identity).GetComponent<Item>();
-        _item.gameObject.GetComponent<SpriteRenderer>().color = randomColor;
-
-        if (!_receiver.CanReceive(_item.ItemType)) 
+        if (valid)
         {
-            Destroy(_item.gameObject);
-            return;
+            // + 9 % 10 scales values down by 1, so pressing 1 selects index 0 (but won't go into negatives)
+            hotbarManager.SelectSlot((num + 9) % 10);
         }
-
-        _receiver.Give(_item);
-    }
-
-    private void On2()
-    {
-        RaycastHit2D _hit = Physics2D.Raycast(mousePosWorld, Vector2.zero);
-        if (_hit) { return; }
-
-        PrefabType buildingToPlace = PrefabType.Drill;
-        tSysManager.PlaceTSystemObjectAtWorldPos(prefabLibrary.GetPrefabOfType(buildingToPlace), mousePosWorld, tilemap, prefabLibrary);
-    }
-
-    private void On3()
-    {
-        RaycastHit2D _hit = Physics2D.Raycast(mousePosWorld, Vector2.zero);
-        if (_hit) { return; }
-
-        PrefabType buildingToPlace = PrefabType.Sink;
-        tSysManager.PlaceTSystemObjectAtWorldPos(prefabLibrary.GetPrefabOfType(buildingToPlace), mousePosWorld);
     }
 }

@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 76a19777120cd5d478c99cce8435f377, type: 3}
-  m_Name: Gem
+  m_Name: GemPink
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 21300000, guid: 66f338c8fb01eca40be37e5e4da3b19f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 48fa2122406f83948926176f20885f5b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 0
@@ -37,4 +37,5 @@ MonoBehaviour:
   Passable: 0
   Buildable: 0
   Drillable: 1
+  Hardness: 3
   ItemReleased: 201

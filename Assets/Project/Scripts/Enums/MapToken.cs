@@ -8,5 +8,6 @@ public enum MapToken
     Ground = 1,
     AlternateGround = 2,
 
-    Gem = 3,
+    Gem1 = 3,
+    Gem2 = 4,
 }

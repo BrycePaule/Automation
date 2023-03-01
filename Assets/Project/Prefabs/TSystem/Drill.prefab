@@ -182,7 +182,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5beea72c87bc4a840a042b0e2bcf2a9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  framesPerSprite: 2
+  framesPerSprite: 20
   sprites:
   - {fileID: 21300000, guid: 695008f3ba5528549ae2814439c7612d, type: 3}
   - {fileID: 21300000, guid: 60a8395a53ffb8240b0d144f2c123294, type: 3}

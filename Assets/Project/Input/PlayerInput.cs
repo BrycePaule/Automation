@@ -80,6 +80,15 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""HotbarNumbers"",
+                    ""type"": ""Button"",
+                    ""id"": ""006f7241-0a5d-426b-9aaa-ef29a6966747"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -146,6 +155,116 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""04abfa04-3fb3-4587-95a9-3c55d30f87cb"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HotbarNumbers"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8398c63c-bdbd-4569-b7bd-89f572e3192b"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HotbarNumbers"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""64cf0157-acc2-47df-a68e-643fe4df32e3"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HotbarNumbers"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a686d040-cf6a-46b6-a591-6903497cf422"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HotbarNumbers"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e53783e2-ae05-4cb8-bb95-af9727c4fb4b"",
+                    ""path"": ""<Keyboard>/5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HotbarNumbers"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8fa62b6f-4beb-498d-a13a-735e713f8e44"",
+                    ""path"": ""<Keyboard>/6"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HotbarNumbers"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fdeb27d2-25d8-49bc-89cb-f3f8efb3eadf"",
+                    ""path"": ""<Keyboard>/7"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HotbarNumbers"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""24a69e5f-9608-4081-9403-2d4d5c12b9b9"",
+                    ""path"": ""<Keyboard>/8"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HotbarNumbers"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""37d268b9-4d74-4784-ab03-32883f14041e"",
+                    ""path"": ""<Keyboard>/9"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HotbarNumbers"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""eaf0292e-c916-4a76-baa8-4b904034030e"",
+                    ""path"": ""<Keyboard>/0"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HotbarNumbers"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -276,6 +395,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_Player__1 = m_Player.FindAction("1", throwIfNotFound: true);
         m_Player__2 = m_Player.FindAction("2", throwIfNotFound: true);
         m_Player__3 = m_Player.FindAction("3", throwIfNotFound: true);
+        m_Player_HotbarNumbers = m_Player.FindAction("HotbarNumbers", throwIfNotFound: true);
         // Camera
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_Pan = m_Camera.FindAction("Pan", throwIfNotFound: true);
@@ -345,6 +465,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player__1;
     private readonly InputAction m_Player__2;
     private readonly InputAction m_Player__3;
+    private readonly InputAction m_Player_HotbarNumbers;
     public struct PlayerActions
     {
         private @PlayerInput m_Wrapper;
@@ -355,6 +476,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         public InputAction @_1 => m_Wrapper.m_Player__1;
         public InputAction @_2 => m_Wrapper.m_Player__2;
         public InputAction @_3 => m_Wrapper.m_Player__3;
+        public InputAction @HotbarNumbers => m_Wrapper.m_Player_HotbarNumbers;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -382,6 +504,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @_3.started -= m_Wrapper.m_PlayerActionsCallbackInterface.On_3;
                 @_3.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.On_3;
                 @_3.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.On_3;
+                @HotbarNumbers.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHotbarNumbers;
+                @HotbarNumbers.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHotbarNumbers;
+                @HotbarNumbers.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHotbarNumbers;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -404,6 +529,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @_3.started += instance.On_3;
                 @_3.performed += instance.On_3;
                 @_3.canceled += instance.On_3;
+                @HotbarNumbers.started += instance.OnHotbarNumbers;
+                @HotbarNumbers.performed += instance.OnHotbarNumbers;
+                @HotbarNumbers.canceled += instance.OnHotbarNumbers;
             }
         }
     }
@@ -457,6 +585,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         void On_1(InputAction.CallbackContext context);
         void On_2(InputAction.CallbackContext context);
         void On_3(InputAction.CallbackContext context);
+        void OnHotbarNumbers(InputAction.CallbackContext context);
     }
     public interface ICameraActions
     {

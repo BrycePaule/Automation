@@ -14,6 +14,7 @@ public enum PrefabType
 
     Item = 200,
     GemPink = 201,
+    GemBlack = 202,
 
     Marker = 900,
     ConnectionMarker = 901,

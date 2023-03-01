@@ -9,5 +9,6 @@ public enum ItemType
     Stick = 1,
 
     GemPink = 10,
+    GemBlack = 11,
 
 }
