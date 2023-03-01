@@ -169,6 +169,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5db7716222480b48964a78d4023072b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isRunning: 0
+  wasRunningLastFrame: 0
 --- !u!114 &2659509074459425212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -234,7 +236,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1

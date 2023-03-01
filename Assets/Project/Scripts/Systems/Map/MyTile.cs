@@ -10,12 +10,12 @@ public class MyTile : Tile
 {
 
     [Header("Custom Settings")]
-    public bool Blocked;
+    public bool Passable;
     public bool Mineable;
 
     public MyTile(bool blocked)
     {
-        Blocked = blocked;
+        Passable = blocked;
     }
 
     public override void RefreshTile(Vector3Int position, ITilemap tilemap)

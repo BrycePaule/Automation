@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8cc09b80222b0d4a8b40b52bc09e723, type: 3}
   m_Name: Tester (gems)
   m_EditorClassIdentifier: 
-  Seed: 7.37
+  Seed: 0.72
   MapSize: 256
   XOffset: 0
   YOffset: 0

@@ -5,29 +5,51 @@ using UnityEngine.Tilemaps;
 
 public class Drill : MonoBehaviour, ITilemapConnected
 {
-    private CardinalDirection drillDirection;
-    
-    private bool running;
-    private MyTile gem;
+    private bool isRunning;
+    private bool wasRunningLastFrame;
 
-    private TSystemConnector connector;
+    private CardinalDirection drillDirection;
+    private MyTile gem;
+        
     private Tilemap tilemap; 
+    private TSystemConnector connector;
+    private ParticleSystem particles;
 
     private void Awake()
     {
         connector = GetComponent<TSystemConnector>();   
+        particles = GetComponentInChildren<ParticleSystem>();   
+
+        isRunning = false;
+        wasRunningLastFrame = false;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        RefreshDrillingTile();
-    }
-
-    private void RefreshDrillingTile()
-    {
-        if (tilemap == null) { return; }
+        wasRunningLastFrame = isRunning;
 
         RefreshDrillDirection();
+        RefreshDrillTile();
+
+        StartOrStopRunning();
+    }
+
+    private void StartOrStopRunning()
+    {
+        if (gem != null && wasRunningLastFrame == false)
+        {
+            SwitchOn();
+        }
+
+        if (gem == null && isRunning == true)
+        {
+            SwitchOff();
+        }
+    }
+
+    private void RefreshDrillTile()
+    {
+        if (tilemap == null) { return; }
 
         Vector3Int _pos = tilemap.WorldToCell(transform.position + Utils.DirToVector(drillDirection));
         MyTile _facingTile = (MyTile) tilemap.GetTile(_pos);
@@ -35,6 +57,10 @@ public class Drill : MonoBehaviour, ITilemapConnected
         if (_facingTile.Mineable)
         {
             gem = _facingTile;
+        }
+        else
+        {
+            gem = null;
         }
     }
 
@@ -51,11 +77,13 @@ public class Drill : MonoBehaviour, ITilemapConnected
 
     private void SwitchOn()
     {
-        running = true;
+        isRunning = true;
+        particles.Play();
     }
 
     private void SwitchOff()
     {
-        running = false;
+        isRunning = false;
+        particles.Stop(withChildren: false);
     }
 }
