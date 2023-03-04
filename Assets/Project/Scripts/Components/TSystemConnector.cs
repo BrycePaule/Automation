@@ -45,14 +45,14 @@ public class TSystemConnector : MonoBehaviour, ITSystemConnectable
         return true;
     }
 
-    public bool CanOffloadItem(ResourceType _itemType)
+    public bool CanOffloadItem(ResourceType resourceType)
     {
         if (!HasValidConnection) { return false; }
 
         ITSystemReceivable _nextReceiver = GetConnectedReceiver();
         if (_nextReceiver == null) { return false; }
 
-        if (!_nextReceiver.CanReceive(_itemType)) { return false; }
+        if (!_nextReceiver.CanReceive(resourceType)) { return false; }
 
         return true;
     }

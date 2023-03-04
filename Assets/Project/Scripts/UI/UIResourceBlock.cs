@@ -6,31 +6,37 @@ using TMPro;
 
 public class UIResourceBlock : MonoBehaviour
 {
-
-    [SerializeField] private ResourceType itemType;
+    [SerializeField] private ResourceType resourceType;
 
     [Header("References")]
     [SerializeField] private Image icon;
-    [SerializeField] private TMP_Text itemCountText;
+    [SerializeField] private TMP_Text countText;
 
-    private int itemCount;
+    private int resourceCount;
 
     private void Awake()
     {
-        itemCount = 0;
+        RefreshType();
+
+        resourceCount = 0;
         UpdateText();
     }
 
     public void OnResourcePickUp(ResourceType eventItemType)
     {
-        if (eventItemType != itemType) { return;}
+        if (eventItemType != resourceType) { return;}
 
-        itemCount += 1;
+        resourceCount += 1;
         UpdateText();
     }
 
     private void UpdateText()
     {
-        itemCountText.text = itemCount.ToString();
+        countText.text = resourceCount.ToString();
+    }
+
+    private void RefreshType()
+    {
+        icon.sprite = ResourceProxy.Instance.GetByType(resourceType).Sprite;
     }
 }

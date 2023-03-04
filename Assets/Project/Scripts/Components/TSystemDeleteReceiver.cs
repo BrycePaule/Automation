@@ -6,24 +6,24 @@ public class TSystemDeleteReceiver : MonoBehaviour, ITSystemReceivable
 {
     [SerializeField] private GameEvent_ResourceType onResourceCollect;
 
-    public void Give(Resource _item)
+    public void Give(Resource resource)
     {
-        Destroy(_item.gameObject);
-        onResourceCollect.Raise(_item.ItemType);
+        Destroy(resource.gameObject);
+        onResourceCollect.Raise(resource.ItemType);
     }
 
-    public bool CanReceive(ResourceType _itemType)
+    public bool CanReceive(ResourceType resourceType)
     {
-        if (!ItemMatchesFilter(_itemType)) { return false; }
+        if (!ItemMatchesFilter(resourceType)) { return false; }
 
         return true;
     }
 
-    public bool ItemMatchesFilter(ResourceType _itemType)
+    public bool ItemMatchesFilter(ResourceType resourceType)
     {
         TSystemReceiptFilter _filter = transform.GetComponent<TSystemReceiptFilter>();
         if (_filter == null) { return true; }
     
-        return _filter.Check(_itemType);
+        return _filter.Check(resourceType);
     }
 }

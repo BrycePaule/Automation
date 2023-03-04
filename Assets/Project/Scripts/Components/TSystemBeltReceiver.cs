@@ -22,9 +22,9 @@ public class TSystemBeltReceiver : MonoBehaviour, ITSystemReceivable
         SetSpacing();
     }
 
-    public bool CanReceive(ResourceType _itemType)
+    public bool CanReceive(ResourceType resourceType)
     {
-        if (!ItemMatchesFilter(_itemType)) { return false; }
+        if (!ItemMatchesFilter(resourceType)) { return false; }
         if (IsFull()) { return false; }
 
         return true;

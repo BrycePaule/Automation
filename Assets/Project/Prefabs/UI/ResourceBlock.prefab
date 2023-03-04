@@ -246,9 +246,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10c9ea2eb63ba5741bf7213d2ddf0b25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemType: 0
+  resourceType: 0
   icon: {fileID: 5111168868436180478}
-  itemCountText: {fileID: 5111168867534904544}
+  countText: {fileID: 5111168867534904544}
 --- !u!114 &4279474844098718667
 MonoBehaviour:
   m_ObjectHideFlags: 0
