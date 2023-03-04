@@ -42,7 +42,7 @@ public class InputManager : MonoBehaviour
     [SerializeField] private Transform player;
 
     // UI
-    [SerializeField] private HotbarManager hotbarManager;
+    [SerializeField] private UIHotbarManager hotbarManager;
 
 
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HotbarSlot : MonoBehaviour
+public class UIHotbarSlot : MonoBehaviour
 {
     public PrefabType building;
 

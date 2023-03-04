@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HotbarManager : MonoBehaviour
+public class UIHotbarManager : MonoBehaviour
 {
 
     [SerializeField] private Canvas hotbar;
 
-    [SerializeField] private HotbarSlot[] slots;
+    [SerializeField] private UIHotbarSlot[] slots;
 
     public int selectedSlot = 0;
 
     private void Start()
     {
-        slots = hotbar.GetComponentsInChildren<HotbarSlot>();
-        foreach (HotbarSlot slot in slots)
+        slots = hotbar.GetComponentsInChildren<UIHotbarSlot>();
+        foreach (UIHotbarSlot slot in slots)
         {
             slot.Refresh();
         }
@@ -34,7 +34,7 @@ public class HotbarManager : MonoBehaviour
         }
     }
 
-    public HotbarSlot GetSelected()
+    public UIHotbarSlot GetSelected()
     {
         return slots[selectedSlot];
     }

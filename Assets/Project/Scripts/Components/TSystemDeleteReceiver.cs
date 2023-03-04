@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class TSystemDeleteReceiver : MonoBehaviour, ITSystemReceivable
 {
+    [SerializeField] private GameEvent_ItemType onResourceCollect;
+
     public void Give(Item _item)
     {
         Destroy(_item.gameObject);
+        onResourceCollect.Raise(_item.ItemType);
     }
 
     public bool CanReceive(ItemType _itemType)
