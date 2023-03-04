@@ -167,7 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7452dc2762b73254ab35912904921e78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onResourceCollect: {fileID: 11400000, guid: 6d87bf42b44a7a249a815bee7918ffad, type: 2}
+  onResourceCollect: {fileID: 11400000, guid: cad37a5170bfc9d4a99c3bdaac9b6e7d, type: 2}
 --- !u!114 &5452952600120360059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,4 +193,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec64ed4c80442f48a535226fda11469, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ItemType: 0
+  ItemType: 1

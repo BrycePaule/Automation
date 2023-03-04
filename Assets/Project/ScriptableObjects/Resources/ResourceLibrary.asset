@@ -9,8 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d90d76368a1c0c499db43a365a4d906, type: 3}
-  m_Name: OnItemPickup
+  m_Script: {fileID: 11500000, guid: 4b949df72b5147045a2bf80b326fb056, type: 3}
+  m_Name: ResourceLibrary
   m_EditorClassIdentifier: 
-  listeners: []
-  LogToConsole: 0
+  Resources:
+  - {fileID: 11400000, guid: f66cdb266d3fa1b46a04c86f4f17c43c, type: 2}
+  - {fileID: 11400000, guid: 4ac4ea9fed809c441b446f01046a7a0a, type: 2}

@@ -247,7 +247,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemType: 0
-  OnResourcePickup: {fileID: 0}
   icon: {fileID: 5111168868436180478}
   itemCountText: {fileID: 5111168867534904544}
 --- !u!114 &4279474844098718667
@@ -262,7 +261,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2073e2ad6c668184aa60f77d36589d99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 6d87bf42b44a7a249a815bee7918ffad, type: 2}
+  Event: {fileID: 11400000, guid: cad37a5170bfc9d4a99c3bdaac9b6e7d, type: 2}
   Response:
     m_PersistentCalls:
       m_Calls:

@@ -5,11 +5,11 @@ using UnityEngine;
 [RequireComponent(typeof(ITSystemReceivable))]
 public class TSystemReceiptFilter : MonoBehaviour
 {
-    public ItemType ItemType;
+    public ResourceType ItemType;
 
-    public bool Check(ItemType _itemType)
+    public bool Check(ResourceType _itemType)
     {
-        if (ItemType == ItemType.Any) { return true; }
+        if (ItemType == ResourceType.Any) { return true; }
         if (ItemType == _itemType) { return true; }
 
         return false;

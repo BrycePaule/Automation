@@ -32,7 +32,7 @@ public class TSystemConnector : MonoBehaviour, ITSystemConnectable
         UpdateConnectionDebugFlag();
     }
 
-    public bool CanOffloadItem(Item _item)
+    public bool CanOffloadItem(Resource _item)
     {
         if (_item == null) { return false; }
         if (!HasValidConnection) { return false; }
@@ -45,7 +45,7 @@ public class TSystemConnector : MonoBehaviour, ITSystemConnectable
         return true;
     }
 
-    public bool CanOffloadItem(ItemType _itemType)
+    public bool CanOffloadItem(ResourceType _itemType)
     {
         if (!HasValidConnection) { return false; }
 

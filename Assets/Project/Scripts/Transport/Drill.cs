@@ -125,9 +125,9 @@ public class Drill : MonoBehaviour, ITilemapConnected, IPrefabLibraryConnected
     {
         GameObject _prefab = prefabLibrary.GetPrefabOfType(gem.ItemReleased);
 
-        if (connector.CanOffloadItem(_prefab.GetComponent<Item>()))
+        if (connector.CanOffloadItem(_prefab.GetComponent<Resource>()))
         {
-            Item _item = Instantiate(_prefab, transform.position, Quaternion.identity).GetComponent<Item>();
+            Resource _item = Instantiate(_prefab, transform.position, Quaternion.identity).GetComponent<Resource>();
             connector.GetConnectedReceiver().Give(_item);
         }
     }

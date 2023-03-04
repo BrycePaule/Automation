@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ItemType
+public enum ResourceType
 {
-    Any = 0,
+    UNASSIGNED = 0,
 
-    Stick = 1,
+    Any = 1,
+
+    Stick = 2,
 
     GemPink = 10,
     GemBlack = 11,
-
 }

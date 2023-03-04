@@ -12,9 +12,13 @@ public class UIHotbarManager : MonoBehaviour
 
     public int selectedSlot = 0;
 
-    private void Start()
+    private void Awake()
     {
         slots = hotbar.GetComponentsInChildren<UIHotbarSlot>();
+    }
+
+    private void Start()
+    {
         foreach (UIHotbarSlot slot in slots)
         {
             slot.Refresh();
@@ -29,7 +33,7 @@ public class UIHotbarManager : MonoBehaviour
 
         for (int i = 0; i < slots.Length; i++)
         {
-            if (i == selection) { slots[selection].Select(); }
+            if (i == selection) { slots[selection].Select();}
             if (i != selection) { slots[selection].Deselect(); }
         }
     }

@@ -7,10 +7,16 @@ public class UIHotbarSlot : MonoBehaviour
 {
     public PrefabType building;
 
+    [Header("References")]
     [SerializeField] private Image itemIcon;
     [SerializeField] private Image selectionRing;
 
     private bool selected;
+
+    private void Awake()
+    {
+        selected = false;
+    }
 
     private void OnEnable()
     {
@@ -20,13 +26,15 @@ public class UIHotbarSlot : MonoBehaviour
     public void Select()
     {
         selected = true;
-        selectionRing.gameObject.SetActive(true);
+        selectionRing.color = Utils.Colour.SetAlpha(selectionRing.color, 1);
+        // selectionRing.gameObject.SetActive(true);
     }
 
     public void Deselect()
     {
         selected = false;
-        selectionRing.gameObject.SetActive(false);
+        selectionRing.color = Utils.Colour.SetAlpha(selectionRing.color, 0);
+        // selectionRing.gameObject.SetActive(false);
     }
 
     public void SetItemIcon(Sprite icon)

@@ -8,5 +8,5 @@ public interface ITSystemConnectable
     public ITSystemReceivable GetConnectedReceiver();
 
     // CHECKERS
-    public bool CanOffloadItem(Item _item);
+    public bool CanOffloadItem(Resource resource);
 }

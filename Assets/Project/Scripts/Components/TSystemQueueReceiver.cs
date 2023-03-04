@@ -7,7 +7,7 @@ public class TSystemQueueReceiver : MonoBehaviour, ITSystemReceivable
     public Queue<ConveyorSlot> Slots;
     public int SlotCount;
 
-    public void Give(Item _item)
+    public void Give(Resource _item)
     {
         // shuffle all but last slot
         for (int i = 0; i < SlotCount - 1; i++)
@@ -22,7 +22,7 @@ public class TSystemQueueReceiver : MonoBehaviour, ITSystemReceivable
         Slots.Enqueue(_lastSlot);
     }
 
-    public bool CanReceive(ItemType _itemType)
+    public bool CanReceive(ResourceType _itemType)
     {
         if (!ItemMatchesFilter(_itemType)) { return false; }
 
@@ -53,7 +53,7 @@ public class TSystemQueueReceiver : MonoBehaviour, ITSystemReceivable
         // return false;
     }
 
-    public bool ItemMatchesFilter(ItemType _itemType)
+    public bool ItemMatchesFilter(ResourceType _itemType)
     {
         TSystemReceiptFilter _filter = transform.GetComponent<TSystemReceiptFilter>();
         if (_filter == null) { return true; }

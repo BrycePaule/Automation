@@ -113,7 +113,7 @@ public class InputManager : MonoBehaviour
 
     private void HandleTileCursor()
     {
-        if (tilemapManager.IsLayerAtWorldPos(Layers.Tilemap, mousePosWorld))
+        if (tilemap.localBounds.Contains(mousePosWorld))
         {
             tileCursor.Visible = true;
             tileCursor.UpdatePosition(tilemapManager.TileAnchorFromWorldPos(mousePosWorld));

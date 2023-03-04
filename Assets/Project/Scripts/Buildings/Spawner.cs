@@ -30,7 +30,7 @@ public class Spawner : MonoBehaviour
 
     private void Spawn()
     {
-        Item _item = Instantiate(ItemToSpawn, transform.position, Quaternion.identity).GetComponent<Item>();
+        Resource _item = Instantiate(ItemToSpawn, transform.position, Quaternion.identity).GetComponent<Resource>();
 
         if (connector.CanOffloadItem(_item))
         {

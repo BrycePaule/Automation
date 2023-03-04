@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ConveyorSlot : MonoBehaviour
 {
-    public Item Item;
+    public Resource Item;
 
     private SpriteRenderer _sr;
 
@@ -16,7 +16,7 @@ public class ConveyorSlot : MonoBehaviour
     public bool IsEmpty() => Item == null;
     public bool IsNotEmpty() => Item != null;
 
-    public void SetItem(Item _item)
+    public void SetItem(Resource _item)
     {
         if (_item == null) { return; }
 

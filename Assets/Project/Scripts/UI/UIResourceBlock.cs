@@ -7,7 +7,7 @@ using TMPro;
 public class UIResourceBlock : MonoBehaviour
 {
 
-    [SerializeField] private ItemType itemType;
+    [SerializeField] private ResourceType itemType;
 
     [Header("References")]
     [SerializeField] private Image icon;
@@ -21,7 +21,7 @@ public class UIResourceBlock : MonoBehaviour
         UpdateText();
     }
 
-    public void OnResourcePickUp(ItemType eventItemType)
+    public void OnResourcePickUp(ResourceType eventItemType)
     {
         if (eventItemType != itemType) { return;}
 

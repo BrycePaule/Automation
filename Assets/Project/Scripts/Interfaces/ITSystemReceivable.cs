@@ -4,9 +4,9 @@ using UnityEngine;
 
 public interface ITSystemReceivable
 {
-    public void Give(Item _item);
+    public void Give(Resource resource);
 
     // CHECKERS
-    public bool CanReceive(ItemType _itemType);
-    public bool ItemMatchesFilter(ItemType _itemType);
+    public bool CanReceive(ResourceType resourceType);
+    public bool ItemMatchesFilter(ResourceType resourceType);
 }

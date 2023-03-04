@@ -341,7 +341,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1380,7 +1380,7 @@ Camera:
   far clip plane: 50
   field of view: 60
   orthographic: 1
-  orthographic size: 50
+  orthographic size: 36
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1730,6 +1730,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &870914457 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5111168867534904544, guid: 17e9789ac4910a94b973818607372ec2, type: 3}
+  m_PrefabInstance: {fileID: 5111168868489756226}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &871963846
 GameObject:
   m_ObjectHideFlags: 0
@@ -1853,6 +1864,7 @@ Transform:
   - {fileID: 953423767}
   - {fileID: 278064799}
   - {fileID: 871963847}
+  - {fileID: 2075222940}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2672,7 +2684,7 @@ MonoBehaviour:
   m_Follow: {fileID: 1837419014}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 50
+    OrthographicSize: 36
     NearClipPlane: 0.3
     FarClipPlane: 50
     Dutch: 0
@@ -3827,6 +3839,50 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2075222939
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2075222940}
+  - component: {fileID: 2075222941}
+  m_Layer: 0
+  m_Name: ResourceProxy
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2075222940
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2075222939}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 961079195}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2075222941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2075222939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb90fb79aad8c6b46928ec08abf7d3d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  library: {fileID: 0}
 --- !u!224 &2081867024 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8137289689764565294, guid: 5cae82d871072eb4d9dad39964db0924, type: 3}
@@ -3853,7 +3909,7 @@ PrefabInstance:
       objectReference: {fileID: 1896494106}
     - target: {fileID: 7272249472136040675, guid: 5cae82d871072eb4d9dad39964db0924, type: 3}
       propertyPath: m_Name
-      value: Slot
+      value: Slot_00
       objectReference: {fileID: 0}
     - target: {fileID: 8137289689764565294, guid: 5cae82d871072eb4d9dad39964db0924, type: 3}
       propertyPath: m_Pivot.x
@@ -3968,6 +4024,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 212535162}
     m_Modifications:
+    - target: {fileID: 2559441796609231329, guid: 17e9789ac4910a94b973818607372ec2, type: 3}
+      propertyPath: itemType
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2559441796609231329, guid: 17e9789ac4910a94b973818607372ec2, type: 3}
+      propertyPath: itemCountText
+      value: 
+      objectReference: {fileID: 870914457}
+    - target: {fileID: 4279474844098718667, guid: 17e9789ac4910a94b973818607372ec2, type: 3}
+      propertyPath: Event
+      value: 
+      objectReference: {fileID: 11400000, guid: cad37a5170bfc9d4a99c3bdaac9b6e7d, type: 2}
     - target: {fileID: 5111168867948669420, guid: 17e9789ac4910a94b973818607372ec2, type: 3}
       propertyPath: m_Name
       value: ResourceBlock
