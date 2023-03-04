@@ -16,7 +16,7 @@ using UnityEngine.Tilemaps;
 // Each point of hardness adds (scaled drill speed * gem hardness / 10) to time
 
 
-public class Drill : MonoBehaviour, ITilemapConnected, IPrefabLibraryConnected
+public class Drill : MonoBehaviour, ITilemapConnected
 {
     [Range(1, 10)]
     public int DrillSpeed;
@@ -31,7 +31,6 @@ public class Drill : MonoBehaviour, ITilemapConnected, IPrefabLibraryConnected
     private float timeToDrill;
         
     private Tilemap tilemap; 
-    private PrefabLibrary prefabLibrary;
     private TSystemConnector connector;
     private ParticleSystem particles;
 
@@ -104,11 +103,6 @@ public class Drill : MonoBehaviour, ITilemapConnected, IPrefabLibraryConnected
         tilemap = _tilemap;
     }
 
-    public void SetPrefabLibrary(PrefabLibrary _prefabLibrary)
-    {
-        prefabLibrary = _prefabLibrary;
-    }
-
     private void SwitchOn()
     {
         isRunning = true;
@@ -123,12 +117,12 @@ public class Drill : MonoBehaviour, ITilemapConnected, IPrefabLibraryConnected
 
     private void DrillItem()
     {
-        GameObject _prefab = prefabLibrary.GetPrefabOfType(gem.ItemReleased);
+        GameObject _gObj = ResourceProxy.Instance.InstantiateByType(gem.ResourceTypeReleased);
 
-        if (connector.CanOffloadItem(_prefab.GetComponent<Resource>()))
+        if (connector.CanOffloadItem(_gObj.GetComponent<Resource>()))
         {
-            Resource _item = Instantiate(_prefab, transform.position, Quaternion.identity).GetComponent<Resource>();
-            connector.GetConnectedReceiver().Give(_item);
+            Resource _resource = _gObj.GetComponent<Resource>();
+            connector.GetConnectedReceiver().Give(_resource);
         }
     }
 }

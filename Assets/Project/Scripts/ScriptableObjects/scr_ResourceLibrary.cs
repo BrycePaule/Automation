@@ -4,7 +4,7 @@ using UnityEngine;
 
 [System.Serializable]
 [CreateAssetMenu(menuName = "Scriptables/Resource Library", fileName = "New Resource Library")]
-public class ResourceLibrary : ScriptableObject
+public class scr_ResourceLibrary : ScriptableObject
 {
     public scr_ResourceAsset[] Resources;
 

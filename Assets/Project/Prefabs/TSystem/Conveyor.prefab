@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 3486167011735841373}
   - component: {fileID: 6508085055607174282}
   - component: {fileID: 6513914186719948946}
-  - component: {fileID: 3665970570168745604}
   - component: {fileID: 5745023214444970979}
   - component: {fileID: 1566095677751510220}
   m_Layer: 20
@@ -143,19 +142,6 @@ MonoBehaviour:
   ConnectionMarker: {fileID: 5351522365391551201}
   HasValidConnection: 0
   TSysConnectionName: 
---- !u!114 &3665970570168745604
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4196235035966897580}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: faf0a3e71b37fea438137dc1300d811b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PrefabType: 100
 --- !u!114 &5745023214444970979
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,7 +155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxItems: 3
-  Items: []
+  Resources: []
   gapWidth: 0
 --- !u!114 &1566095677751510220
 MonoBehaviour:

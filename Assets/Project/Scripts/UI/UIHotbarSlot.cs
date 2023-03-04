@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class UIHotbarSlot : MonoBehaviour
 {
-    public PrefabType building;
+    public BuildingType buildingType;
 
     [Header("References")]
     [SerializeField] private Image itemIcon;
@@ -15,6 +15,8 @@ public class UIHotbarSlot : MonoBehaviour
 
     private void Awake()
     {
+        RefreshType();
+
         selected = false;
     }
 
@@ -53,5 +55,12 @@ public class UIHotbarSlot : MonoBehaviour
         {
             Deselect();
         }
+    }
+
+    private void RefreshType()
+    {
+        if (buildingType == BuildingType.NULL) { return; }
+
+        itemIcon.sprite = BuildingProxy.Instance.GetByType(buildingType).InventoryIcon;
     }
 }

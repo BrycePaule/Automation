@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IPrefabLibraryConnected
 {
-    public void SetPrefabLibrary(PrefabLibrary prefabLibrary);
+    // public void SetPrefabLibrary(PrefabLibrary prefabLibrary);
 }

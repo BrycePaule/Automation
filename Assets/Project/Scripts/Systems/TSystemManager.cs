@@ -38,20 +38,6 @@ public class TSystemManager : MonoBehaviour
         RefreshConnectionsAroundWorldPos(_worldPos);
     }
 
-    public void PlaceTSystemObjectAtWorldPos(GameObject _prefab, Vector3 _worldPos, Tilemap _tilemap, PrefabLibrary _prefabLibrary)
-    {
-        if (!tilemapManager.CanBuildAt(_worldPos)) { return; }
-
-        Vector3Int _cellPos = tilemapManager.CellFromWorldPos(_worldPos);
-
-        GameObject _connectable = Instantiate(_prefab, tilemapManager.TileAnchorFromWorldPos(_worldPos), Quaternion.identity);
-        _connectable.name = _prefab.name + " " + _cellPos;
-        _connectable.GetComponent<ITilemapConnected>().SetTilemap(_tilemap);
-        _connectable.GetComponent<IPrefabLibraryConnected>().SetPrefabLibrary(_prefabLibrary);
-        
-        RefreshConnectionsAroundWorldPos(_worldPos);
-    }
-
     public void DestroyTSystemObjectAtWorldPos(Vector3 _worldPos)
     {
         Component _connectable = GetTSystemObjectAtWorldPos(_worldPos);

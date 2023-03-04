@@ -16,7 +16,7 @@ public class MyTile : Tile
     [Header("Drillable settings")]
     public bool Drillable;
     public float Hardness;
-    public PrefabType ItemReleased;
+    public ResourceType ResourceTypeReleased;
 
     public MyTile(bool blocked)
     {

@@ -9,7 +9,7 @@ public class TSystemDeleteReceiver : MonoBehaviour, ITSystemReceivable
     public void Give(Resource resource)
     {
         Destroy(resource.gameObject);
-        onResourceCollect.Raise(resource.ItemType);
+        onResourceCollect.Raise(resource.resourceType);
     }
 
     public bool CanReceive(ResourceType resourceType)

@@ -37,6 +37,8 @@ public class UIResourceBlock : MonoBehaviour
 
     private void RefreshType()
     {
+        if (resourceType == ResourceType.UNASSIGNED) { return; }
+
         icon.sprite = ResourceProxy.Instance.GetByType(resourceType).Sprite;
     }
 }

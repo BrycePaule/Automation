@@ -5,6 +5,6 @@ using UnityEngine;
 [System.Serializable]
 public class PrefabPair
 {
-    public GameObject Prefab;
-    public PrefabType Type;
+    // public GameObject Prefab;
+    // public PrefabType Type;
 }

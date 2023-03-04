@@ -7,7 +7,6 @@ public class UIHotbarManager : MonoBehaviour
 {
 
     [SerializeField] private Canvas hotbar;
-
     [SerializeField] private UIHotbarSlot[] slots;
 
     public int selectedSlot = 0;

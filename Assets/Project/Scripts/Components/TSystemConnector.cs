@@ -32,15 +32,15 @@ public class TSystemConnector : MonoBehaviour, ITSystemConnectable
         UpdateConnectionDebugFlag();
     }
 
-    public bool CanOffloadItem(Resource _item)
+    public bool CanOffloadItem(Resource resource)
     {
-        if (_item == null) { return false; }
+        if (resource == null) { return false; }
         if (!HasValidConnection) { return false; }
 
         ITSystemReceivable _nextReceiver = GetConnectedReceiver();
 
         if (_nextReceiver == null) { return false; }
-        if (!_nextReceiver.CanReceive(_item.ItemType)) { return false; }
+        if (!_nextReceiver.CanReceive(resource.resourceType)) { return false; }
 
         return true;
     }

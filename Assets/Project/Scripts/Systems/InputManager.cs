@@ -34,8 +34,6 @@ public class InputManager : MonoBehaviour
     [SerializeField] private TilemapManager tilemapManager;
     [SerializeField] private TileCursor tileCursor;
 
-    [SerializeField] private PrefabLibrary prefabLibrary;
-
     [SerializeField] private Transform cameraTarget;
     [SerializeField] private CinemachineVirtualCamera cvCam;
 
@@ -136,19 +134,14 @@ public class InputManager : MonoBehaviour
         }
         else
         {
-            PrefabType selectedBuilding = hotbarManager.GetSelected().building;
-            if (selectedBuilding == PrefabType.NOT_SELECTED) { return; }
+            if (hotbarManager.GetSelected().buildingType == BuildingType.NULL) { return; }
 
-            GameObject gObj = prefabLibrary.GetPrefabOfType(selectedBuilding);
+            scr_BuildingAsset asset = BuildingProxy.Instance.GetByType(hotbarManager.GetSelected().buildingType);
+            GameObject gObj = BuildingProxy.Instance.InstantiateByType(asset.BuildingType);
 
             bool needsTilemap = gObj.TryGetComponent<ITilemapConnected>(out _);
-            bool needsPrefabLibrary = gObj.TryGetComponent<IPrefabLibraryConnected>(out _);
 
-            if (needsPrefabLibrary)
-            {
-                tSysManager.PlaceTSystemObjectAtWorldPos(gObj, mousePosWorld, tilemap, prefabLibrary);
-            }
-            else if (needsTilemap)
+            if (needsTilemap)
             {
                 tSysManager.PlaceTSystemObjectAtWorldPos(gObj, mousePosWorld, tilemap);
             }
