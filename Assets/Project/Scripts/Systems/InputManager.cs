@@ -14,6 +14,7 @@ public class InputManager : MonoBehaviour
 
     private Vector2 mousePosScreen;
     private Vector3 mousePosWorld;
+    private Vector3Int mousePosCell;
 
     private Vector2 moveDir;
     private float cameraZoom;
@@ -30,8 +31,6 @@ public class InputManager : MonoBehaviour
     [Header("References")]
     [SerializeField] private MapGenerator mapGenerator;
     [SerializeField] private Tilemap tilemap;
-    [SerializeField] private TSystemManager tSysManager;
-    [SerializeField] private TilemapManager tilemapManager;
     [SerializeField] private TileCursor tileCursor;
 
     [SerializeField] private Transform cameraTarget;
@@ -74,7 +73,7 @@ public class InputManager : MonoBehaviour
     private void Update()
     {
         UpdateMousePos();
-        HandleTileCursor();
+        UpdateTileCursor();
 
         UpdatePlayerPosition();
     }
@@ -105,21 +104,27 @@ public class InputManager : MonoBehaviour
 
     private void UpdateMousePos()
     {
+        // Screen-space
         mousePosScreen = a_mousePosition.ReadValue<Vector2>();
+
+        // World-space
         mousePosWorld = Camera.main.ScreenToWorldPoint(mousePosScreen);
         mousePosWorld.z = 0f;
+
+        // Cell-space
+        mousePosCell = tilemap.WorldToCell(mousePosWorld);
     }
 
-    private void HandleTileCursor()
+    private void UpdateTileCursor()
     {
         if (tilemap.localBounds.Contains(mousePosWorld))
         {
-            tileCursor.Visible = true;
-            tileCursor.UpdatePosition(tilemapManager.TileAnchorFromWorldPos(mousePosWorld));
+            tileCursor.Enable();
+            tileCursor.UpdatePosition(mousePosCell);
         }
         else
         {
-            tileCursor.Visible = false;
+            tileCursor.Disable();
         }
     }
 
@@ -127,39 +132,29 @@ public class InputManager : MonoBehaviour
 
     private void OnLeftClick()
     {
-        RaycastHit2D _hit = Physics2D.Raycast(mousePosWorld, Vector2.zero);
+        if (!TilemapManager.Instance.InsideBounds(mousePosCell)) { return; }
 
-        if (_hit)
+        GameObject _building = BuildingProxy.Instance.GetBuildingAt(mousePosCell);
+
+        if (_building != null)
         {
-            _hit.transform.gameObject.GetComponent<TSystemRotator>()?.RotateClockwise();
+            _building.GetComponent<TSystemRotator>()?.RotateClockwise();
         }
         else
         {
-            if (hotbarManager.GetSelected().buildingType == BuildingType.UNASSIGNED) { return; }
-
             BuildingType _selectedBuildingType = hotbarManager.GetSelected().buildingType;
-            GameObject gObj = BuildingProxy.Instance.InstantiateByType(_selectedBuildingType);
 
-            bool needsTilemap = gObj.TryGetComponent<ITilemapConnected>(out _);
+            if (_selectedBuildingType == BuildingType.UNASSIGNED) { return; }
 
-            if (needsTilemap)
-            {
-                tSysManager.PlaceTSystemObjectAtWorldPos(gObj, mousePosWorld, tilemap);
-            }
-            else
-            {
-                tSysManager.PlaceTSystemObjectAtWorldPos(gObj, mousePosWorld);
-            }
+            BuildingProxy.Instance.InstantiateBuildingAt(_selectedBuildingType, mousePosCell);
         }
     }
 
     private void OnRightClick() 
     {
-        RaycastHit2D _hit = Physics2D.Raycast(mousePosWorld, Vector2.zero);
-        if (_hit)
-        {
-            tSysManager.DestroyTSystemObjectAtWorldPos(mousePosWorld);
-        }
+        if (!TilemapManager.Instance.InsideBounds(mousePosCell)) { return; }
+
+        BuildingProxy.Instance.DestroyBuildingAt(mousePosCell);
     }
 
     private void OnPressNumber(InputAction.CallbackContext ctx)

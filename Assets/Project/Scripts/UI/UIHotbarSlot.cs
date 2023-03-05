@@ -58,6 +58,6 @@ public class UIHotbarSlot : MonoBehaviour
     {
         if (buildingType == BuildingType.UNASSIGNED) { return; }
 
-        itemIcon.sprite = BuildingProxy.Instance.GetByType(buildingType).InventoryIcon;
+        itemIcon.sprite = BuildingProxy.Instance.GetAssetByType(buildingType).InventoryIcon;
     }
 }

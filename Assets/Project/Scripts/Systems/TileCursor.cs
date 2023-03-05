@@ -4,32 +4,31 @@ using UnityEngine;
 
 public class TileCursor : MonoBehaviour
 {
-
     public bool Visible;
     public Sprite Sprite;
 
-    private SpriteRenderer spriteRenderer;
+    private SpriteRenderer sr;
 
     private void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.sprite = Sprite;
+        sr = GetComponent<SpriteRenderer>();
+        sr.sprite = Sprite;
     }
 
-    private void Update()
+    public void UpdatePosition(Vector3Int cellPos)
     {
-        if (Visible)
-        {
-            spriteRenderer.enabled = true;
-        }
-        else
-        {
-            spriteRenderer.enabled = false;
-        }
+        transform.position = TilemapManager.Instance.TileAnchorFromCellPos(cellPos);
     }
 
-    public void UpdatePosition(Vector3 _worldPos)
+    public void Disable()
     {
-        transform.position = _worldPos;
+        Visible = false;
+        sr.enabled = false;
+    }
+
+    public void Enable()
+    {
+        Visible = true;
+        sr.enabled = true;
     }
 }

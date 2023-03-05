@@ -10,14 +10,12 @@ public class TSystemConnector : MonoBehaviour, ITSystemConnectable
 
     public bool HasValidConnection;
 
+    public Vector3Int CellPos { get; private set; }
+
     // DEBUG ONLY
     [SerializeField] 
     private string TSysConnectionName;
 
-    private void OnEnable()
-    {
-        RefreshTSysConnection();
-    }
 
     private void FixedUpdate()
     {
@@ -28,11 +26,11 @@ public class TSystemConnector : MonoBehaviour, ITSystemConnectable
     {
         ConnectedTo = null;
 
-        RaycastHit2D _hit = Physics2D.Raycast(transform.position + Utils.DirToVector(Facing), Vector2.zero);
+        MyTile _tile = TilemapManager.Instance.GetTile(CellPos + Utils.DirToVector(Facing));
 
-        if (_hit && _hit.transform.GetComponent<ITSystemConnectable>() != null)
+        if (_tile.Building != null)
         {
-            ConnectedTo = _hit.transform.GetComponent<ITSystemConnectable>();
+            ConnectedTo = _tile.Building.GetComponent<ITSystemConnectable>();
         }
 
         UpdateConnectionDebugFlag();
@@ -72,5 +70,10 @@ public class TSystemConnector : MonoBehaviour, ITSystemConnectable
             HasValidConnection = true;
             TSysConnectionName = ConnectedTo.ToString();
         }
+    }
+
+    public void SetCellPosition(Vector3Int _cellPos)
+    {
+        CellPos = _cellPos;
     }
 }

@@ -8,7 +8,6 @@ using UnityEngine.Tilemaps;
 [CreateAssetMenu(menuName="Scriptables/Map/MyTile", fileName="New MyTile")]
 public class MyTile : Tile
 {
-
     [Header("Custom Settings")]
     public bool Passable;
     public bool Buildable;
@@ -17,6 +16,8 @@ public class MyTile : Tile
     public bool Drillable;
     public float Hardness;
     public ResourceType ResourceTypeReleased;
+
+    public GameObject Building;
 
     public MyTile(bool blocked)
     {

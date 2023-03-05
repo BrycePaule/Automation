@@ -16,7 +16,7 @@ using UnityEngine.Tilemaps;
 // Each point of hardness adds (scaled drill speed * gem hardness / 10) to time
 
 [RequireComponent(typeof(TSystemConnector))]
-public class Drill : MonoBehaviour, ITilemapConnected
+public class Drill : MonoBehaviour
 {
     [Range(1, 10)]
     public int DrillSpeed;
@@ -30,7 +30,6 @@ public class Drill : MonoBehaviour, ITilemapConnected
     private float timer;
     private float timeToDrill;
         
-    private Tilemap tilemap; 
     private TSystemConnector connector;
     private ParticleSystem particles;
 
@@ -76,10 +75,7 @@ public class Drill : MonoBehaviour, ITilemapConnected
 
     private void RefreshDrillTile()
     {
-        if (tilemap == null) { return; }
-
-        Vector3Int _pos = tilemap.WorldToCell(transform.position + Utils.DirToVector(drillDirection));
-        MyTile _Tile = (MyTile) tilemap.GetTile(_pos);
+        MyTile _Tile = TilemapManager.Instance.GetTile(connector.CellPos + Utils.DirToVector(drillDirection));
 
         if (_Tile.Drillable)
         {
@@ -96,11 +92,6 @@ public class Drill : MonoBehaviour, ITilemapConnected
     {
         int _facingAsInt = (int) connector.Facing;
         drillDirection = Utils.IntToCardinalDirection(_facingAsInt + 2);
-    }
-
-    public void SetTilemap(Tilemap _tilemap)
-    {
-        tilemap = _tilemap;
     }
 
     private void SwitchOn()

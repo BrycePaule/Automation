@@ -22,7 +22,7 @@ public class BuildingGhost : MonoBehaviour
         else
         {
             sr.enabled = true;
-            sr.sprite = BuildingProxy.Instance.GetByType(selected).WorldSprite;
+            sr.sprite = BuildingProxy.Instance.GetAssetByType(selected).WorldSprite;
         }
     }
 }

@@ -70,10 +70,10 @@ public class MapGenerator : MonoBehaviour
             {
                 Vector3Int pos = new Vector3Int(y, x, 0);
 
-                if (map[y, x] == MapToken.Ground) { tilemap.SetTile(pos, BaseTile); }
-                if (map[y, x] == MapToken.AlternateGround) { tilemap.SetTile(pos, AltBaseTile); }
-                if (map[y, x] == MapToken.Gem1) { tilemap.SetTile(pos, Gem1Tile); }
-                if (map[y, x] == MapToken.Gem2) { tilemap.SetTile(pos, Gem2Tile); }
+                if (map[y, x] == MapToken.Ground) { tilemap.SetTile(pos, Instantiate(BaseTile)); }
+                if (map[y, x] == MapToken.AlternateGround) { tilemap.SetTile(pos,Instantiate(AltBaseTile)); }
+                if (map[y, x] == MapToken.Gem1) { tilemap.SetTile(pos,Instantiate(Gem1Tile)); }
+                if (map[y, x] == MapToken.Gem2) { tilemap.SetTile(pos,Instantiate(Gem2Tile)); }
             }
         }
     }
