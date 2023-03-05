@@ -14,11 +14,11 @@ public class UIResourceBlock : MonoBehaviour
 
     private int resourceCount;
 
-    private void Awake()
+    private void Start()
     {
-        RefreshType();
-
         resourceCount = 0;
+
+        RefreshResourceType();
         UpdateText();
     }
 
@@ -35,7 +35,7 @@ public class UIResourceBlock : MonoBehaviour
         countText.text = resourceCount.ToString();
     }
 
-    private void RefreshType()
+    private void RefreshResourceType()
     {
         if (resourceType == ResourceType.UNASSIGNED) { return; }
 

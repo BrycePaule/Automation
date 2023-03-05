@@ -56,7 +56,7 @@ public class InputManager : MonoBehaviour
         a_rightClick.performed += ctx => OnRightClick();
 
         a_hotbarNumbers = input.Player.HotbarNumbers;
-        a_hotbarNumbers.performed += ctx => OnNumber(ctx);
+        a_hotbarNumbers.performed += ctx => OnPressNumber(ctx);
 
         a_mousePosition = input.Player.MousePosition;
 
@@ -75,6 +75,7 @@ public class InputManager : MonoBehaviour
     {
         UpdateMousePos();
         HandleTileCursor();
+
         UpdatePlayerPosition();
     }
 
@@ -134,10 +135,10 @@ public class InputManager : MonoBehaviour
         }
         else
         {
-            if (hotbarManager.GetSelected().buildingType == BuildingType.NULL) { return; }
+            if (hotbarManager.GetSelected().buildingType == BuildingType.UNASSIGNED) { return; }
 
-            scr_BuildingAsset asset = BuildingProxy.Instance.GetByType(hotbarManager.GetSelected().buildingType);
-            GameObject gObj = BuildingProxy.Instance.InstantiateByType(asset.BuildingType);
+            BuildingType _selectedBuildingType = hotbarManager.GetSelected().buildingType;
+            GameObject gObj = BuildingProxy.Instance.InstantiateByType(_selectedBuildingType);
 
             bool needsTilemap = gObj.TryGetComponent<ITilemapConnected>(out _);
 
@@ -161,47 +162,7 @@ public class InputManager : MonoBehaviour
         }
     }
 
-    // private void On1()
-    // {
-    //     Component _connector = tSysManager.GetTSystemObjectAtWorldPos(mousePosWorld);
-    //     if (_connector == null) { return; }
-
-    //     ITSystemReceivable _receiver = _connector.GetComponent<ITSystemReceivable>();
-    //     if (_receiver == null) { return; }
-
-    //     // TODO: delegate this somewhere else later
-    //     Color randomColor = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f));
-    //     Item _item = Instantiate(prefabLibrary.GetPrefabOfType(PrefabType.Item), Vector3.zero, Quaternion.identity).GetComponent<Item>();
-    //     _item.gameObject.GetComponent<SpriteRenderer>().color = randomColor;
-
-    //     if (!_receiver.CanReceive(_item.ItemType)) 
-    //     {
-    //         Destroy(_item.gameObject);
-    //         return;
-    //     }
-
-    //     _receiver.Give(_item);
-    // }
-
-    // private void On2()
-    // {
-    //     RaycastHit2D _hit = Physics2D.Raycast(mousePosWorld, Vector2.zero);
-    //     if (_hit) { return; }
-
-    //     PrefabType buildingToPlace = PrefabType.Drill;
-    //     tSysManager.PlaceTSystemObjectAtWorldPos(prefabLibrary.GetPrefabOfType(buildingToPlace), mousePosWorld, tilemap, prefabLibrary);
-    // }
-
-    // private void On3()
-    // {
-    //     RaycastHit2D _hit = Physics2D.Raycast(mousePosWorld, Vector2.zero);
-    //     if (_hit) { return; }
-
-    //     PrefabType buildingToPlace = PrefabType.Sink;
-    //     tSysManager.PlaceTSystemObjectAtWorldPos(prefabLibrary.GetPrefabOfType(buildingToPlace), mousePosWorld);
-    // }
-
-    private void OnNumber(InputAction.CallbackContext ctx)
+    private void OnPressNumber(InputAction.CallbackContext ctx)
     {
         int num;
         bool valid = int.TryParse(ctx.control.name, out num);

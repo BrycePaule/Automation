@@ -30,16 +30,16 @@ public class Spawner : MonoBehaviour
 
     private void Spawn()
     {
-        GameObject gObj = ResourceProxy.Instance.InstantiateByType(ResourceType);
-        Resource _item = gObj.GetComponent<Resource>();
+        GameObject _gObj = ResourceProxy.Instance.InstantiateByType(ResourceType);
+        Resource _resource = _gObj.GetComponent<Resource>();
 
-        if (connector.CanOffloadItem(_item))
+        if (connector.CanOffloadItem(_resource.resourceType))
         {
-            connector.GetConnectedReceiver().Give(_item);
+            connector.GetConnectedReceiver().Give(_resource);
         }
         else
         {
-            Destroy(_item.gameObject);
+            Destroy(_resource.gameObject);
         }
     }
 }

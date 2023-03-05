@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4b949df72b5147045a2bf80b326fb056, type: 3}
+  m_Script: {fileID: 11500000, guid: 8a8fff9beb4523a42bff8ce5558ec5b4, type: 3}
   m_Name: ResourceLibrary
   m_EditorClassIdentifier: 
   Resources:

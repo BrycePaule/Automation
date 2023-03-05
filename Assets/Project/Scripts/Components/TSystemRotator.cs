@@ -36,16 +36,4 @@ public class TSystemRotator : MonoBehaviour, ITSystemRotatable
     {
         RotateClockwise(_reverse: true);
     }
-
-    private Transform GetConnectionMarker()
-    {
-        Transform _marker = connector.ConnectionMarker;
-
-        if (_marker != null)
-        {
-            hasMarker = true;
-        }
-
-        return _marker;
-    }
 }

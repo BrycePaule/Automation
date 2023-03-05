@@ -18,6 +18,8 @@ public class BuildingProxy : Singleton<BuildingProxy>
 
     public GameObject InstantiateByType(BuildingType type)
     {
+        if (type == BuildingType.UNASSIGNED) { Debug.LogError("BuildingProxy failed to Instatiate resource of Type: " + BuildingType.UNASSIGNED); }
+
         scr_BuildingAsset asset = GetByType(type);
 
         return Instantiate(asset.Prefab, Vector3.zero, Quaternion.identity);

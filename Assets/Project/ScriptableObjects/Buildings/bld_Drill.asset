@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13fcff2d41ebd8a45abe5eff9685dfe6, type: 3}
+  m_Name: bld_Drill
+  m_EditorClassIdentifier: 
+  ID: 2
+  DisplayName: Drill
+  Description: Mines resources.
+  BuildingType: 2
+  WorldSprite: {fileID: 21300000, guid: 695008f3ba5528549ae2814439c7612d, type: 3}
+  InventoryIcon: {fileID: 21300000, guid: 695008f3ba5528549ae2814439c7612d, type: 3}
+  Prefab: {fileID: 4545999447416434855, guid: 52f6d683f3b14d64c82c488c09074dc7, type: 3}

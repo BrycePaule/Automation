@@ -13,28 +13,23 @@ public class TSystemManager : MonoBehaviour
 
     // CREATION, REMOVAL, INTERACTION
 
-    public void PlaceTSystemObjectAtWorldPos(GameObject _prefab, Vector3 _worldPos)
+    public void PlaceTSystemObjectAtWorldPos(GameObject _gObj, Vector3 _worldPos)
     {
         if (!tilemapManager.CanBuildAt(_worldPos)) { return; }
 
         Vector3Int _cellPos = tilemapManager.CellFromWorldPos(_worldPos);
-
-        GameObject _connectable = Instantiate(_prefab, tilemapManager.TileAnchorFromWorldPos(_worldPos), Quaternion.identity);
-        _connectable.name = _prefab.name + " " + _cellPos;
+        _gObj.name = _gObj.name + " " + _cellPos;
+        _gObj.transform.position = tilemapManager.TileAnchorFromWorldPos(_worldPos);
 
         RefreshConnectionsAroundWorldPos(_worldPos);
     }
 
-    public void PlaceTSystemObjectAtWorldPos(GameObject _prefab, Vector3 _worldPos, Tilemap _tilemap)
+    public void PlaceTSystemObjectAtWorldPos(GameObject _gObj, Vector3 _worldPos, Tilemap _tilemap)
     {
-        if (!tilemapManager.CanBuildAt(_worldPos)) { return; }
+        PlaceTSystemObjectAtWorldPos(_gObj, _worldPos);
 
-        Vector3Int _cellPos = tilemapManager.CellFromWorldPos(_worldPos);
+        _gObj.GetComponent<ITilemapConnected>().SetTilemap(_tilemap);
 
-        GameObject _connectable = Instantiate(_prefab, tilemapManager.TileAnchorFromWorldPos(_worldPos), Quaternion.identity);
-        _connectable.name = _prefab.name + " " + _cellPos;
-        _connectable.GetComponent<ITilemapConnected>().SetTilemap(_tilemap);
-        
         RefreshConnectionsAroundWorldPos(_worldPos);
     }
 
@@ -72,12 +67,12 @@ public class TSystemManager : MonoBehaviour
         {
             for (int j = -1; j <= 1; j++)
             {
-                Vector3 _offset = new Vector3(i, j, 0);
+                Vector3 _offset = new Vector3(j, i, 0);
                 Component _connectable = GetTSystemObjectAtWorldPos(_worldPos + _offset);
 
                 if (_connectable != null)
                 {
-                    _connectable.GetComponent<TSystemConnector>().RefreshTSysConnection();
+                    _connectable.GetComponent<ITSystemConnectable>().RefreshTSysConnection();
                 }
             }
         }

@@ -15,7 +15,7 @@ using UnityEngine.Tilemaps;
 
 // Each point of hardness adds (scaled drill speed * gem hardness / 10) to time
 
-
+[RequireComponent(typeof(TSystemConnector))]
 public class Drill : MonoBehaviour, ITilemapConnected
 {
     [Range(1, 10)]
@@ -117,12 +117,10 @@ public class Drill : MonoBehaviour, ITilemapConnected
 
     private void DrillItem()
     {
-        GameObject _gObj = ResourceProxy.Instance.InstantiateByType(gem.ResourceTypeReleased);
-
-        if (connector.CanOffloadItem(_gObj.GetComponent<Resource>()))
+        if (connector.CanOffloadItem(gem.ResourceTypeReleased))
         {
-            Resource _resource = _gObj.GetComponent<Resource>();
-            connector.GetConnectedReceiver().Give(_resource);
+            GameObject _gObj = ResourceProxy.Instance.InstantiateByType(gem.ResourceTypeReleased);
+            connector.GetConnectedReceiver().Give(_gObj.GetComponent<Resource>());
         }
     }
 }

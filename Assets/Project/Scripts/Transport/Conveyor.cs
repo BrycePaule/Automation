@@ -33,8 +33,8 @@ public class Conveyor : MonoBehaviour
 
         for (int i = 0; i < receiver.Resources.Count; i++)
         {
-            var _item = receiver.Resources[i];
-            float _currXPos = _item.transform.localPosition.x;
+            Resource _resource = receiver.Resources[i];
+            float _currXPos = _resource.transform.localPosition.x;
             float _inFrontXPos = 0f;
 
             // if not at the front, cache the pos of the item in front for spacing
@@ -43,16 +43,16 @@ public class Conveyor : MonoBehaviour
                 _inFrontXPos = receiver.Resources[i - 1].transform.localPosition.x;
             }
 
-            if (connector.CanOffloadItem(_item))
+            if (connector.CanOffloadItem(_resource.resourceType))
             {
                 if (i == 0 && (_currXPos >= _rightEdge))
                 {
-                    connector.GetConnectedReceiver().Give(_item);
-                    receiver.Resources.Remove(_item);
+                    connector.GetConnectedReceiver().Give(_resource);
+                    receiver.Resources.Remove(_resource);
                 }
 
                 if (i != 0 && ((_inFrontXPos - _currXPos) < receiver.gapWidth)) { continue; }
-                _item.transform.localPosition += _moveOffset;
+                _resource.transform.localPosition += _moveOffset;
             }
             else
             {
@@ -63,7 +63,7 @@ public class Conveyor : MonoBehaviour
                 }
 
                 if (i != 0 && ((_inFrontXPos - _currXPos) < receiver.gapWidth)) { continue; }
-                _item.transform.localPosition += _moveOffset;
+                _resource.transform.localPosition += _moveOffset;
             }
         }
     }

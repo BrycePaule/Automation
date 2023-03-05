@@ -10,18 +10,13 @@ public class UIHotbarSlot : MonoBehaviour
     [Header("References")]
     [SerializeField] private Image itemIcon;
     [SerializeField] private Image selectionRing;
+    [SerializeField] private GameEvent_BuildingType onBuildingSelected;
 
     private bool selected;
 
-    private void Awake()
+    private void Start()
     {
-        RefreshType();
-
-        selected = false;
-    }
-
-    private void OnEnable()
-    {
+        RefreshBuildingType();
         Deselect();
     }
 
@@ -30,6 +25,8 @@ public class UIHotbarSlot : MonoBehaviour
         selected = true;
         selectionRing.color = Utils.Colour.SetAlpha(selectionRing.color, 1);
         // selectionRing.gameObject.SetActive(true);
+
+        onBuildingSelected.Raise(buildingType);
     }
 
     public void Deselect()
@@ -57,9 +54,9 @@ public class UIHotbarSlot : MonoBehaviour
         }
     }
 
-    private void RefreshType()
+    private void RefreshBuildingType()
     {
-        if (buildingType == BuildingType.NULL) { return; }
+        if (buildingType == BuildingType.UNASSIGNED) { return; }
 
         itemIcon.sprite = BuildingProxy.Instance.GetByType(buildingType).InventoryIcon;
     }

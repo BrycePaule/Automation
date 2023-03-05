@@ -19,10 +19,11 @@ public class ResourceProxy : Singleton<ResourceProxy>
 
     public GameObject InstantiateByType(ResourceType type)
     {
-        scr_ResourceAsset asset = GetByType(type);
-        GameObject resourceObject = Instantiate(baseItemPrefab, Vector3.zero, Quaternion.identity);
+        if (type == ResourceType.UNASSIGNED) { Debug.LogError("ResourceProxy failed to Instatiate resource of Type: " + ResourceType.UNASSIGNED); }
+        if (type == ResourceType.Any) { Debug.LogError("ResourceProxy failed to Instatiate resource of Type: " + ResourceType.Any); }
 
-        resourceObject.GetComponent<Resource>().SetResource(type);
+        GameObject resourceObject = Instantiate(baseItemPrefab, Vector3.zero, Quaternion.identity);
+        resourceObject.GetComponent<Resource>().OverrideDefaultValues(type);
 
         return resourceObject;
     }

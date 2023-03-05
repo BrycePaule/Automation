@@ -11,7 +11,13 @@ public class TSystemConnector : MonoBehaviour, ITSystemConnectable
     public bool HasValidConnection;
 
     // DEBUG ONLY
-    [SerializeField] private string TSysConnectionName;
+    [SerializeField] 
+    private string TSysConnectionName;
+
+    private void OnEnable()
+    {
+        RefreshTSysConnection();
+    }
 
     private void FixedUpdate()
     {
@@ -30,19 +36,6 @@ public class TSystemConnector : MonoBehaviour, ITSystemConnectable
         }
 
         UpdateConnectionDebugFlag();
-    }
-
-    public bool CanOffloadItem(Resource resource)
-    {
-        if (resource == null) { return false; }
-        if (!HasValidConnection) { return false; }
-
-        ITSystemReceivable _nextReceiver = GetConnectedReceiver();
-
-        if (_nextReceiver == null) { return false; }
-        if (!_nextReceiver.CanReceive(resource.resourceType)) { return false; }
-
-        return true;
     }
 
     public bool CanOffloadItem(ResourceType resourceType)

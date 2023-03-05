@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum BuildingType
 {
-    NULL = 0,
+    UNASSIGNED = 0,
 
     Conveyor = 1,
     Drill = 2,
