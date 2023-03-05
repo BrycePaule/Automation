@@ -10,10 +10,9 @@ public class TilemapManager : Singleton<TilemapManager>
     [Header("References")]
     [SerializeField] private Tilemap tilemap;
 
-    public bool IsLayerAtWorldPos(Layers layer, Vector3 worldPos)
+    public Vector3Int WorldToCell(Vector3 worldPos)
     {
-        RaycastHit2D _hit = Physics2D.Raycast(worldPos, Vector2.zero);
-        return (_hit && _hit.transform.gameObject.layer == (int) layer);
+        return tilemap.WorldToCell(worldPos);
     }
 
     public Vector3 TileAnchorFromWorldPos(Vector3 worldPos)

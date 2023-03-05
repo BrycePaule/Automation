@@ -30,7 +30,6 @@ public class InputManager : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private MapGenerator mapGenerator;
-    [SerializeField] private Tilemap tilemap;
     [SerializeField] private TileCursor tileCursor;
 
     [SerializeField] private Transform cameraTarget;
@@ -112,12 +111,12 @@ public class InputManager : MonoBehaviour
         mousePosWorld.z = 0f;
 
         // Cell-space
-        mousePosCell = tilemap.WorldToCell(mousePosWorld);
+        mousePosCell = TilemapManager.Instance.WorldToCell(mousePosWorld);
     }
 
     private void UpdateTileCursor()
     {
-        if (tilemap.localBounds.Contains(mousePosWorld))
+        if (TilemapManager.Instance.InsideBounds(mousePosCell))
         {
             tileCursor.Enable();
             tileCursor.UpdatePosition(mousePosCell);

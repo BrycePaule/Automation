@@ -5,6 +5,10 @@ using UnityEngine.Tilemaps;
 
 public class TSystemManager : Singleton<TSystemManager>
 {
+    [Header("Debug")]
+    [SerializeField] private bool markRefreshCells;
+
+    [Header("References")]
     [SerializeField] private GameObject markerPrefab;
 
     public void RefreshConnectionsAround(Vector3Int cellPos)
@@ -16,8 +20,11 @@ public class TSystemManager : Singleton<TSystemManager>
                 Vector3Int _offset = new Vector3Int(j, i, 0);
                 Vector3Int _cellToCheck = cellPos + _offset;
 
-                GameObject m = Instantiate(markerPrefab, TilemapManager.Instance.TileAnchorFromCellPos(cellPos) + _offset, Quaternion.identity);
-                Destroy(m, 2f);
+                if (markRefreshCells)
+                {
+                    GameObject m = Instantiate(markerPrefab, TilemapManager.Instance.TileAnchorFromCellPos(cellPos) + _offset, Quaternion.identity);
+                    Destroy(m, 1f);
+                }
 
                 if (!TilemapManager.Instance.InsideBounds(_cellToCheck)) { continue; }
 
