@@ -19,11 +19,6 @@ public class MyTile : Tile
 
     public GameObject Building;
 
-    public MyTile(bool blocked)
-    {
-        Passable = blocked;
-    }
-
     public override void RefreshTile(Vector3Int position, ITilemap tilemap)
     {
         base.RefreshTile(position, tilemap);

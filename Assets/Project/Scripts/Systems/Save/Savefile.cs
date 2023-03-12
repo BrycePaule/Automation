@@ -6,15 +6,5 @@ using UnityEngine;
 public class Savefile : ScriptableObject
 {
 	public Vector3 PlayerPos;
-
-	public int TimeDay;
-	public int TimeHour;
-	public int TimeMinute;
-
-	// public InventoryCapped PlayerInventory;
-	// public Inventory PlayerItemsCollected;
-	// public Inventory PlayerRecipesUnlocked;
-
-	// public int MapSize;
-	// public TileInfo[] TileInfo;
+    public scr_MapAsset Map;
 }

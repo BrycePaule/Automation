@@ -10,6 +10,39 @@ public class TilemapManager : Singleton<TilemapManager>
     [Header("References")]
     [SerializeField] private Tilemap tilemap;
 
+    [Header("Tiles")]
+    [SerializeField] private MyTile BaseTile;
+    [SerializeField] private MyTile AltBaseTile;
+    [SerializeField] private MyTile Gem1Tile;
+    [SerializeField] private MyTile Gem2Tile;
+
+    // GENERATION
+    public void SetTiles(MapToken[,] map, int mapSize)
+    {
+        for (int y = 0; y < mapSize; y++)
+        {
+            for (int x = 0; x < mapSize; x++)
+            {
+                int randOffset = -5;
+
+                Vector3Int pos = new Vector3Int(y + randOffset, x + randOffset, 0);
+
+                if (map[y, x] == MapToken.Ground) { SetTile(pos, Instantiate(BaseTile)); }
+                if (map[y, x] == MapToken.AlternateGround) { SetTile(pos,Instantiate(AltBaseTile)); }
+                if (map[y, x] == MapToken.Gem1) { SetTile(pos,Instantiate(Gem1Tile)); }
+                if (map[y, x] == MapToken.Gem2) { SetTile(pos,Instantiate(Gem2Tile)); }
+            }
+        }
+    }
+
+    private void SetTile(Vector3Int pos, MyTile tile)
+    {
+        tilemap.SetTile(pos, tile);
+    }
+
+
+    // INTERACTIONS
+
     public Vector3Int WorldToCell(Vector3 worldPos)
     {
         return tilemap.WorldToCell(worldPos);

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEditor;
 
 public class MapGenerator : MonoBehaviour
 {
@@ -13,69 +14,71 @@ public class MapGenerator : MonoBehaviour
 
     [Header("Noise Profiles")]
     public NoiseProfile Base;
-    // public NoiseSetting Biomes;
     public NoiseProfile Gem1;
     public NoiseProfile Gem2;
 
-    [Header("Tiles")]
-    public MyTile BaseTile;
-    public MyTile AltBaseTile;
-    public MyTile Gem1Tile;
-    public MyTile Gem2Tile;
+    private MapToken[,] baseMap;
+    private List<MapToken> baseTokens = new List<MapToken>();
+
+    private MapToken[,] gem1Map;
+    private List<MapToken> gem1Tokens = new List<MapToken>();
+
+    private MapToken[,] gem2Map;
+    private List<MapToken> gem2Tokens = new List<MapToken>();
+
+    private List<MapToken[,]> mapsToBlend = new List<MapToken[,]>();
 
     [Header("References")]
     [SerializeField] private PerlinNoiseMapGenerator perlGen;
-    [SerializeField] private TilemapManager tilemapManager;
-    [SerializeField] private Tilemap tilemap;
+    [SerializeField] private scr_MapAsset MapAsset;
 
     private void Awake()
     {
+        if (MapAsset == null)
+        {
+            MapAsset = GenerateNewMap();
+        }
+    }
+
+    private void Start()
+    {
+        TilemapManager.Instance.SetTiles(MapAsset.Tokens, MapSize);
+    }
+
+    private scr_MapAsset GenerateNewMap()
+    {
         // BASE
-        List<MapToken> baseTokens = new List<MapToken>();
         baseTokens.Add(MapToken.Ground);
         baseTokens.Add(MapToken.AlternateGround);
 
         perlGen.SetValues(Seed, MapSize, XOffset, YOffset, Base.Scale, Base.NoiseValues, Base.HeightThresholds, Base.Colours);
-        MapToken[,] baseMap = perlGen.GenerateMap(baseTokens);
+        baseMap = perlGen.GenerateMap(baseTokens);
 
         // GEMS
-        List<MapToken> gem1Tokens = new List<MapToken>();
         gem1Tokens.Add(MapToken.Empty);
         gem1Tokens.Add(MapToken.Gem1);
 
-        List<MapToken> gem2Tokens = new List<MapToken>();
+        perlGen.SetValues(Seed, MapSize, XOffset, YOffset, Gem1.Scale, Gem1.NoiseValues, Gem1.HeightThresholds, Gem1.Colours);
+        gem1Map = perlGen.GenerateMap(gem1Tokens);
+
         gem2Tokens.Add(MapToken.Empty);
         gem2Tokens.Add(MapToken.Gem2);
 
-        perlGen.SetValues(Seed, MapSize, XOffset, YOffset, Gem1.Scale, Gem1.NoiseValues, Gem1.HeightThresholds, Gem1.Colours);
-        MapToken[,] gem1Map = perlGen.GenerateMap(gem1Tokens);
-
         perlGen.SetValues(Seed, MapSize, XOffset, YOffset, Gem2.Scale, Gem2.NoiseValues, Gem2.HeightThresholds, Gem2.Colours);
-        MapToken[,] gem2Map = perlGen.GenerateMap(gem2Tokens);
+        gem2Map = perlGen.GenerateMap(gem2Tokens);
 
         // BLENDING
-        List<MapToken[,]> maps = new List<MapToken[,]>();
-        maps.Add(baseMap);
-        maps.Add(gem1Map);
-        maps.Add(gem2Map);
+        mapsToBlend.Add(baseMap);
+        mapsToBlend.Add(gem1Map);
+        mapsToBlend.Add(gem2Map);
 
-        SetTiles(Blend(maps));
-    }
+		scr_MapAsset newMap = scr_MapAsset.CreateInstance<scr_MapAsset>();
+        newMap.Tokens = Blend(mapsToBlend);
 
-    private void SetTiles(MapToken[,] map)
-    {
-        for (int y = 0; y < MapSize; y++)
-        {
-            for (int x = 0; x < MapSize; x++)
-            {
-                Vector3Int pos = new Vector3Int(y, x, 0);
+		string PATH = AssetDatabase.GenerateUniqueAssetPath("Assets/Project/ScriptableObjects/Maps/map_NEWMAP.asset");
+		AssetDatabase.CreateAsset(newMap, PATH);
 
-                if (map[y, x] == MapToken.Ground) { tilemap.SetTile(pos, Instantiate(BaseTile)); }
-                if (map[y, x] == MapToken.AlternateGround) { tilemap.SetTile(pos,Instantiate(AltBaseTile)); }
-                if (map[y, x] == MapToken.Gem1) { tilemap.SetTile(pos,Instantiate(Gem1Tile)); }
-                if (map[y, x] == MapToken.Gem2) { tilemap.SetTile(pos,Instantiate(Gem2Tile)); }
-            }
-        }
+        return newMap;
     }
 
     private MapToken[,] Blend(List<MapToken[,]> mapsToAdd)

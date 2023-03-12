@@ -31,6 +31,7 @@ public class InputManager : MonoBehaviour
     [Header("References")]
     [SerializeField] private MapGenerator mapGenerator;
     [SerializeField] private TileCursor tileCursor;
+    [SerializeField] private UIDebugDisplay DebugDisplay; 
 
     [SerializeField] private Transform cameraTarget;
     [SerializeField] private CinemachineVirtualCamera cvCam;
@@ -39,6 +40,7 @@ public class InputManager : MonoBehaviour
 
     // UI
     [SerializeField] private UIHotbarManager hotbarManager;
+    // [SerializeField] private UIHotbarManager hotbarManager;
 
 
 
@@ -75,6 +77,15 @@ public class InputManager : MonoBehaviour
         UpdateTileCursor();
 
         UpdatePlayerPosition();
+        UpdateDebugMenu();
+    }
+
+    private void UpdateDebugMenu()
+    {
+        DebugDisplay.SetMPosScreen(mousePosScreen);
+        DebugDisplay.SetMPosWorld(mousePosWorld);
+        DebugDisplay.SetMPosCell(mousePosCell);
+        DebugDisplay.SetPlayerPos(player.position);
     }
 
     private void OnCameraZoom()
