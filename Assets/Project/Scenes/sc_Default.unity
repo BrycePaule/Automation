@@ -283,10 +283,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f4e66232266e224aa4bff0a3cf7a284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CameraPanningSpeed: 45
-  MinimumZoomLevel: 15
-  MaximumZoomLevel: 50
-  mapGenerator: {fileID: 534216889}
+  CameraPanningSpeed: 20
+  MinimumZoomLevel: 10
+  MaximumZoomLevel: 30
   tileCursor: {fileID: 138122005}
   DebugDisplay: {fileID: 447789740}
   cameraTarget: {fileID: 1968400425}
@@ -1599,7 +1598,7 @@ Camera:
   far clip plane: 50
   field of view: 60
   orthographic: 1
-  orthographic size: 15
+  orthographic size: 18
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1672,10 +1671,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0199e0760467d9e49a2dc6ecf81e0168, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Seed: 0.72
-  MapSize: 128
-  XOffset: 0
-  YOffset: 0
   MapAsset: {fileID: 0}
   BaseSettings: {fileID: 11400000, guid: 35b39e112bf46fa42856bab7a2d1fbf2, type: 2}
   Gem1Settings: {fileID: 11400000, guid: 201ab118a42afc649a31ffaf948794dd, type: 2}
@@ -2185,13 +2180,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91e9dd4621ef9c54ca6f2140851c50b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tilemap: {fileID: 1163442512}
-  mapGenerator: {fileID: 534216889}
+  mapSize: 128
   BaseTile: {fileID: 11400000, guid: 2710df9b6a956e54c96af881b76250dd, type: 2}
   AltBaseTile: {fileID: 11400000, guid: 718fe9baaada13143a118e152e21a85f, type: 2}
   Gem1Tile: {fileID: 11400000, guid: bb1c0a5a01ea44745a7bb325f9f1b5fe, type: 2}
   Gem2Tile: {fileID: 11400000, guid: 61b90e4160a18824c8d1737ede43374f, type: 2}
-  mapSize: 128
+  tilemap: {fileID: 1163442512}
 --- !u!1 &961079194
 GameObject:
   m_ObjectHideFlags: 0
@@ -3265,7 +3259,7 @@ MonoBehaviour:
   m_Follow: {fileID: 1837419014}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 15
+    OrthographicSize: 18
     NearClipPlane: 0.3
     FarClipPlane: 50
     Dutch: 0
@@ -4141,7 +4135,6 @@ MonoBehaviour:
   Player: {fileID: 1837419013}
   ResourceLibrary: {fileID: 11400000, guid: 1223cde7d3369594db06aaeb9d2823f0, type: 2}
   BuildingLibrary: {fileID: 11400000, guid: 397b9444778a8e1469dd0f6830169eca, type: 2}
-  TilemapManager: {fileID: 953423768}
 --- !u!1 &1884822202
 GameObject:
   m_ObjectHideFlags: 0

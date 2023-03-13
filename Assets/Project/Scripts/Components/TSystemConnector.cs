@@ -13,9 +13,7 @@ public class TSystemConnector : MonoBehaviour, ITSystemConnectable
     public Vector3Int CellPos { get; private set; }
 
     // DEBUG ONLY
-    [SerializeField] 
-    private string TSysConnectionName;
-
+    [SerializeField] private string TSysConnectionName;
 
     private void FixedUpdate()
     {

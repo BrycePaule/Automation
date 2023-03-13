@@ -8,5 +8,7 @@ using UnityEngine.Tilemaps;
 public class scr_MapAsset : ScriptableObject
 {
     public List<PerlinSettings> PerlinSettings = new List<PerlinSettings>();
-	public Dictionary<Vector3Int, GameObject> Objects = new Dictionary<Vector3Int, GameObject>();
+
+    public Dictionary<Vector3Int, MapToken> TokenCache;
+    public Dictionary<Vector3Int, GameObject> BuildingCache;
 }

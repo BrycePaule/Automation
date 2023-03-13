@@ -74,7 +74,7 @@ public class InputManager : MonoBehaviour
     private void Start()
     {
         CalcPlayerPositions();
-        RefreshTilemap();
+        TilemapManager.Instance.RefreshTilesAroundPlayer(playerCellPos);
     }
 
     private void Update()
@@ -156,7 +156,7 @@ public class InputManager : MonoBehaviour
 
         if (playerCellPos != playerCellPosLastFrame)
         {
-            TilemapManager.Instance.RefreshTiles(playerCellPos);
+            TilemapManager.Instance.RefreshTilesAroundPlayer(playerCellPos);
         }
     }
 

@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5263a09b7ee9f7a449f92730584a7249, type: 3}
+  m_Script: {fileID: 11500000, guid: 8e554bea340954143ac58fbaa6d37c4e, type: 3}
   m_Name: save_Dev
   m_EditorClassIdentifier: 
-  PlayerPos: {x: 88.46589, y: 65.3641, z: 0}
-  Map: {fileID: 11400000, guid: b4998cf01c381b44a922fedaf5782bac, type: 2}
+  PlayerCellPos: {x: 0, y: 0, z: 0}
+  MapAsset: {fileID: 0}

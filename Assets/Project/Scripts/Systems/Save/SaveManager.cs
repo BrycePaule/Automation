@@ -7,24 +7,20 @@ using UnityEditor;
 
 public class SaveManager : MonoBehaviour
 {
-	[Header("Current Savefile")]
-	public Savefile saveFile;
-	public bool OverwriteSave;
+    [Header("Current Savefile")]
+    public scr_Savefile saveFile;
+    public bool OverwriteSave;
 
-	[Header("Save Resources")]
+    [Header("Save Resources")]
     [SerializeField] private GameObject Player;
 
-	[Header("Load Resources")]
+    [Header("Load Resources")]
     [SerializeField] private scr_ResourceLibrary ResourceLibrary;
     [SerializeField] private scr_BuildingLibrary BuildingLibrary;
 
-	[Header("References")]
-    [SerializeField] private TilemapManager TilemapManager;
+    private void OnApplicationQuit() => Save();
 
-
-	private void OnApplicationQuit() => Save();
-
-	public void Save()
+    public void Save()
     {
         if (saveFile == null)
         {
@@ -38,9 +34,8 @@ public class SaveManager : MonoBehaviour
         // 	return;
         // }
 
-        // SaveMapData();
-
         SavePlayerPos();
+        SaveMapData();
 
         EditorUtility.SetDirty(saveFile);
         Debug.Log("Saved");
@@ -48,60 +43,29 @@ public class SaveManager : MonoBehaviour
 
     private void SavePlayerPos()
     {
-        saveFile.PlayerPos = Player.transform.position;
+        saveFile.PlayerCellPos = TilemapManager.Instance.WorldToCell(Player.transform.position);
     }
 
-	private void SaveMapData()
-	{
-		// OffGridMap _map = MapManager.Instance.Map;
+    private void SaveMapData()
+    {
+        saveFile.MapAsset.TokenCache = TilemapManager.Instance.TokenCache;
+        saveFile.MapAsset.BuildingCache = TilemapManager.Instance.BuildingCache;
+    }
 
-		// for (int i = 0; i < _map.Size; i++)
-		// {
-		// 	for (int j = 0; j < _map.Size; j++)
-		// 	{
-		// 		Vector3Int _pos = new Vector3Int(i, j, 0);
-				
-		// 		// fetch objects
-		// 		int objectCount = 0;
-		// 		if (_map.TileObjectDict.ContainsKey(_pos))
-		// 			objectCount = _map.TileObjectDict[_pos].Count;
+    public void Load()
+    {
 
-		// 		int[] objectIDsToSave = new int[objectCount];
+        if (saveFile == null)
+        {
+            // 
+        }
+        else
+        {
+            print("Loading from save");
+            Player.transform.position = TilemapManager.Instance.TileAnchorFromCellPos(saveFile.PlayerCellPos);
 
-		// 		for (int n = 0; n < objectCount; n++)
-		// 		{
-		// 			if (_map.TileObjectDict[_pos][n].GetComponent<ObjectBase>() != null)
-		// 			{
-		// 				objectIDsToSave[n] = _map.TileObjectDict[_pos][n].GetComponent<ObjectBase>().ObjectID;
-
-		// 				// this break is only here temporarily to cap objects at one per tile - for now...
-		// 				break;
-		// 			}
-		// 		}
-
-		// 		// fetch tiletype
-		// 		TileType tileTypeToSave = MapManager.Instance.GetTile(_pos).TileType;
-
-		// 		// fetch location
-		// 		Vector3Int locationToSave = new Vector3Int(i, j, 0);
-
-		// 		saveFile.TileInfo[i * _map.Size + j] = new TileInfo(locationToSave, tileTypeToSave, objectIDsToSave);
-		// 	}
-		// }
-	}
-
-	public void Load()
-	{
-		// if (saveFile == null)
-		// {
-		// 	MapGenerator.GenerateNewMap();
-		// }
-		// else
-		// {
-		// 	print("Loading from save");
-		// 	Player.GetComponentInChildren<InventoryProxy>().Inventory = saveFile.PlayerInventory;
-		// 	CraftingRecipeManager.PlayerItemsCollected = saveFile.PlayerItemsCollected;
-		// 	CraftingRecipeManager.PlayerRecipesUnlocked = saveFile.PlayerRecipesUnlocked;
-		// }
-	}
+            TilemapManager.Instance.TokenCache = saveFile.MapAsset.TokenCache;
+            TilemapManager.Instance.BuildingCache = saveFile.MapAsset.BuildingCache;
+        }
+    }
 }

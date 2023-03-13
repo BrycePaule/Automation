@@ -17,9 +17,8 @@ public class TilemapManager : Singleton<TilemapManager>
     [Header("References")]
     [SerializeField] private Tilemap tilemap;
 
-
-    private Dictionary<Vector3Int, MapToken> tileCache = new Dictionary<Vector3Int, MapToken>();
-    private Dictionary<Vector3Int, GameObject> buildingCache = new Dictionary<Vector3Int, GameObject>();
+    public Dictionary<Vector3Int, MapToken> TokenCache = new Dictionary<Vector3Int, MapToken>();
+    public Dictionary<Vector3Int, GameObject> BuildingCache = new Dictionary<Vector3Int, GameObject>();
 
     private Vector3Int playerCellPos;
 
@@ -38,21 +37,21 @@ public class TilemapManager : Singleton<TilemapManager>
         if (token == MapToken.Gem2) { tilemap.SetTile((Vector3Int) pos, Gem2Tile); }
     }
 
-    public void RefreshTiles(Vector3Int playerPos)
+    // This could probably be refactored to only update in the direction the player is moving
+    public void RefreshTilesAroundPlayer(Vector3Int playerPos)
     {
         playerCellPos = playerPos;
 
         foreach (var pos in Utils.EvaluateGrid(playerCellPos.x - (mapSize / 2), playerCellPos.y - (mapSize / 2), mapSize))
         {
-            if (!tileCache.ContainsKey(pos))
+            if (!TokenCache.ContainsKey(pos))
             {
-                tileCache[pos] = MapGenerator.Instance.GetTokenAtPos(pos, playerPos);
+                TokenCache[pos] = MapGenerator.Instance.GetTokenAtPos(pos, playerPos);
             }
 
-            SetTile((Vector2Int) pos, tileCache[pos]);
+            SetTile((Vector2Int) pos, TokenCache[pos]);
         }
     }
-
 
     // INTERACTIONS
 
@@ -86,23 +85,23 @@ public class TilemapManager : Singleton<TilemapManager>
 
     public void SetBuilding(Vector3Int cellPos, GameObject building)
     {
-        buildingCache[cellPos] = building;
+        BuildingCache[cellPos] = building;
     }
 
     public void DestroyBuilding(Vector3Int cellPos)
     {
-        if (buildingCache.ContainsKey(cellPos))
+        if (BuildingCache.ContainsKey(cellPos))
         {
-            Destroy(buildingCache[cellPos]);
-            buildingCache.Remove(cellPos);
+            Destroy(BuildingCache[cellPos]);
+            BuildingCache.Remove(cellPos);
         }
     }
     
     public GameObject GetBuilding(Vector3Int cellPos)
     {
-        if (buildingCache.ContainsKey(cellPos))
+        if (BuildingCache.ContainsKey(cellPos))
         {
-            return buildingCache[cellPos];
+            return BuildingCache[cellPos];
         }
 
         return null;
@@ -115,7 +114,7 @@ public class TilemapManager : Singleton<TilemapManager>
         TerrainTile _tile = (TerrainTile) tilemap.GetTile(cellPos);
 
         if (!_tile.Buildable) { return false; }
-        if (buildingCache.ContainsKey(cellPos)) { return false; }
+        if (BuildingCache.ContainsKey(cellPos)) { return false; }
 
         return true;
     }
@@ -137,9 +136,7 @@ public class TilemapManager : Singleton<TilemapManager>
 
     public bool ContainsBuilding(Vector3Int cellPos)
     {
-        return buildingCache.ContainsKey(cellPos);
+        return BuildingCache.ContainsKey(cellPos);
     }
-
-    // GETTERS
 
 }

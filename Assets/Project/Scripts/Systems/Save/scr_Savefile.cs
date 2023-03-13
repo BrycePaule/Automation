@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Scriptables/Savefile", fileName = "New Savefile")]
-public class Savefile : ScriptableObject
+public class scr_Savefile : ScriptableObject
 {
-	public Vector3 PlayerPos;
-    public scr_MapAsset Map;
+	public Vector3Int PlayerCellPos;
+    public scr_MapAsset MapAsset;
 }
