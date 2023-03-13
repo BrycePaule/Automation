@@ -28,8 +28,9 @@ public class InputManager : MonoBehaviour
     private InputAction a_camera_pan;
     private InputAction a_camera_zoom;
 
+    private InputAction a_debug;
+
     [Header("References")]
-    [SerializeField] private MapGenerator mapGenerator;
     [SerializeField] private TileCursor tileCursor;
     [SerializeField] private UIDebugDisplay DebugDisplay; 
 
@@ -40,8 +41,9 @@ public class InputManager : MonoBehaviour
 
     // UI
     [SerializeField] private UIHotbarManager hotbarManager;
-    // [SerializeField] private UIHotbarManager hotbarManager;
 
+    private Vector3Int playerCellPos;
+    private Vector3Int playerCellPosLastFrame;
 
 
     private void Awake()
@@ -64,28 +66,35 @@ public class InputManager : MonoBehaviour
 
         a_camera_zoom = input.Camera.Zoom;
         a_camera_zoom.performed += ctx => OnCameraZoom();
+
+        a_debug = input.Player.Debug;
+        a_debug.performed += ctx => OnDebugPressed();
     }
 
     private void Start()
     {
-        player.position = new Vector3(mapGenerator.MapSize / 2, mapGenerator.MapSize / 2, 0f);
+        CalcPlayerPositions();
+        RefreshTilemap();
     }
 
     private void Update()
     {
-        UpdateMousePos();
-        UpdateTileCursor();
+        CalcMousePositions();
+        CalcPlayerPositions();
 
-        UpdatePlayerPosition();
-        UpdateDebugMenu();
+        RefreshTilemap();
+        RefreshTileCursor();
+        RefreshDebugMenu();
     }
 
-    private void UpdateDebugMenu()
+    private void RefreshDebugMenu()
     {
         DebugDisplay.SetMPosScreen(mousePosScreen);
         DebugDisplay.SetMPosWorld(mousePosWorld);
         DebugDisplay.SetMPosCell(mousePosCell);
-        DebugDisplay.SetPlayerPos(player.position);
+
+        DebugDisplay.SetPlayerPosWorld(player.position);
+        DebugDisplay.SetPlayerPosCell(playerCellPos);
     }
 
     private void OnCameraZoom()
@@ -103,16 +112,19 @@ public class InputManager : MonoBehaviour
         }
     }
 
-    private void UpdatePlayerPosition()
+    private void CalcPlayerPositions()
     {
         moveDir = a_camera_pan.ReadValue<Vector2>();
 
         if (moveDir == Vector2.zero) { return; }
 
         player.position += ((Vector3) moveDir) * CameraPanningSpeed * Time.deltaTime;
+
+        playerCellPosLastFrame = playerCellPos;
+        playerCellPos = TilemapManager.Instance.WorldToCell(player.transform.position);
     }
 
-    private void UpdateMousePos()
+    private void CalcMousePositions()
     {
         // Screen-space
         mousePosScreen = a_mousePosition.ReadValue<Vector2>();
@@ -125,7 +137,7 @@ public class InputManager : MonoBehaviour
         mousePosCell = TilemapManager.Instance.WorldToCell(mousePosWorld);
     }
 
-    private void UpdateTileCursor()
+    private void RefreshTileCursor()
     {
         if (TilemapManager.Instance.InsideBounds(mousePosCell))
         {
@@ -135,6 +147,16 @@ public class InputManager : MonoBehaviour
         else
         {
             tileCursor.Disable();
+        }
+    }
+
+    private void RefreshTilemap()
+    {
+        if (playerCellPosLastFrame == null) { return; }
+
+        if (playerCellPos != playerCellPosLastFrame)
+        {
+            TilemapManager.Instance.RefreshTiles(playerCellPos);
         }
     }
 
@@ -177,5 +199,10 @@ public class InputManager : MonoBehaviour
             // + 9 % 10 scales values down by 1, so pressing 1 selects index 0 (but won't go into negatives)
             hotbarManager.SelectSlot((num + 9) % 10);
         }
+    }
+
+    private void OnDebugPressed()
+    {
+        DebugDisplay.ToggleDisplay();
     }
 }
