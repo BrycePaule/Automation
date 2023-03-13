@@ -26,11 +26,11 @@ public class TSystemConnector : MonoBehaviour, ITSystemConnectable
     {
         ConnectedTo = null;
 
-        MyTile _tile = TilemapManager.Instance.GetTile(CellPos + Utils.DirToVector(Facing));
+        Vector3Int _posInFront = CellPos + Utils.DirToVector(Facing);
 
-        if (_tile.Building != null)
+        if (TilemapManager.Instance.ContainsBuilding(_posInFront))
         {
-            ConnectedTo = _tile.Building.GetComponent<ITSystemConnectable>();
+            ConnectedTo = TilemapManager.Instance.GetBuilding(_posInFront).GetComponent<ITSystemConnectable>();
         }
 
         UpdateConnectionDebugFlag();

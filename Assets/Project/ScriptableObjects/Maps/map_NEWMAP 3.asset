@@ -10,5 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b1211fa2b04f32240a28e0ba73689686, type: 3}
-  m_Name: map_Dev
+  m_Name: map_NEWMAP 3
   m_EditorClassIdentifier: 
+  PerlinSettings:
+  - {fileID: 11400000, guid: 35b39e112bf46fa42856bab7a2d1fbf2, type: 2}
+  - {fileID: 11400000, guid: 201ab118a42afc649a31ffaf948794dd, type: 2}
+  - {fileID: 11400000, guid: 432084c23abfa4f4989e66bb6062990b, type: 2}

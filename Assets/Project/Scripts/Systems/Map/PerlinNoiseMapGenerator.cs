@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[ExecuteInEditMode]
-public class PerlinNoiseMapGenerator : MonoBehaviour
+public class PerlinNoiseMapGenerator
 {
     private float seed;
     private int mapSize;
@@ -15,43 +14,94 @@ public class PerlinNoiseMapGenerator : MonoBehaviour
     private List<Threshold> heightThresholds;
     private List<Color> colours;
 
-    public void SetValues(float _seed, int _mapSize, float _xOffset, float _yOffset, float _scale, List<NoiseFreqAmp> _noiseValues, List<Threshold> _heightThresholds, List<Color> _colours)
+    public PerlinNoiseMapGenerator(float _seed, int _mapSize, float _xOffset, float _yOffset, float _scale, List<NoiseFreqAmp> _noiseValues, List<Threshold> _heightThresholds, List<Color> _colours)
     {
         this.seed = _seed;
         this.mapSize = _mapSize;
         this.xOffset = _xOffset;
         this.yOffset = _yOffset;
-
         this.scale = _scale;
+
         this.noiseValues = _noiseValues;
         this.heightThresholds = _heightThresholds;
         this.colours = _colours;
     }
 
-    private float PerlinSample(int x, int y, NoiseFreqAmp fa)
+    public PerlinNoiseMapGenerator(PerlinSettings settings)
     {
-        float xCoord = (float) x / mapSize * scale + xOffset;
-        float yCoord = (float) y / mapSize * scale + yOffset;
+        this.seed = settings.Seed;
+        this.mapSize = settings.MapSize;
+        this.xOffset = settings.XOffset;
+        this.yOffset = settings.YOffset;
+        this.scale = settings.Scale;
 
-        return Mathf.PerlinNoise((xCoord + mapSize * seed) * fa.Frequency, (yCoord + mapSize * seed) * fa.Frequency) * fa.Amplitude;
+        this.noiseValues = settings.NoiseValues;
+        this.heightThresholds = settings.HeightThresholds;
     }
+
+    private float ClampedPerlinSample(int x, int y, NoiseFreqAmp fa)
+    {
+        float scaledXOffset = xOffset / mapSize * scale;
+        float scaledYOffset = yOffset / mapSize * scale;
+
+        float xCoord = (float) x / mapSize * scale + scaledXOffset;
+        float yCoord = (float) y / mapSize * scale + scaledYOffset;
+
+        return Mathf.Clamp01(
+            Mathf.PerlinNoise(
+                ((xCoord + mapSize * seed) * fa.Frequency) * fa.Amplitude,
+                ((yCoord + mapSize * seed) * fa.Frequency) * fa.Amplitude)
+            );
+    }
+
+    public int GetThresholdIndex(float height)
+    {
+        int _index = 0;
+
+        foreach (var threshold in heightThresholds)
+        {
+            if (height > threshold.Value) { _index += 1; }
+        }
+
+        return _index;
+    }
+
+    public float GetHeight(Vector2Int pos)
+    {
+        float _height = 0;
+
+        foreach (var freqAmp in noiseValues)
+        {
+            _height += ClampedPerlinSample(pos.x, pos.y, freqAmp);
+        }
+
+        return _height;
+    }
+
+    public MapToken GetTokenAt(Vector3Int pos, List<MapToken> tokens)
+    {
+        float _height = GetHeight((Vector2Int) pos);
+        int _index = GetThresholdIndex(_height);
+
+        return tokens[_index];
+    }
+
+    public void Offset(Vector3Int playerOffset)
+    {
+        xOffset = playerOffset.x;
+        yOffset = playerOffset.y;
+    }
+
+    // GENERATE FULL MAPS
+    // old technique that is no longer used
 
     public float[,] GenerateHeightMap()
     {
         float[,] _heightMap = new float[mapSize, mapSize];
 
-        for (int y = 0; y < mapSize; y++)
+        foreach (Vector3Int point in Utils.EvaluateGrid(mapSize))
         {
-            for (int x = 0; x < mapSize; x++)
-            {
-                float _height = 0;
-                foreach (NoiseFreqAmp freqAmp in noiseValues)
-                {
-                    _height += Mathf.Clamp01(PerlinSample(x, y, freqAmp));
-                }
-
-                _heightMap[y, x] = _height;
-            }
+            _heightMap[point.y, point.x] = GetHeight((Vector2Int) point);
         }
 
         return _heightMap;
@@ -67,28 +117,15 @@ public class PerlinNoiseMapGenerator : MonoBehaviour
         float[,] heightMap = GenerateHeightMap();
         MapToken[,] map = new MapToken[mapSize, mapSize];
 
-        for (int y = 0; y < mapSize; y++)
+        foreach (var point in Utils.EvaluateGrid(mapSize))
         {
-            for (int x = 0; x < mapSize; x++)
-            {
-                int index = GetThresholdIndex(heightThresholds, heightMap[y, x]);
-                map[y, x] = tokens[index];
-            }
+            int index = GetThresholdIndex(heightMap[point.y, point.x]);
+            map[point.y, point.x] = tokens[index];
         }
 
         return map;
     }
 
-    private int GetThresholdIndex(List<Threshold> heightThresholds, float height)
-    {
-        int _index = 0;
 
-        foreach (var threshold in heightThresholds)
-        {
-            if (height > threshold.Value) { _index += 1; }
-        }
-
-        return _index;
-    }
 }
 

@@ -30,6 +30,28 @@ public static class Utils
         }
     }
 
+    public static IEnumerable<Vector3Int> EvaluateGrid(int size)
+    {
+        for (int y = 0; y < size; y++)
+        {
+            for (int x = 0; x < size; x++)
+            {
+                yield return new Vector3Int(x, y, 0);
+            }
+        }
+    }
+
+    public static IEnumerable<Vector3Int> EvaluateGrid(int xStart, int yStart, int size)
+    {
+        for (int y = yStart; y < yStart + size; y++)
+        {
+            for (int x = xStart; x < xStart + size; x++)
+            {
+                yield return new Vector3Int(x, y, 0);
+            }
+        }
+    }
+
     public static bool Roll(float chance)
     {
         return Random.Range(0f, 100f) <= chance;

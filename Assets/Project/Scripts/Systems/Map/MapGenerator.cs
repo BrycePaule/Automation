@@ -4,76 +4,68 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEditor;
 
-public class MapGenerator : MonoBehaviour
+public class MapGenerator : Singleton<MapGenerator>
 {
-    [Header("World Settings")]
-    public float Seed;
-    public int MapSize;
-	public float XOffset;
-	public float YOffset;
-
-    [Header("Noise Profiles")]
-    public NoiseProfile Base;
-    public NoiseProfile Gem1;
-    public NoiseProfile Gem2;
-
-    private MapToken[,] baseMap;
-    private List<MapToken> baseTokens = new List<MapToken>();
-
-    private MapToken[,] gem1Map;
-    private List<MapToken> gem1Tokens = new List<MapToken>();
-
-    private MapToken[,] gem2Map;
-    private List<MapToken> gem2Tokens = new List<MapToken>();
-
-    private List<MapToken[,]> mapsToBlend = new List<MapToken[,]>();
-
-    [Header("References")]
-    [SerializeField] private PerlinNoiseMapGenerator perlGen;
+    [Header("Settings")]
     [SerializeField] private scr_MapAsset MapAsset;
 
-    private void Awake()
+    public PerlinSettings BaseSettings;
+    public PerlinSettings Gem1Settings;
+    public PerlinSettings Gem2Settings;
+
+    private PerlinNoiseMapGenerator basePerlGen;
+    private PerlinNoiseMapGenerator gem1PerlGen;
+    private PerlinNoiseMapGenerator gem2PerlGen;
+        
+    private int mapSize;
+    private MapToken[,] blendedTokens;
+
+    protected override void Awake()
     {
+        base.Awake();
+        mapSize = BaseSettings.MapSize;
+
+        basePerlGen = new PerlinNoiseMapGenerator(BaseSettings);
+        gem1PerlGen = new PerlinNoiseMapGenerator(Gem1Settings);
+        gem2PerlGen = new PerlinNoiseMapGenerator(Gem2Settings);
+
         if (MapAsset == null)
         {
             MapAsset = GenerateNewMap();
         }
     }
 
-    private void Start()
+    private MapToken Blend(MapToken tBase, MapToken tGem1, MapToken tGem2)
     {
-        TilemapManager.Instance.SetTiles(MapAsset.Tokens, MapSize);
+        if (tGem2 != MapToken.Empty) { return tGem2; }
+        if (tGem1 != MapToken.Empty) { return tGem1; }
+
+        return tBase;
+    }
+
+    public MapToken GetTokenAtPos(Vector3Int cellPos, Vector3Int playerOffset)
+    {
+        basePerlGen.Offset(playerOffset);
+        gem1PerlGen.Offset(playerOffset);
+        gem2PerlGen.Offset(playerOffset);
+
+        MapToken tBase = basePerlGen.GetTokenAt(cellPos, BaseSettings.Tokens);
+        MapToken tGem1 = gem1PerlGen.GetTokenAt(cellPos, Gem1Settings.Tokens);
+        MapToken tGem2 = gem2PerlGen.GetTokenAt(cellPos, Gem2Settings.Tokens);
+
+        return Blend(tBase, tGem1, tGem2);
     }
 
     private scr_MapAsset GenerateNewMap()
     {
-        // BASE
-        baseTokens.Add(MapToken.Ground);
-        baseTokens.Add(MapToken.AlternateGround);
+        scr_MapAsset newMap = GenerateMapAsset();
 
-        perlGen.SetValues(Seed, MapSize, XOffset, YOffset, Base.Scale, Base.NoiseValues, Base.HeightThresholds, Base.Colours);
-        baseMap = perlGen.GenerateMap(baseTokens);
+        blendedTokens = new MapToken[mapSize, mapSize];
 
-        // GEMS
-        gem1Tokens.Add(MapToken.Empty);
-        gem1Tokens.Add(MapToken.Gem1);
-
-        perlGen.SetValues(Seed, MapSize, XOffset, YOffset, Gem1.Scale, Gem1.NoiseValues, Gem1.HeightThresholds, Gem1.Colours);
-        gem1Map = perlGen.GenerateMap(gem1Tokens);
-
-        gem2Tokens.Add(MapToken.Empty);
-        gem2Tokens.Add(MapToken.Gem2);
-
-        perlGen.SetValues(Seed, MapSize, XOffset, YOffset, Gem2.Scale, Gem2.NoiseValues, Gem2.HeightThresholds, Gem2.Colours);
-        gem2Map = perlGen.GenerateMap(gem2Tokens);
-
-        // BLENDING
-        mapsToBlend.Add(baseMap);
-        mapsToBlend.Add(gem1Map);
-        mapsToBlend.Add(gem2Map);
-
-		scr_MapAsset newMap = scr_MapAsset.CreateInstance<scr_MapAsset>();
-        newMap.Tokens = Blend(mapsToBlend);
+        foreach (var point in Utils.EvaluateGrid(mapSize))
+        {
+            blendedTokens[point.y, point.x] = GetTokenAtPos(point, Vector3Int.zero);
+        }
 
 		string PATH = AssetDatabase.GenerateUniqueAssetPath("Assets/Project/ScriptableObjects/Maps/map_NEWMAP.asset");
 		AssetDatabase.CreateAsset(newMap, PATH);
@@ -81,24 +73,31 @@ public class MapGenerator : MonoBehaviour
         return newMap;
     }
 
-    private MapToken[,] Blend(List<MapToken[,]> mapsToAdd)
+    // GIZMO
+
+    private void OnDrawGizmos()
     {
-        MapToken[,] result = new MapToken[MapSize, MapSize];
+        Gizmos.color = new Color(1, 0, 0, 0.1f);
+        float _offset = 0.5f;
 
-        foreach (var map in mapsToAdd)
+        foreach (var point in Utils.EvaluateGrid(mapSize))
         {
-            for (int y = 0; y < MapSize; y++)
-            {
-                for (int x = 0; x < MapSize; x++)
-                {
-                    if (map[y, x] == MapToken.Empty) { continue; }
-                    result[y, x] = map[y, x];
-                }
-            }
-            
+            Vector3 _pos = new Vector3(point.x + _offset, point.y + _offset, 0);
+            Gizmos.DrawWireCube( _pos, new Vector3(1, 1, 1));
         }
+    }
 
-        return result;
+    // MAP ASSET
+
+    private scr_MapAsset GenerateMapAsset()
+    {
+        scr_MapAsset newMap = scr_MapAsset.CreateInstance<scr_MapAsset>();
+
+        newMap.PerlinSettings.Add(BaseSettings);
+        newMap.PerlinSettings.Add(Gem1Settings);
+        newMap.PerlinSettings.Add(Gem2Settings);
+
+        return newMap;
     }
 }
 

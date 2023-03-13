@@ -9,21 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8cc09b80222b0d4a8b40b52bc09e723, type: 3}
-  m_Name: GemPink
+  m_Script: {fileID: 11500000, guid: 9aae54bf445880d41896727f66491ad8, type: 3}
+  m_Name: perl_Base
   m_EditorClassIdentifier: 
-  Seed: 0.72
-  MapSize: 256
+  Seed: 0
+  MapSize: 128
   XOffset: 0
   YOffset: 0
-  Scale: 20
+  Scale: 1.09
   NoiseValues:
-  - Frequency: 0.77
-    Amplitude: 0.88
-  - Frequency: 20.15
-    Amplitude: 0.1
+  - Frequency: 3.84
+    Amplitude: 0.66
+  - Frequency: 0.97
+    Amplitude: 0.59
   HeightThresholds:
-  - Value: 0.9
-  Colours:
-  - {r: 1, g: 1, b: 1, a: 1}
-  - {r: 0, g: 0, b: 0, a: 1}
+  - Value: 0.81
+  Tokens: 0100000002000000

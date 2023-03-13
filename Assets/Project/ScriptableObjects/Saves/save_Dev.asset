@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5263a09b7ee9f7a449f92730584a7249, type: 3}
   m_Name: save_Dev
   m_EditorClassIdentifier: 
-  PlayerPos: {x: 64, y: 64, z: 0}
+  PlayerPos: {x: 88.46589, y: 65.3641, z: 0}
   Map: {fileID: 11400000, guid: b4998cf01c381b44a922fedaf5782bac, type: 2}

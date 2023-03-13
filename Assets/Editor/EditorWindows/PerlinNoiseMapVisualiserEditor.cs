@@ -29,7 +29,7 @@ public class PerlinNoiseMapVisualiserEditor : Editor
 
     private string GetNameOfCurrentlySelectedSettings(PerlinNoiseMapVisualiser gen)
     {
-        NoiseProfile _selected = gen.SelectedNoiseProfile;
+        PerlinSettings _selected = gen.SelectedPerlinSettings;
 
         if (_selected == null) { return "Null"; }
 

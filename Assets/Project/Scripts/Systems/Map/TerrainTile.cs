@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 
 [System.Serializable]
 [CreateAssetMenu(menuName="Scriptables/Map/MyTile", fileName="New MyTile")]
-public class MyTile : Tile
+public class TerrainTile : Tile
 {
     [Header("Custom Settings")]
     public bool Passable;
@@ -16,8 +16,6 @@ public class MyTile : Tile
     public bool Drillable;
     public float Hardness;
     public ResourceType ResourceTypeReleased;
-
-    public GameObject Building;
 
     public override void RefreshTile(Vector3Int position, ITilemap tilemap)
     {

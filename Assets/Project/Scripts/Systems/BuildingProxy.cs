@@ -39,30 +39,19 @@ public class BuildingProxy : Singleton<BuildingProxy>
         _building.transform.position = TilemapManager.Instance.TileAnchorFromCellPos(cellPos);
         _building.GetComponent<ITSystemConnectable>().SetCellPosition(cellPos);
 
-        MyTile _tile = TilemapManager.Instance.GetTile(cellPos);
-        _tile.Building = _building;
-
+        TilemapManager.Instance.SetBuilding(cellPos, _building);
         TSystemManager.Instance.RefreshConnectionsAround(cellPos);
     }
 
     public void DestroyBuildingAt(Vector3Int cellPos)
     {
-        GameObject _building = GetBuildingAt(cellPos);
-
-        if (_building != null)
-        {
-            TilemapManager.Instance.DestroyBuilding(cellPos);
-            TSystemManager.Instance.RefreshConnectionsAround(cellPos);
-        }
+        TilemapManager.Instance.DestroyBuilding(cellPos);
+        TSystemManager.Instance.RefreshConnectionsAround(cellPos);
     }
 
     public GameObject GetBuildingAt(Vector3Int cellPos)
     {
-        GameObject _building = TilemapManager.Instance.GetTile(cellPos).Building;
-
-        if (_building == null) { return null; }
-
-        return _building;
+        return TilemapManager.Instance.GetBuilding(cellPos);
     }
 
 }

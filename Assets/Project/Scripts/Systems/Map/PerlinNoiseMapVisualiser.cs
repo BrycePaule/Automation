@@ -7,16 +7,17 @@ using UnityEditor;
 public class PerlinNoiseMapVisualiser : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private PerlinNoiseMapGenerator perlinGen;
     [SerializeField] private SpriteRenderer sr;
 
+    [Header("Asset")]
+    public bool UseSettingsAsset;
+    public PerlinSettings SelectedPerlinSettings;
+
     [Header("Settings")]
-    public bool OverrideInspectorSettings;
-    public NoiseProfile SelectedNoiseProfile;
+    [Range(1, 512)] public int MapSize;
     public float Seed;
-    public int MapSize;
-    public float XOffset;
-    public float YOffset;
+    public int XOffset;
+    public int YOffset;
 
     public float Scale;
     public List<NoiseFreqAmp> NoiseValues;
@@ -26,30 +27,23 @@ public class PerlinNoiseMapVisualiser : MonoBehaviour
     public bool UseManualColours;
     public List<Color> Colours;
 
+    private PerlinNoiseMapGenerator perlinGen;
+
     private void Update()
     {
-        if (OverrideInspectorSettings)
+        if (UseSettingsAsset)
         {
-            Seed = SelectedNoiseProfile.Seed;
-            MapSize = SelectedNoiseProfile.MapSize;
-            XOffset = SelectedNoiseProfile.XOffset;
-            YOffset = SelectedNoiseProfile.YOffset;
-            Scale = SelectedNoiseProfile.Scale;
-            NoiseValues = SelectedNoiseProfile.NoiseValues;
-            HeightThresholds = SelectedNoiseProfile.HeightThresholds;
-            Colours = SelectedNoiseProfile.Colours;
+            Seed = SelectedPerlinSettings.Seed;
+            MapSize = SelectedPerlinSettings.MapSize;
+            XOffset = SelectedPerlinSettings.XOffset;
+            YOffset = SelectedPerlinSettings.YOffset;
+            Scale = SelectedPerlinSettings.Scale;
+            NoiseValues = SelectedPerlinSettings.NoiseValues;
+            HeightThresholds = SelectedPerlinSettings.HeightThresholds;
         }
 
-        perlinGen.SetValues(
-            _seed: Seed,
-            _mapSize: MapSize,
-            _xOffset: XOffset,
-            _yOffset: YOffset,
-            _scale: Scale,
-            _noiseValues: NoiseValues,
-            _heightThresholds: HeightThresholds,
-            _colours: Colours
-        );
+        transform.position = new Vector3(MapSize/2, MapSize/2, 0);
+        transform.localScale = new Vector3(MapSize, MapSize, 1);
 
         BalanceThresholdAndColourNumbers();
         UpdateColours();
@@ -60,14 +54,13 @@ public class PerlinNoiseMapVisualiser : MonoBehaviour
     private Texture2D GenerateTexture()
     {
         Texture2D tex = new Texture2D(MapSize, MapSize);
-        float[,] heightMap = perlinGen.GenerateHeightMap();
+        perlinGen = new PerlinNoiseMapGenerator(Seed, MapSize, XOffset, YOffset, Scale, NoiseValues, HeightThresholds, Colours);
 
-        for (int y = 0; y < MapSize; y++)
+        foreach (Vector3Int point in Utils.EvaluateGrid(MapSize))
         {
-            for (int x = 0; x < MapSize; x++)
-            {
-                tex.SetPixel(x, y, GetTerrainColour(heightMap[y, x], 0));
-            }
+            float _height = perlinGen.GetHeight((Vector2Int) point);
+            int _index = perlinGen.GetThresholdIndex(_height);
+            tex.SetPixel(point.y, point.x, Colours[_index]);
         }
 
         tex.Apply();
@@ -117,54 +110,43 @@ public class PerlinNoiseMapVisualiser : MonoBehaviour
         }
     }
 
-    private Color GetTerrainColour(float terrainHeight, float biomeHeight)
-    {
-        for (int i = 0; i < HeightThresholds.Count; i++)
-        {
-            if (terrainHeight < HeightThresholds[0].Value) { return Colours[0]; }
-            if (terrainHeight >= HeightThresholds[HeightThresholds.Count-1].Value) { return Colours[HeightThresholds.Count]; }
-
-            if (terrainHeight >= HeightThresholds[i].Value & terrainHeight < HeightThresholds[i+1].Value)
-            {
-                return Colours[i + 1];
-            }
-        }
-
-        return Color.yellow;
-    }
-
     // Saving - called by editor
     public void SaveNewAsset()
     {
-        NoiseProfile _profile = NoiseProfile.CreateInstance<NoiseProfile>();
-        _profile.SetValues(Seed, MapSize, Scale, XOffset, YOffset, NoiseValues, HeightThresholds, Colours);
+        PerlinSettings _settings = PerlinSettings.CreateInstance<PerlinSettings>();
+        _settings.Seed = Seed;
+        _settings.MapSize = MapSize;
+        _settings.XOffset = XOffset;
+        _settings.YOffset = YOffset;
+        _settings.Scale = Scale;
+        _settings.NoiseValues = NoiseValues;
+        _settings.HeightThresholds = HeightThresholds;
 
-        string _path = "Assets/Project/ScriptableObjects/NoiseSettings/New NoiseSetting.asset";
-        AssetDatabase.CreateAsset(_profile, _path);
+        string _path = "Assets/Project/ScriptableObjects/PerlinSettings/New PerlinSetting.asset";
+        AssetDatabase.CreateAsset(_settings, _path);
 
         EditorUtility.FocusProjectWindow();
 
-        Selection.activeObject = _profile;
+        Selection.activeObject = _settings;
 
-        Debug.Log("Saved new NoiseSetting asset.");
-        EditorUtility.SetDirty(_profile);
+        Debug.Log("Saved new PerlinSetting asset.");
+        EditorUtility.SetDirty(_settings);
     }
 
     public void OverrideSelectedAsset()
     {
-        SelectedNoiseProfile.Seed = Seed;
-        SelectedNoiseProfile.MapSize = MapSize;
+        SelectedPerlinSettings.Seed = Seed;
+        SelectedPerlinSettings.MapSize = MapSize;
 
-        SelectedNoiseProfile.Scale = Scale;
-        SelectedNoiseProfile.YOffset = YOffset;
-        SelectedNoiseProfile.XOffset = XOffset;
+        SelectedPerlinSettings.Scale = Scale;
+        SelectedPerlinSettings.YOffset = YOffset;
+        SelectedPerlinSettings.XOffset = XOffset;
 
-        SelectedNoiseProfile.NoiseValues = NoiseValues;
-        SelectedNoiseProfile.HeightThresholds = HeightThresholds;
-        SelectedNoiseProfile.Colours = Colours;
+        SelectedPerlinSettings.NoiseValues = NoiseValues;
+        SelectedPerlinSettings.HeightThresholds = HeightThresholds;
 
-        Debug.Log($"Overrided {SelectedNoiseProfile.ToString()}.");
-        EditorUtility.SetDirty(SelectedNoiseProfile);
+        Debug.Log($"Overrided {SelectedPerlinSettings.ToString()}.");
+        EditorUtility.SetDirty(SelectedPerlinSettings);
     }
 
 }

@@ -5,39 +5,52 @@ using UnityEngine.Tilemaps;
 
 public class TilemapManager : Singleton<TilemapManager>
 {
-    private Vector3 anchorOffset { get; }
+    [Header("Settings")]
+    [SerializeField] private int mapSize;
 
+    [Header("Tiles")]
+    [SerializeField] private TerrainTile BaseTile;
+    [SerializeField] private TerrainTile AltBaseTile;
+    [SerializeField] private TerrainTile Gem1Tile;
+    [SerializeField] private TerrainTile Gem2Tile;
+    
     [Header("References")]
     [SerializeField] private Tilemap tilemap;
 
-    [Header("Tiles")]
-    [SerializeField] private MyTile BaseTile;
-    [SerializeField] private MyTile AltBaseTile;
-    [SerializeField] private MyTile Gem1Tile;
-    [SerializeField] private MyTile Gem2Tile;
+
+    private Dictionary<Vector3Int, MapToken> tileCache = new Dictionary<Vector3Int, MapToken>();
+    private Dictionary<Vector3Int, GameObject> buildingCache = new Dictionary<Vector3Int, GameObject>();
+
+    private Vector3Int playerCellPos;
 
     // GENERATION
-    public void SetTiles(MapToken[,] map, int mapSize)
+
+    public void SetTile(Vector2Int pos, MapToken token)
     {
-        for (int y = 0; y < mapSize; y++)
-        {
-            for (int x = 0; x < mapSize; x++)
-            {
-                int randOffset = -5;
+        // if (token == MapToken.Ground) { tilemap.SetTile(pos, Instantiate(BaseTile)); }
+        // if (token == MapToken.AlternateGround) { tilemap.SetTile(pos,Instantiate(AltBaseTile)); }
+        // if (token == MapToken.Gem1) { tilemap.SetTile(pos,Instantiate(Gem1Tile)); }
+        // if (token == MapToken.Gem2) { tilemap.SetTile(pos,Instantiate(Gem2Tile)); }
 
-                Vector3Int pos = new Vector3Int(y + randOffset, x + randOffset, 0);
-
-                if (map[y, x] == MapToken.Ground) { SetTile(pos, Instantiate(BaseTile)); }
-                if (map[y, x] == MapToken.AlternateGround) { SetTile(pos,Instantiate(AltBaseTile)); }
-                if (map[y, x] == MapToken.Gem1) { SetTile(pos,Instantiate(Gem1Tile)); }
-                if (map[y, x] == MapToken.Gem2) { SetTile(pos,Instantiate(Gem2Tile)); }
-            }
-        }
+        if (token == MapToken.Ground) { tilemap.SetTile((Vector3Int) pos, BaseTile); }
+        if (token == MapToken.AlternateGround) { tilemap.SetTile((Vector3Int) pos, AltBaseTile); }
+        if (token == MapToken.Gem1) { tilemap.SetTile((Vector3Int) pos, Gem1Tile); }
+        if (token == MapToken.Gem2) { tilemap.SetTile((Vector3Int) pos, Gem2Tile); }
     }
 
-    private void SetTile(Vector3Int pos, MyTile tile)
+    public void RefreshTiles(Vector3Int playerPos)
     {
-        tilemap.SetTile(pos, tile);
+        playerCellPos = playerPos;
+
+        foreach (var pos in Utils.EvaluateGrid(playerCellPos.x - (mapSize / 2), playerCellPos.y - (mapSize / 2), mapSize))
+        {
+            if (!tileCache.ContainsKey(pos))
+            {
+                tileCache[pos] = MapGenerator.Instance.GetTokenAtPos(pos, playerPos);
+            }
+
+            SetTile((Vector2Int) pos, tileCache[pos]);
+        }
     }
 
 
@@ -66,45 +79,67 @@ public class TilemapManager : Singleton<TilemapManager>
         return tilemap.WorldToCell(worldPos);
     }
     
-    public MyTile GetTile(Vector3Int cellPos)
+    public TerrainTile GetTile(Vector3Int cellPos)
     {
-        return (MyTile) tilemap.GetTile(cellPos);
+        return (TerrainTile) tilemap.GetTile(cellPos);
+    }
+
+    public void SetBuilding(Vector3Int cellPos, GameObject building)
+    {
+        buildingCache[cellPos] = building;
     }
 
     public void DestroyBuilding(Vector3Int cellPos)
     {
-        MyTile _tile = GetTile(cellPos);
-
-        if (_tile.Building == null) { return; }
-
-        Destroy(_tile.Building);
-        _tile.Building = null;
+        if (buildingCache.ContainsKey(cellPos))
+        {
+            Destroy(buildingCache[cellPos]);
+            buildingCache.Remove(cellPos);
+        }
     }
     
+    public GameObject GetBuilding(Vector3Int cellPos)
+    {
+        if (buildingCache.ContainsKey(cellPos))
+        {
+            return buildingCache[cellPos];
+        }
+
+        return null;
+    }
+
     // CHECKERS
 
     public bool CanBuildAt(Vector3Int cellPos)
     {
-        MyTile _tile = (MyTile) tilemap.GetTile(cellPos);
+        TerrainTile _tile = (TerrainTile) tilemap.GetTile(cellPos);
 
         if (!_tile.Buildable) { return false; }
-        if (_tile.Building != null) { return false; }
+        if (buildingCache.ContainsKey(cellPos)) { return false; }
 
         return true;
     }
 
     public bool CanPassAt(Vector3Int cellPos)
     {
-        return ((MyTile) tilemap.GetTile(cellPos)).Passable;
+        return ((TerrainTile) tilemap.GetTile(cellPos)).Passable;
     }
 
     public bool CanDrillAt(Vector3Int cellPos)
     {
-        return ((MyTile) tilemap.GetTile(cellPos)).Drillable;
+        return ((TerrainTile) tilemap.GetTile(cellPos)).Drillable;
     }
 
     public bool InsideBounds(Vector3Int cellPos)
     {
         return tilemap.cellBounds.Contains(cellPos);
     }
+
+    public bool ContainsBuilding(Vector3Int cellPos)
+    {
+        return buildingCache.ContainsKey(cellPos);
+    }
+
+    // GETTERS
+
 }

@@ -89,6 +89,15 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Debug"",
+                    ""type"": ""Button"",
+                    ""id"": ""5c208273-b2e2-4475-8006-55e03e92378e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -267,6 +276,17 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""action"": ""HotbarNumbers"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1ade04f0-be94-4bfc-8e59-358e569158a9"",
+                    ""path"": ""<Keyboard>/f1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Debug"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -396,6 +416,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_Player__2 = m_Player.FindAction("2", throwIfNotFound: true);
         m_Player__3 = m_Player.FindAction("3", throwIfNotFound: true);
         m_Player_HotbarNumbers = m_Player.FindAction("HotbarNumbers", throwIfNotFound: true);
+        m_Player_Debug = m_Player.FindAction("Debug", throwIfNotFound: true);
         // Camera
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_Pan = m_Camera.FindAction("Pan", throwIfNotFound: true);
@@ -466,6 +487,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player__2;
     private readonly InputAction m_Player__3;
     private readonly InputAction m_Player_HotbarNumbers;
+    private readonly InputAction m_Player_Debug;
     public struct PlayerActions
     {
         private @PlayerInput m_Wrapper;
@@ -477,6 +499,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         public InputAction @_2 => m_Wrapper.m_Player__2;
         public InputAction @_3 => m_Wrapper.m_Player__3;
         public InputAction @HotbarNumbers => m_Wrapper.m_Player_HotbarNumbers;
+        public InputAction @Debug => m_Wrapper.m_Player_Debug;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -507,6 +530,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @HotbarNumbers.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHotbarNumbers;
                 @HotbarNumbers.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHotbarNumbers;
                 @HotbarNumbers.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHotbarNumbers;
+                @Debug.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDebug;
+                @Debug.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDebug;
+                @Debug.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDebug;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -532,6 +558,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @HotbarNumbers.started += instance.OnHotbarNumbers;
                 @HotbarNumbers.performed += instance.OnHotbarNumbers;
                 @HotbarNumbers.canceled += instance.OnHotbarNumbers;
+                @Debug.started += instance.OnDebug;
+                @Debug.performed += instance.OnDebug;
+                @Debug.canceled += instance.OnDebug;
             }
         }
     }
@@ -586,6 +615,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         void On_2(InputAction.CallbackContext context);
         void On_3(InputAction.CallbackContext context);
         void OnHotbarNumbers(InputAction.CallbackContext context);
+        void OnDebug(InputAction.CallbackContext context);
     }
     public interface ICameraActions
     {

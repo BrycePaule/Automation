@@ -25,7 +25,7 @@ public class Drill : MonoBehaviour
     private bool wasRunningLastFrame;
 
     private CardinalDirection drillDirection;
-    private MyTile gem;
+    private TerrainTile gem;
 
     private float timer;
     private float timeToDrill;
@@ -75,7 +75,7 @@ public class Drill : MonoBehaviour
 
     private void RefreshDrillTile()
     {
-        MyTile _Tile = TilemapManager.Instance.GetTile(connector.CellPos + Utils.DirToVector(drillDirection));
+        TerrainTile _Tile = TilemapManager.Instance.GetTile(connector.CellPos + Utils.DirToVector(drillDirection));
 
         if (_Tile.Drillable)
         {
