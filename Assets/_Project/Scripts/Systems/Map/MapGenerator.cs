@@ -68,7 +68,7 @@ namespace bpdev
                 blendedTokens[point.y, point.x] = GetTokenAtPos(point, Vector3Int.zero);
             }
 
-            string PATH = AssetDatabase.GenerateUniqueAssetPath("Assets/Project/ScriptableObjects/Maps/map_NEWMAP.asset");
+            string PATH = AssetDatabase.GenerateUniqueAssetPath("Assets/_Project/ScriptableObjects/Maps/map_NEWMAP.asset");
             AssetDatabase.CreateAsset(newMap, PATH);
 
             return newMap;
