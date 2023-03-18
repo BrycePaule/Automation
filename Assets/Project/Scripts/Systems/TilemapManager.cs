@@ -22,6 +22,22 @@ public class TilemapManager : Singleton<TilemapManager>
 
     private Vector3Int playerCellPos;
 
+    private void Start()
+    {
+        tilemap = FindObjectOfType<Tilemap>();
+        RefreshTilesAroundPlayer(InputManager.Instance.PlayerCellPos);
+    }
+
+    private void Update()
+    {
+        if (InputManager.Instance.PlayerCellPosLastFrame == null) { return; }
+
+        if (InputManager.Instance.PlayerCellPos != InputManager.Instance.PlayerCellPosLastFrame)
+        {
+            RefreshTilesAroundPlayer(InputManager.Instance.PlayerCellPos);
+        }
+    }
+
     // GENERATION
 
     public void SetTile(Vector2Int pos, MapToken token)

@@ -15,6 +15,19 @@ public class TileCursor : MonoBehaviour
         sr.sprite = Sprite;
     }
 
+    private void FixedUpdate()
+    {
+        if (TilemapManager.Instance.InsideBounds(InputManager.Instance.MPosCell))
+        {
+            Enable();
+            UpdatePosition(InputManager.Instance.MPosCell);
+        }
+        else
+        {
+            Disable();
+        }
+    }
+
     public void UpdatePosition(Vector3Int cellPos)
     {
         transform.position = TilemapManager.Instance.TileAnchorFromCellPos(cellPos);

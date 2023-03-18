@@ -16,10 +16,15 @@ public class UIDebugDisplay : MonoBehaviour
     [SerializeField] private UIDebugDisplayLine PlayerPosWorld; 
     [SerializeField] private UIDebugDisplayLine PlayerPosCell; 
 
-    // private void Update()
-    // {
-    //     ToggleDisplay();
-    // }
+    private void Update()
+    {
+        SetMPosScreen(InputManager.Instance.MPosScreen);
+        SetMPosWorld(InputManager.Instance.MPosWorld);
+        SetMPosCell(InputManager.Instance.MPosCell);
+
+        SetPlayerPosWorld(InputManager.Instance.PlayerPos);
+        SetPlayerPosCell(InputManager.Instance.PlayerCellPos);
+    }
 
     public void ToggleDisplay()
     {
