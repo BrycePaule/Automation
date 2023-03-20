@@ -134,6 +134,8 @@ GameObject:
   - component: {fileID: 138122004}
   - component: {fileID: 138122006}
   - component: {fileID: 138122005}
+  - component: {fileID: 138122008}
+  - component: {fileID: 138122007}
   m_Layer: 28
   m_Name: TileCursor
   m_TagString: Untagged
@@ -169,7 +171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Visible: 1
-  Sprite: {fileID: 21300000, guid: ffdf45d4bcdb2184fa1c02232339b699, type: 3}
+  Direction: 1
 --- !u!212 &138122006
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -210,7 +212,7 @@ SpriteRenderer:
   m_SortingLayerID: -1096484495
   m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: ffdf45d4bcdb2184fa1c02232339b699, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 30735c27d397c0740b1ff18f97c1f955, type: 3}
   m_Color: {r: 0.99294466, g: 1, b: 0.1745283, a: 0.49411765}
   m_FlipX: 0
   m_FlipY: 0
@@ -221,6 +223,62 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &138122007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 138122003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b091c7042704484f822b648a089faff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: c97738822de66bd48846d28ba997646c, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 138122005}
+        m_TargetAssemblyTypeName: bpdev.TileCursor, Assembly-CSharp
+        m_MethodName: RotateAntiClockwise
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &138122008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 138122003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b091c7042704484f822b648a089faff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 12720a966aef7f44284adc6c65997b1d, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 138122005}
+        m_TargetAssemblyTypeName: bpdev.TileCursor, Assembly-CSharp
+        m_MethodName: RotateClockwise
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!28 &185477295
 Texture2D:
   m_ObjectHideFlags: 0
@@ -630,7 +688,7 @@ Camera:
   far clip plane: 50
   field of view: 60
   orthographic: 1
-  orthographic size: 12
+  orthographic size: 10
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1193,7 +1251,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1476035383}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 2, y: 2, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1556586076}
@@ -1223,7 +1281,7 @@ MonoBehaviour:
   m_Follow: {fileID: 1837419014}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 12
+    OrthographicSize: 10
     NearClipPlane: 0.3
     FarClipPlane: 50
     Dutch: 0
@@ -1428,7 +1486,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1837419013}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 2, y: 2, z: 0}
   m_LocalScale: {x: 0.8, y: 0.8, z: 1}
   m_Children:
   - {fileID: 500528400}

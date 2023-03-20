@@ -76,6 +76,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ScrollWheel",
+                    "type": "Button",
+                    "id": "7dd307c6-7c46-456d-a327-781f0cc0209a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -265,6 +274,39 @@
                     "action": "Debug",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "1D Axis",
+                    "id": "5a21c751-aecb-4691-a583-c2a4399a6c44",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ScrollWheel",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "d3abbd1f-c572-4583-83c8-1ef975b8493f",
+                    "path": "<Mouse>/scroll/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ScrollWheel",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "8d3165fe-0e6a-4d36-9b29-a4f17c39b5ca",
+                    "path": "<Mouse>/scroll/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ScrollWheel",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         },
@@ -282,10 +324,19 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Zoom",
+                    "name": "ZoomIn",
                     "type": "Value",
-                    "id": "deeb4f19-dfcb-48c3-93b7-1cd40e207aa3",
-                    "expectedControlType": "Vector2",
+                    "id": "6925de69-5ed2-49fe-a117-8fa3e4031bb9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "ZoomOut",
+                    "type": "Value",
+                    "id": "b578760e-269e-4b7d-a5e9-12e1164a2df3",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -348,35 +399,68 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "1D Axis",
-                    "id": "66043841-4b38-4fea-b432-2e678c779383",
-                    "path": "1DAxis",
+                    "name": "One Modifier",
+                    "id": "ad9fcb33-a3b5-421c-89d7-5b5921a0dfa8",
+                    "path": "OneModifier",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Zoom",
+                    "action": "ZoomIn",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "positive",
-                    "id": "c4810d11-36c7-4cc9-b845-360cfb23b039",
-                    "path": "<Mouse>/scroll/down",
+                    "name": "modifier",
+                    "id": "52c49db5-d5a7-417b-a029-eb89ff49de23",
+                    "path": "<Keyboard>/ctrl",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Zoom",
+                    "action": "ZoomIn",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "negative",
-                    "id": "c3198841-f651-4140-8aaf-0a123da6356c",
+                    "name": "binding",
+                    "id": "8ba02b29-a853-407e-8139-61c6b29e10ec",
                     "path": "<Mouse>/scroll/up",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Zoom",
+                    "action": "ZoomIn",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "One Modifier",
+                    "id": "9667260b-e41e-4c72-bca5-96c637f60f54",
+                    "path": "OneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ZoomOut",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "7f69e09b-40dd-4cbc-b27f-73b685201995",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ZoomOut",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "binding",
+                    "id": "a1568420-3dac-4968-827a-cb932b3c5c8a",
+                    "path": "<Mouse>/scroll/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ZoomOut",
                     "isComposite": false,
                     "isPartOfComposite": true
                 }

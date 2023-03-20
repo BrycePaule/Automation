@@ -49,6 +49,8 @@ MonoBehaviour:
   player: {fileID: 0}
   e_OnHotbarSelection: {fileID: 11400000, guid: e11d8f58c11d0ba43a88a5d8ca311ff4, type: 2}
   e_OnDebugButtonPressed: {fileID: 11400000, guid: 95a0e4fb12690db4b81679c68ea567ff, type: 2}
+  e_OnRotateCursorClockwise: {fileID: 11400000, guid: 12720a966aef7f44284adc6c65997b1d, type: 2}
+  e_OnRotateCursorAntiClockwise: {fileID: 11400000, guid: c97738822de66bd48846d28ba997646c, type: 2}
 --- !u!1 &1866753550
 GameObject:
   m_ObjectHideFlags: 0
@@ -227,6 +229,7 @@ MonoBehaviour:
   BaseSettings: {fileID: 11400000, guid: 35b39e112bf46fa42856bab7a2d1fbf2, type: 2}
   Gem1Settings: {fileID: 11400000, guid: 201ab118a42afc649a31ffaf948794dd, type: 2}
   Gem2Settings: {fileID: 11400000, guid: 432084c23abfa4f4989e66bb6062990b, type: 2}
+  distanceScaleValue: 0.0001
 --- !u!1 &8389366245203628054
 GameObject:
   m_ObjectHideFlags: 0

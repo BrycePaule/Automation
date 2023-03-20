@@ -8,5 +8,7 @@ namespace bpdev
     {
         public void RotateClockwise(bool _reverse);
         public void RotateAntiClockwise();
+
+        public void RotateToFace(CardinalDirection targetDir);
     }
 }

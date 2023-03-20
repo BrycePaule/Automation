@@ -38,5 +38,13 @@ namespace bpdev
         {
             RotateClockwise(_reverse: true);
         }
+
+        public void RotateToFace(CardinalDirection targetDir)
+        {
+            while (targetDir != connector.Facing)
+            {
+                RotateClockwise();
+            }
+        }
     }
 }

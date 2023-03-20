@@ -8,7 +8,9 @@ namespace bpdev
     {
         [SerializeField] private scr_BuildingLibrary library;
 
-        // LIBRARY INTERFACING
+
+        // LIBRARY INTERFACE (fetching assets)
+
         public scr_BuildingAsset GetAssetByID(int id)
         {
             return library.GetByID(id);
@@ -19,30 +21,40 @@ namespace bpdev
             return library.GetByType(type);
         }
 
-        public GameObject InstantiateByType(BuildingType type)
+
+        // CREATION
+
+        public GameObject InstantiateBuildingPrefab(BuildingType type)
         {
-            if (type == BuildingType.UNASSIGNED) { Debug.LogError("BuildingProxy failed to Instatiate resource of Type: " + BuildingType.UNASSIGNED); }
+            if (type == BuildingType.UNASSIGNED) { Debug.LogError("BuildingProxy failed to Instatiate building of Type: " + BuildingType.UNASSIGNED); }
 
             scr_BuildingAsset asset = GetAssetByType(type);
 
             return Instantiate(asset.Prefab, Vector3.zero, Quaternion.identity);
         }
 
-        // CREATION, REMOVAL, INTERACTION
-
         public void InstantiateBuildingAt(BuildingType buildingType, Vector3Int cellPos)
         {
             if (buildingType == BuildingType.UNASSIGNED) { return; }
             if (!TilemapManager.Instance.CanBuildAt(cellPos)) { return; }
 
-            GameObject _building = InstantiateByType(buildingType);
+            GameObject _building = InstantiateBuildingPrefab(buildingType);
             _building.name = _building.name + " " + cellPos;
             _building.transform.position = TilemapManager.Instance.TileAnchorFromCellPos(cellPos);
             
             _building.GetComponent<ITSystemConnectable>().SetCellPosition(cellPos);
+            _building.GetComponent<ITSystemRotatable>().RotateToFace(TileCursor.Instance.Direction);
 
             TilemapManager.Instance.SetBuilding(cellPos, _building);
             TSystemManager.Instance.RefreshConnectionsAround(cellPos);
+        }
+
+
+        // INTERACTION & DESTRUCTION
+
+        public GameObject GetBuildingAt(Vector3Int cellPos)
+        {
+            return TilemapManager.Instance.GetBuilding(cellPos);
         }
 
         public void DestroyBuildingAt(Vector3Int cellPos)
@@ -50,11 +62,5 @@ namespace bpdev
             TilemapManager.Instance.DestroyBuilding(cellPos);
             TSystemManager.Instance.RefreshConnectionsAround(cellPos);
         }
-
-        public GameObject GetBuildingAt(Vector3Int cellPos)
-        {
-            return TilemapManager.Instance.GetBuilding(cellPos);
-        }
-
     }
 }

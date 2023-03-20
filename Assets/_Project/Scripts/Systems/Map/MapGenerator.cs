@@ -15,6 +15,9 @@ namespace bpdev
         public PerlinSettings Gem1Settings;
         public PerlinSettings Gem2Settings;
 
+        [Header("Distance Scaling")]
+        [SerializeField] private float distanceScaleValue; 
+
         private PerlinNoiseMapGenerator basePerlGen;
         private PerlinNoiseMapGenerator gem1PerlGen;
         private PerlinNoiseMapGenerator gem2PerlGen;
@@ -46,8 +49,8 @@ namespace bpdev
             gem2PerlGen.Offset(playerOffset);
 
             MapToken tBase = basePerlGen.GetTokenAt(cellPos, BaseSettings.Tokens);
-            MapToken tGem1 = gem1PerlGen.GetTokenAt(cellPos, Gem1Settings.Tokens);
-            MapToken tGem2 = gem2PerlGen.GetTokenAt(cellPos, Gem2Settings.Tokens);
+            MapToken tGem1 = gem1PerlGen.GetTokenAt(cellPos, Gem1Settings.Tokens, Mathf.Abs(cellPos.magnitude * distanceScaleValue));
+            MapToken tGem2 = gem2PerlGen.GetTokenAt(cellPos, Gem2Settings.Tokens, Mathf.Abs(cellPos.magnitude * distanceScaleValue));
 
             return Blend(tBase, tGem1, tGem2);
         }

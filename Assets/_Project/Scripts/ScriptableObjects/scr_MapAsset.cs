@@ -11,6 +11,6 @@ namespace bpdev
         public List<PerlinSettings> PerlinSettings = new List<PerlinSettings>();
 
         public Dictionary<Vector3Int, int> TokenCache;
-        public List<BuildingLocTypePair> BuildingCache;
+        public List<BuildingInfo> BuildingCache;
     }
 }

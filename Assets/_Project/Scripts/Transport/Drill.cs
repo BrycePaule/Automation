@@ -58,7 +58,6 @@ namespace bpdev
                 timer = 0f;
                 DrillItem();
             }
-
         }
 
         private void StartOrStopRunning()

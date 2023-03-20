@@ -68,21 +68,21 @@ namespace bpdev
             return _index;
         }
 
-        public float GetHeight(Vector2Int pos)
+        public float GetHeight(Vector2Int pos, float scaleAdditive = 0f)
         {
             float _height = 0;
 
             foreach (var freqAmp in noiseValues)
             {
-                _height += ClampedPerlinSample(pos.x, pos.y, freqAmp);
+                _height += ClampedPerlinSample(pos.x, pos.y, freqAmp) + scaleAdditive;
             }
 
             return _height;
         }
 
-        public MapToken GetTokenAt(Vector3Int pos, List<MapToken> tokens)
+        public MapToken GetTokenAt(Vector3Int pos, List<MapToken> tokens, float scaleAdditive = 0f)
         {
-            float _height = GetHeight((Vector2Int) pos);
+            float _height = GetHeight((Vector2Int) pos, scaleAdditive);
             int _index = GetThresholdIndex(_height);
 
             return tokens[_index];

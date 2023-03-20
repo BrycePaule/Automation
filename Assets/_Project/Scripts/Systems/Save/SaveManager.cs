@@ -23,16 +23,19 @@ namespace bpdev
             }
         }
 
+
+        // SAVE
+
         public void Save()
         {
             if (saveFile != null && OverwriteSave)
             {
-                Debug.Log($"Saving over {saveFile.name}.");
+                Debug.Log($"Saving over <{saveFile.name}>.");
             }
             else 
             {
                 saveFile = GenerateNewSaveFile();
-                Debug.Log($"Saved to new file ({saveFile.name})");
+                Debug.Log($"Saved to new file <{saveFile.name}>");
             }
 
             SavePlayerPos();
@@ -52,8 +55,29 @@ namespace bpdev
             saveFile.MapAsset.PerlinSettings.Add(MapGenerator.Instance.Gem1Settings);
             saveFile.MapAsset.PerlinSettings.Add(MapGenerator.Instance.Gem2Settings);
 
-            saveFile.MapAsset.BuildingCache = ConvertBuildingGOCacheToBuildingTypeInts(TilemapManager.Instance.BuildingCache);
+            saveFile.MapAsset.BuildingCache = SaveBuildingData(TilemapManager.Instance.BuildingCache);
         }
+
+        private List<BuildingInfo> SaveBuildingData(Dictionary<Vector3Int, GameObject> buildingsGOs)
+        {
+            List<BuildingInfo> buildingList = new List<BuildingInfo>();
+
+            foreach (var building in buildingsGOs)
+            {
+                Building _bld = building.Value.GetComponent<Building>();
+
+                buildingList.Add(new BuildingInfo(
+                    _bld.BuildingType,
+                    _bld.GetComponent<TSystemConnector>().Facing,
+                    building.Key
+                ));                
+            }
+
+            return buildingList;
+        }
+
+
+        // LOAD
 
         public void Load()
         {
@@ -74,25 +98,19 @@ namespace bpdev
                 MapGenerator.Instance.Gem1Settings = saveFile.MapAsset.PerlinSettings[1];
                 MapGenerator.Instance.Gem2Settings = saveFile.MapAsset.PerlinSettings[2];
 
-                foreach (var building in saveFile.MapAsset.BuildingCache)
-                {
-                    BuildingProxy.Instance.InstantiateBuildingAt(building.BuildingType, building.Location);
-                }
+                PlaceBuildings();
 
                 MapGenerator.Instance.MapAsset = saveFile.MapAsset;
             }
         }
 
-        private List<BuildingLocTypePair> ConvertBuildingGOCacheToBuildingTypeInts(Dictionary<Vector3Int, GameObject> buildings)
+        private void PlaceBuildings()
         {
-            List<BuildingLocTypePair> buildingList = new List<BuildingLocTypePair>();
-
-            foreach (var building in buildings)
+            foreach (BuildingInfo buildInfo in saveFile.MapAsset.BuildingCache)
             {
-                buildingList.Add(new BuildingLocTypePair(building.Key, building.Value.GetComponent<Building>().BuildingType));                
+                BuildingProxy.Instance.InstantiateBuildingAt(buildInfo.Type, buildInfo.Location);
+                TilemapManager.Instance.GetBuilding(buildInfo.Location)?.GetComponent<TSystemRotator>().RotateToFace(buildInfo.Direction);
             }
-
-            return buildingList;
         }
 
         // SCRIPTABLES

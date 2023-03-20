@@ -12,8 +12,6 @@ namespace bpdev
         [SerializeField] private float MinimumZoomLevel;
         [SerializeField] private float MaximumZoomLevel;
 
-        private float cameraZoom;
-
         public Vector2 MPosScreen {get; private set;}
         public Vector3 MPosWorld {get; private set;}
         public Vector3Int MPosCell {get; private set;}
@@ -29,20 +27,23 @@ namespace bpdev
         private InputAction a_rightClick;
         private InputAction a_mousePosition;
         private InputAction a_hotbarNumbers;
+        private InputAction a_scrollWheel;
 
-        private InputAction a_camera_pan;
-        private InputAction a_camera_zoom;
+        private InputAction a_cameraPan;
+        private InputAction a_cameraZoomIn;
+        private InputAction a_cameraZoomOut;
 
         private InputAction a_debug;
 
         [Header("References")]
         [SerializeField] private CinemachineVirtualCamera cvCam; //
-
         [SerializeField] private Transform player; //
 
         [Header("Events")]
         [SerializeField] private GameEvent_Int e_OnHotbarSelection; 
         [SerializeField] private GameEvent_Int e_OnDebugButtonPressed; 
+        [SerializeField] private GameEvent_Int e_OnRotateCursorClockwise; 
+        [SerializeField] private GameEvent_Int e_OnRotateCursorAntiClockwise; 
 
 
         protected override void Awake()
@@ -61,15 +62,21 @@ namespace bpdev
 
             a_mousePosition = input.Player.MousePosition;
 
+            a_scrollWheel = input.Player.ScrollWheel;
+            a_scrollWheel.performed += ctx => OnScrollWheel(ctx);
+
             // HOTBAR
             a_hotbarNumbers = input.Player.HotbarNumbers;
             a_hotbarNumbers.performed += ctx => OnPressNumber(ctx);
 
             // CAMERA
-            a_camera_pan = input.Camera.Pan;
+            a_cameraPan = input.Camera.Pan;
 
-            a_camera_zoom = input.Camera.Zoom;
-            a_camera_zoom.performed += ctx => OnCameraZoom();
+            a_cameraZoomIn = input.Camera.ZoomIn;
+            a_cameraZoomIn.performed += ctx => OnCameraZoomIn();
+
+            a_cameraZoomOut = input.Camera.ZoomOut;
+            a_cameraZoomOut.performed += ctx => OnCameraZoomOut();
 
             // DEBUG DISPLAY
             a_debug = input.Player.Debug;
@@ -85,7 +92,7 @@ namespace bpdev
 
         private void CalcPlayerMovement()
         {
-            PlayerMoveDir = a_camera_pan.ReadValue<Vector2>();
+            PlayerMoveDir = a_cameraPan.ReadValue<Vector2>();
         }
 
         private void CalcPlayerPositions()
@@ -153,24 +160,37 @@ namespace bpdev
         {
             e_OnDebugButtonPressed.Raise(-1);
         }
-    
-        private void OnCameraZoom()
+
+        private void OnCameraZoomOut()
         {
             if (cvCam == null)
             {
                 cvCam = Camera.main.transform.parent.GetComponent<CinemachineVirtualCamera>();
             }
 
-            cameraZoom = a_camera_zoom.ReadValue<float>();
-            if (cameraZoom == 0f) { return; }
+            cvCam.m_Lens.OrthographicSize = Mathf.Clamp(cvCam.m_Lens.OrthographicSize + 1, MinimumZoomLevel, MaximumZoomLevel);
+        }
 
-            if (cameraZoom > 0)
+        private void OnCameraZoomIn()
+        {
+            if (cvCam == null)
             {
-                cvCam.m_Lens.OrthographicSize = Mathf.Clamp(cvCam.m_Lens.OrthographicSize + 1, MinimumZoomLevel, MaximumZoomLevel);
+                cvCam = Camera.main.transform.parent.GetComponent<CinemachineVirtualCamera>();
             }
-            else
+
+            cvCam.m_Lens.OrthographicSize = Mathf.Clamp(cvCam.m_Lens.OrthographicSize - 1, MinimumZoomLevel, MaximumZoomLevel);
+        }
+    
+        private void OnScrollWheel(InputAction.CallbackContext ctx)
+        {
+            if (ctx.ReadValue<float>() > 0f)
             {
-                cvCam.m_Lens.OrthographicSize = Mathf.Clamp(cvCam.m_Lens.OrthographicSize - 1, MinimumZoomLevel, MaximumZoomLevel);
+                e_OnRotateCursorAntiClockwise.Raise(-1);
+            }
+
+            if (ctx.ReadValue<float>() < 0f)
+            {
+                e_OnRotateCursorClockwise.Raise(-1);
             }
         }
     }
