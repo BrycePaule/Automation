@@ -8,7 +8,9 @@ namespace bpdev
     public class MapGenerator : Singleton<MapGenerator>
     {
         [Header("Settings")]
+
         public scr_MapAsset MapAsset;
+        public int MapSize { get; private set; }
 
         public PerlinSettings BaseSettings;
         public PerlinSettings Gem1Settings;
@@ -18,22 +20,17 @@ namespace bpdev
         private PerlinNoiseMapGenerator gem1PerlGen;
         private PerlinNoiseMapGenerator gem2PerlGen;
             
-        private int mapSize;
         private MapToken[,] blendedTokens;
 
         protected override void Awake()
         {
             base.Awake();
-            mapSize = BaseSettings.MapSize;
+            MapSize = BaseSettings.MapSize;
 
             basePerlGen = new PerlinNoiseMapGenerator(BaseSettings);
             gem1PerlGen = new PerlinNoiseMapGenerator(Gem1Settings);
             gem2PerlGen = new PerlinNoiseMapGenerator(Gem2Settings);
 
-            if (MapAsset == null)
-            {
-                MapAsset = GenerateNewMap();
-            }
         }
 
         private MapToken Blend(MapToken tBase, MapToken tGem1, MapToken tGem2)
@@ -59,11 +56,11 @@ namespace bpdev
 
         private scr_MapAsset GenerateNewMap()
         {
-            scr_MapAsset newMap = GenerateMapAsset();
+            scr_MapAsset newMap = CreateMapAsset();
 
-            blendedTokens = new MapToken[mapSize, mapSize];
+            blendedTokens = new MapToken[MapSize, MapSize];
 
-            foreach (var point in Utils.EvaluateGrid(mapSize))
+            foreach (var point in Utils.EvaluateGrid(MapSize))
             {
                 blendedTokens[point.y, point.x] = GetTokenAtPos(point, Vector3Int.zero);
             }
@@ -81,7 +78,7 @@ namespace bpdev
             Gizmos.color = new Color(1, 0, 0, 0.1f);
             float _offset = 0.5f;
 
-            foreach (var point in Utils.EvaluateGrid(mapSize))
+            foreach (var point in Utils.EvaluateGrid(MapSize))
             {
                 Vector3 _pos = new Vector3(point.x + _offset, point.y + _offset, 0);
                 Gizmos.DrawWireCube( _pos, new Vector3(1, 1, 1));
@@ -90,7 +87,7 @@ namespace bpdev
 
         // MAP ASSET
 
-        private scr_MapAsset GenerateMapAsset()
+        public scr_MapAsset CreateMapAsset()
         {
             scr_MapAsset newMap = scr_MapAsset.CreateInstance<scr_MapAsset>();
 

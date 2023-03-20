@@ -10,10 +10,9 @@ namespace bpdev
         public static void Execute()
         {
             Object.DontDestroyOnLoad(Object.Instantiate(Resources.Load("PersistentSingletons")));
-        
-            // InitGame();
         }
 
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void InitGame()
         {
             if (SaveManager.Instance.saveFile != null)

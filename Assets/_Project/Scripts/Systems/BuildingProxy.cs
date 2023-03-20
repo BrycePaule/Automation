@@ -38,6 +38,7 @@ namespace bpdev
             GameObject _building = InstantiateByType(buildingType);
             _building.name = _building.name + " " + cellPos;
             _building.transform.position = TilemapManager.Instance.TileAnchorFromCellPos(cellPos);
+            
             _building.GetComponent<ITSystemConnectable>().SetCellPosition(cellPos);
 
             TilemapManager.Instance.SetBuilding(cellPos, _building);

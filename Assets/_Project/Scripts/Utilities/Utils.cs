@@ -87,5 +87,63 @@ namespace bpdev
             }
         }
 
+
+        public static class SaveConversion
+        {
+            public static Dictionary<Vector3Int, int> ConvertEnumDictToInt<T>(Dictionary<Vector3Int, T> enumDict) where T : System.Enum
+            {
+                Dictionary<Vector3Int, int> intDict = new Dictionary<Vector3Int, int>();
+
+                foreach (var item in enumDict)
+                {
+                    intDict[item.Key] = item.Value.GetHashCode();
+                }
+
+                return intDict;
+            }
+
+            // public static Dictionary<Vector3Int, T> ConvertIntEnumTo<T>(Dictionary<Vector3Int, int> intDict) where T : System.Enum
+            // {
+            //     Dictionary<Vector3Int, T> enumDict = new Dictionary<Vector3Int, T>();
+
+            //     foreach (var item in intDict)
+            //     {
+            //         enumDict[item.Key] = (typeof(T)) item.Value;
+            //     }
+
+            //     return enumDict;
+            // }
+
+
+            // DICT <-> TUPLE LIST
+
+            public static List<(TOne, TTwo)> DictToList<TOne, TTwo>(Dictionary<TOne, TTwo> dict)
+            {
+                List<(TOne, TTwo)> lst = new List<(TOne, TTwo)>();
+
+                foreach (var item in dict)
+                {
+                    lst.Add((item.Key, item.Value));
+                }
+
+                return lst;
+            }
+
+            public static Dictionary<T1, T2> ListToDict<T1, T2>(List<(T1, T2)> lst)
+            {
+                Dictionary<T1, T2> dict = new Dictionary<T1, T2>();
+
+                foreach (var item in lst)
+                {
+                    dict[item.Item1] = item.Item2;
+                }
+
+                return dict;
+            }
+
+
+
+        }
+
     }
 }

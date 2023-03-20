@@ -8,7 +8,7 @@ namespace bpdev
     public class TilemapManager : Singleton<TilemapManager>
     {
         [Header("Settings")]
-        [SerializeField] private int mapSize;
+        [SerializeField] private float renderGridSizeMultiplier;
 
         [Header("Tiles")]
         [SerializeField] private TerrainTile BaseTile;
@@ -57,7 +57,9 @@ namespace bpdev
         // This could probably be refactored to only update in the direction the player is moving
         public void RefreshTilesAroundPlayer(Vector3Int playerCellPos)
         {
-            foreach (var pos in Utils.EvaluateGrid(playerCellPos.x - (mapSize / 2), playerCellPos.y - (mapSize / 2), mapSize))
+            int renderGridSize = (int) (MapGenerator.Instance.MapSize * renderGridSizeMultiplier);
+
+            foreach (var pos in Utils.EvaluateGrid(playerCellPos.x - (renderGridSize / 2), playerCellPos.y - (renderGridSize / 2), renderGridSize))
             {
                 if (!TokenCache.ContainsKey(pos))
                 {
@@ -78,13 +80,12 @@ namespace bpdev
         public Vector3 TileAnchorFromWorldPos(Vector3 worldPos)
         {
             Vector3Int _cellPos = tilemap.WorldToCell(worldPos);
-            // Vector3 _baseTilemapOffset = new Vector3(.5f, .5f, 0);
-
             return tilemap.CellToWorld(_cellPos) + tilemap.tileAnchor;
         }
 
         public Vector3 TileAnchorFromCellPos(Vector3Int cellPos)
         {
+            print("B " + tilemap.CellToWorld(cellPos));
             return tilemap.CellToWorld(cellPos) + tilemap.tileAnchor;
         }
 

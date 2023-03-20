@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 8808228902737252289}
   - component: {fileID: 1452876697222341344}
   - component: {fileID: 2659509074459425212}
+  - component: {fileID: 6934533977074434058}
   m_Layer: 0
   m_Name: p_Drill
   m_TagString: Untagged
@@ -173,6 +174,19 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 695008f3ba5528549ae2814439c7612d, type: 3}
   - {fileID: 21300000, guid: 60a8395a53ffb8240b0d144f2c123294, type: 3}
   - {fileID: 21300000, guid: 18c0f66e1457d254090e61f2033f8fe8, type: 3}
+--- !u!114 &6934533977074434058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4545999447416434855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bf97489fcfd9bd44a7d8a6f1c7295e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BuildingType: 2
 --- !u!1 &6785864985640356805
 GameObject:
   m_ObjectHideFlags: 0

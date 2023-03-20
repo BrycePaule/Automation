@@ -4,9 +4,8 @@ using UnityEngine;
 
 namespace bpdev
 {
-    [System.Serializable]
-    public struct Threshold
+    public class Building : MonoBehaviour
     {
-        [Range(0f, 1f)] public float Value;	
+        public BuildingType BuildingType;
     }
 }

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 6513914186719948946}
   - component: {fileID: 5745023214444970979}
   - component: {fileID: 1566095677751510220}
+  - component: {fileID: 3002598173900086777}
   m_Layer: 20
   m_Name: p_Conveyor
   m_TagString: Untagged
@@ -170,6 +171,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Movespeed: 1
+--- !u!114 &3002598173900086777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4196235035966897580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bf97489fcfd9bd44a7d8a6f1c7295e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BuildingType: 1
 --- !u!1001 &617201745370349689
 PrefabInstance:
   m_ObjectHideFlags: 0

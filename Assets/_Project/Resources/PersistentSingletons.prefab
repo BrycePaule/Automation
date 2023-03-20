@@ -92,7 +92,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47881b93d55ad3a4991186311c50a54f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  saveFile: {fileID: 11400000, guid: c5ef20e7302268a41b222cb64a7bd954, type: 2}
+  saveFile: {fileID: 11400000, guid: 78a2431cd5ccb11449f6653ea39f4340, type: 2}
   OverwriteSave: 0
   ResourceLibrary: {fileID: 11400000, guid: 1223cde7d3369594db06aaeb9d2823f0, type: 2}
   BuildingLibrary: {fileID: 11400000, guid: 397b9444778a8e1469dd0f6830169eca, type: 2}
@@ -175,7 +175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91e9dd4621ef9c54ca6f2140851c50b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapSize: 128
+  renderGridSizeMultiplier: 1
   BaseTile: {fileID: 11400000, guid: 2710df9b6a956e54c96af881b76250dd, type: 2}
   AltBaseTile: {fileID: 11400000, guid: 718fe9baaada13143a118e152e21a85f, type: 2}
   Gem1Tile: {fileID: 11400000, guid: bb1c0a5a01ea44745a7bb325f9f1b5fe, type: 2}

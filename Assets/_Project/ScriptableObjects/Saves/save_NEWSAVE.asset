@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: save_NEWSAVE
   m_EditorClassIdentifier: 
   PlayerCellPos: {x: 0, y: 0, z: 0}
-  MapAsset: {fileID: 11400000, guid: 96b70ac21a6aec748ba27611343a5d9b, type: 2}
+  MapAsset: {fileID: 11400000, guid: 003065a13a923cc499dca9b6729107f9, type: 2}

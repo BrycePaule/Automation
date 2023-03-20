@@ -10,7 +10,7 @@ namespace bpdev
     {
         public List<PerlinSettings> PerlinSettings = new List<PerlinSettings>();
 
-        public Dictionary<Vector3Int, MapToken> TokenCache;
-        public Dictionary<Vector3Int, GameObject> BuildingCache;
+        public Dictionary<Vector3Int, int> TokenCache;
+        public List<BuildingLocTypePair> BuildingCache;
     }
 }

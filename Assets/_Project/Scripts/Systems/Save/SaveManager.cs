@@ -41,8 +41,13 @@ namespace bpdev
 
         private void SaveMapData()
         {
-            saveFile.MapAsset.TokenCache = TilemapManager.Instance.TokenCache;
-            saveFile.MapAsset.BuildingCache = TilemapManager.Instance.BuildingCache;
+            saveFile.MapAsset.PerlinSettings = new List<PerlinSettings>();
+            saveFile.MapAsset.PerlinSettings.Add(MapGenerator.Instance.BaseSettings);
+            saveFile.MapAsset.PerlinSettings.Add(MapGenerator.Instance.Gem1Settings);
+            saveFile.MapAsset.PerlinSettings.Add(MapGenerator.Instance.Gem2Settings);
+
+            // saveFile.MapAsset.TokenCache = ConvertEnumArrayToInt<MapToken>(TilemapManager.Instance.TokenCache);
+            saveFile.MapAsset.BuildingCache = ConvertBuildingGOCacheToBuildingTypeInts(TilemapManager.Instance.BuildingCache);
         }
 
         public void Load()
@@ -54,11 +59,20 @@ namespace bpdev
             else
             {
                 print("Loading from save");
+
                 Transform player = FindObjectOfType<PlayerMovement>().transform.parent;
                 player.transform.position = TilemapManager.Instance.TileAnchorFromCellPos(saveFile.PlayerCellPos);
 
-                TilemapManager.Instance.TokenCache = saveFile.MapAsset.TokenCache;
-                TilemapManager.Instance.BuildingCache = saveFile.MapAsset.BuildingCache;
+                MapGenerator.Instance.BaseSettings = saveFile.MapAsset.PerlinSettings[0];
+                MapGenerator.Instance.Gem1Settings = saveFile.MapAsset.PerlinSettings[1];
+                MapGenerator.Instance.Gem2Settings = saveFile.MapAsset.PerlinSettings[2];
+
+                foreach (var building in saveFile.MapAsset.BuildingCache)
+                {
+                    BuildingProxy.Instance.InstantiateBuildingAt(building.BuildingType, building.Location);
+                }
+
+                MapGenerator.Instance.MapAsset = saveFile.MapAsset;
             }
         }
 
@@ -71,6 +85,18 @@ namespace bpdev
             AssetDatabase.CreateAsset(saveFile, PATH);
 
             return saveFile;
+        }
+
+        private List<BuildingLocTypePair> ConvertBuildingGOCacheToBuildingTypeInts(Dictionary<Vector3Int, GameObject> buildings)
+        {
+            List<BuildingLocTypePair> buildingList = new List<BuildingLocTypePair>();
+
+            foreach (var building in buildings)
+            {
+                buildingList.Add(new BuildingLocTypePair(building.Key, building.Value.GetComponent<Building>().BuildingType));                
+            }
+
+            return buildingList;
         }
     }
 }
