@@ -85,7 +85,6 @@ namespace bpdev
 
         public Vector3 TileAnchorFromCellPos(Vector3Int cellPos)
         {
-            print("B " + tilemap.CellToWorld(cellPos));
             return tilemap.CellToWorld(cellPos) + tilemap.tileAnchor;
         }
 

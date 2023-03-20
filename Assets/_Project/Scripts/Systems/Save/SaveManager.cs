@@ -10,28 +10,34 @@ namespace bpdev
     {
         [Header("Current Savefile")]
         public scr_Savefile saveFile;
+        
+        [Header("Settings")]
+        public bool SaveOnExit;
         public bool OverwriteSave;
 
-        // [Header("Save Resources")]
-
-        [Header("Load Resources")]
-        [SerializeField] private scr_ResourceLibrary ResourceLibrary;
-        [SerializeField] private scr_BuildingLibrary BuildingLibrary;
-
-        private void OnApplicationQuit() => Save();
+        private void OnApplicationQuit()
+        {
+            if (SaveOnExit)
+            {
+                Save();
+            }
+        }
 
         public void Save()
         {
-            if (saveFile == null)
+            if (saveFile != null && OverwriteSave)
             {
-                saveFile = GenerateSaveFile();
+                Debug.Log($"Saving over {saveFile.name}.");
+            }
+            else 
+            {
+                saveFile = GenerateNewSaveFile();
+                Debug.Log($"Saved to new file ({saveFile.name})");
             }
 
             SavePlayerPos();
             SaveMapData();
-
             EditorUtility.SetDirty(saveFile);
-            Debug.Log("Saved");
         }
 
         private void SavePlayerPos()
@@ -46,7 +52,6 @@ namespace bpdev
             saveFile.MapAsset.PerlinSettings.Add(MapGenerator.Instance.Gem1Settings);
             saveFile.MapAsset.PerlinSettings.Add(MapGenerator.Instance.Gem2Settings);
 
-            // saveFile.MapAsset.TokenCache = ConvertEnumArrayToInt<MapToken>(TilemapManager.Instance.TokenCache);
             saveFile.MapAsset.BuildingCache = ConvertBuildingGOCacheToBuildingTypeInts(TilemapManager.Instance.BuildingCache);
         }
 
@@ -58,6 +63,8 @@ namespace bpdev
             }
             else
             {
+                if (saveFile.MapAsset == null) { return; }
+
                 print("Loading from save");
 
                 Transform player = FindObjectOfType<PlayerMovement>().transform.parent;
@@ -76,17 +83,6 @@ namespace bpdev
             }
         }
 
-        private scr_Savefile GenerateSaveFile()
-        {
-            scr_Savefile saveFile = scr_Savefile.CreateInstance<scr_Savefile>();
-            saveFile.MapAsset = MapGenerator.Instance.MapAsset;
-
-            string PATH = AssetDatabase.GenerateUniqueAssetPath("Assets/_Project/ScriptableObjects/Saves/save_NEWSAVE.asset");
-            AssetDatabase.CreateAsset(saveFile, PATH);
-
-            return saveFile;
-        }
-
         private List<BuildingLocTypePair> ConvertBuildingGOCacheToBuildingTypeInts(Dictionary<Vector3Int, GameObject> buildings)
         {
             List<BuildingLocTypePair> buildingList = new List<BuildingLocTypePair>();
@@ -98,5 +94,19 @@ namespace bpdev
 
             return buildingList;
         }
+
+        // SCRIPTABLES
+
+        private scr_Savefile GenerateNewSaveFile()
+        {
+            scr_Savefile saveFile = scr_Savefile.CreateInstance<scr_Savefile>();
+            saveFile.MapAsset = MapGenerator.Instance.CreateMapAsset();
+
+            string PATH = AssetDatabase.GenerateUniqueAssetPath("Assets/_Project/ScriptableObjects/Saves/save_NEWSAVE.asset");
+            AssetDatabase.CreateAsset(saveFile, PATH);
+
+            return saveFile;
+        }
+
     }
 }

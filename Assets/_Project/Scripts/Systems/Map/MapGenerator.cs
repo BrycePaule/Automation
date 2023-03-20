@@ -8,7 +8,6 @@ namespace bpdev
     public class MapGenerator : Singleton<MapGenerator>
     {
         [Header("Settings")]
-
         public scr_MapAsset MapAsset;
         public int MapSize { get; private set; }
 
@@ -30,7 +29,6 @@ namespace bpdev
             basePerlGen = new PerlinNoiseMapGenerator(BaseSettings);
             gem1PerlGen = new PerlinNoiseMapGenerator(Gem1Settings);
             gem2PerlGen = new PerlinNoiseMapGenerator(Gem2Settings);
-
         }
 
         private MapToken Blend(MapToken tBase, MapToken tGem1, MapToken tGem2)
@@ -54,21 +52,30 @@ namespace bpdev
             return Blend(tBase, tGem1, tGem2);
         }
 
-        private scr_MapAsset GenerateNewMap()
+        // private scr_MapAsset GenerateNewMap()
+        // {
+        //     scr_MapAsset newMap = CreateMapAsset();
+
+        //     blendedTokens = new MapToken[MapSize, MapSize];
+
+        //     foreach (var point in Utils.EvaluateGrid(MapSize))
+        //     {
+        //         blendedTokens[point.y, point.x] = GetTokenAtPos(point, Vector3Int.zero);
+        //     }
+
+        //     string PATH = AssetDatabase.GenerateUniqueAssetPath("Assets/_Project/ScriptableObjects/Maps/map_NEWMAP.asset");
+        //     AssetDatabase.CreateAsset(newMap, PATH);
+
+        //     return newMap;
+        // }
+
+        public void RandomiseSeed()
         {
-            scr_MapAsset newMap = CreateMapAsset();
+            float rand = Random.Range(0, 999);
 
-            blendedTokens = new MapToken[MapSize, MapSize];
-
-            foreach (var point in Utils.EvaluateGrid(MapSize))
-            {
-                blendedTokens[point.y, point.x] = GetTokenAtPos(point, Vector3Int.zero);
-            }
-
-            string PATH = AssetDatabase.GenerateUniqueAssetPath("Assets/_Project/ScriptableObjects/Maps/map_NEWMAP.asset");
-            AssetDatabase.CreateAsset(newMap, PATH);
-
-            return newMap;
+            BaseSettings.Seed = rand;
+            Gem1Settings.Seed = rand;
+            Gem2Settings.Seed = rand;
         }
 
         // GIZMO
@@ -94,6 +101,10 @@ namespace bpdev
             newMap.PerlinSettings.Add(BaseSettings);
             newMap.PerlinSettings.Add(Gem1Settings);
             newMap.PerlinSettings.Add(Gem2Settings);
+
+            string PATH = AssetDatabase.GenerateUniqueAssetPath("Assets/_Project/ScriptableObjects/Maps/map_NEWMAP.asset");
+            AssetDatabase.CreateAsset(newMap, PATH);
+
 
             return newMap;
         }
