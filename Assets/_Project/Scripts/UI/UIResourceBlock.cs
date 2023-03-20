@@ -16,7 +16,7 @@ namespace bpdev
 
         private int resourceCount;
 
-        private void Start()
+        private void OnEnable()
         {
             resourceCount = 0;
 

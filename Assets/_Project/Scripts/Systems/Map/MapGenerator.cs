@@ -8,7 +8,7 @@ namespace bpdev
     public class MapGenerator : Singleton<MapGenerator>
     {
         [Header("Settings")]
-        [SerializeField] private scr_MapAsset MapAsset;
+        public scr_MapAsset MapAsset;
 
         public PerlinSettings BaseSettings;
         public PerlinSettings Gem1Settings;

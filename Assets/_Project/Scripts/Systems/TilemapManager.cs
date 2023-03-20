@@ -22,9 +22,12 @@ namespace bpdev
         public Dictionary<Vector3Int, MapToken> TokenCache = new Dictionary<Vector3Int, MapToken>();
         public Dictionary<Vector3Int, GameObject> BuildingCache = new Dictionary<Vector3Int, GameObject>();
 
-        private Vector3Int playerCellPos;
+        protected override void Awake()
+        {
+            base.Awake();
+        }
 
-        private void Start()
+        private void OnEnable()
         {
             tilemap = FindObjectOfType<Tilemap>();
             RefreshTilesAroundPlayer(InputManager.Instance.PlayerCellPos);
@@ -32,6 +35,7 @@ namespace bpdev
 
         private void Update()
         {
+            if (InputManager.Instance.PlayerCellPos == null) { return; }
             if (InputManager.Instance.PlayerCellPosLastFrame == null) { return; }
 
             if (InputManager.Instance.PlayerCellPos != InputManager.Instance.PlayerCellPosLastFrame)
@@ -44,11 +48,6 @@ namespace bpdev
 
         public void SetTile(Vector2Int pos, MapToken token)
         {
-            // if (token == MapToken.Ground) { tilemap.SetTile(pos, Instantiate(BaseTile)); }
-            // if (token == MapToken.AlternateGround) { tilemap.SetTile(pos,Instantiate(AltBaseTile)); }
-            // if (token == MapToken.Gem1) { tilemap.SetTile(pos,Instantiate(Gem1Tile)); }
-            // if (token == MapToken.Gem2) { tilemap.SetTile(pos,Instantiate(Gem2Tile)); }
-
             if (token == MapToken.Ground) { tilemap.SetTile((Vector3Int) pos, BaseTile); }
             if (token == MapToken.AlternateGround) { tilemap.SetTile((Vector3Int) pos, AltBaseTile); }
             if (token == MapToken.Gem1) { tilemap.SetTile((Vector3Int) pos, Gem1Tile); }
@@ -56,15 +55,13 @@ namespace bpdev
         }
 
         // This could probably be refactored to only update in the direction the player is moving
-        public void RefreshTilesAroundPlayer(Vector3Int playerPos)
+        public void RefreshTilesAroundPlayer(Vector3Int playerCellPos)
         {
-            playerCellPos = playerPos;
-
             foreach (var pos in Utils.EvaluateGrid(playerCellPos.x - (mapSize / 2), playerCellPos.y - (mapSize / 2), mapSize))
             {
                 if (!TokenCache.ContainsKey(pos))
                 {
-                    TokenCache[pos] = MapGenerator.Instance.GetTokenAtPos(pos, playerPos);
+                    TokenCache[pos] = MapGenerator.Instance.GetTokenAtPos(pos, playerCellPos);
                 }
 
                 SetTile((Vector2Int) pos, TokenCache[pos]);

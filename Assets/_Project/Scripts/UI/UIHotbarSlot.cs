@@ -16,7 +16,7 @@ namespace bpdev
 
         private bool selected;
 
-        private void Start()
+        private void OnEnable()
         {
             RefreshBuildingType();
             Deselect();
@@ -26,7 +26,7 @@ namespace bpdev
         {
             selected = true;
             selectionRing.color = Utils.Colour.SetAlpha(selectionRing.color, 1);
-            // selectionRing.gameObject.SetActive(true);
+            selectionRing.gameObject.SetActive(true);
 
             onBuildingSelected.Raise(buildingType);
         }
@@ -35,14 +35,14 @@ namespace bpdev
         {
             selected = false;
             selectionRing.color = Utils.Colour.SetAlpha(selectionRing.color, 0);
-            // selectionRing.gameObject.SetActive(false);
+            selectionRing.gameObject.SetActive(false);
         }
 
-        public void SetItemIcon(Sprite icon)
-        {
-            itemIcon.gameObject.SetActive(true);
-            itemIcon.sprite = icon;
-        }
+        // public void SetItemIcon(Sprite icon)
+        // {
+        //     itemIcon.gameObject.SetActive(true);
+        //     itemIcon.sprite = icon;
+        // }
 
         public void Refresh()
         {

@@ -18,19 +18,13 @@ namespace bpdev
         [SerializeField] private scr_ResourceLibrary ResourceLibrary;
         [SerializeField] private scr_BuildingLibrary BuildingLibrary;
 
-        protected override void Awake()
-        {
-            base.Awake();
-        }
-
         private void OnApplicationQuit() => Save();
 
         public void Save()
         {
             if (saveFile == null)
             {
-                Debug.Log("Unable to save, no save file selected.");
-                return;
+                saveFile = GenerateSaveFile();
             }
 
             SavePlayerPos();
@@ -42,8 +36,7 @@ namespace bpdev
 
         private void SavePlayerPos()
         {
-            Transform player = FindObjectOfType<PlayerMovement>().transform.parent;
-            saveFile.PlayerCellPos = TilemapManager.Instance.WorldToCell(player.position);
+            saveFile.PlayerCellPos = InputManager.Instance.PlayerCellPos;
         }
 
         private void SaveMapData()
@@ -67,6 +60,17 @@ namespace bpdev
                 TilemapManager.Instance.TokenCache = saveFile.MapAsset.TokenCache;
                 TilemapManager.Instance.BuildingCache = saveFile.MapAsset.BuildingCache;
             }
+        }
+
+        private scr_Savefile GenerateSaveFile()
+        {
+            scr_Savefile saveFile = scr_Savefile.CreateInstance<scr_Savefile>();
+            saveFile.MapAsset = MapGenerator.Instance.MapAsset;
+
+            string PATH = AssetDatabase.GenerateUniqueAssetPath("Assets/_Project/ScriptableObjects/Saves/save_NEWSAVE.asset");
+            AssetDatabase.CreateAsset(saveFile, PATH);
+
+            return saveFile;
         }
     }
 }

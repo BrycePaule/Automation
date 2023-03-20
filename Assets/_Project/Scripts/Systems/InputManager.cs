@@ -76,34 +76,11 @@ namespace bpdev
             a_debug.performed += ctx => OnDebugPressed();
         }
 
-        private void Start()
-        {
-            player = FindObjectOfType<PlayerMovement>().transform.parent;
-            cvCam = Camera.main.transform.parent.GetComponent<CinemachineVirtualCamera>();
-
-            // CalcPlayerPositions();
-        }
-
         private void Update()
         {
             CalcMousePositions();
             CalcPlayerMovement();
             CalcPlayerPositions();
-        }
-
-        private void OnCameraZoom()
-        {
-            cameraZoom = a_camera_zoom.ReadValue<float>();
-            if (cameraZoom == 0f) { return; }
-
-            if (cameraZoom > 0)
-            {
-                cvCam.m_Lens.OrthographicSize = Mathf.Clamp(cvCam.m_Lens.OrthographicSize + 1, MinimumZoomLevel, MaximumZoomLevel);
-            }
-            else
-            {
-                cvCam.m_Lens.OrthographicSize = Mathf.Clamp(cvCam.m_Lens.OrthographicSize - 1, MinimumZoomLevel, MaximumZoomLevel);
-            }
         }
 
         private void CalcPlayerMovement()
@@ -113,8 +90,14 @@ namespace bpdev
 
         private void CalcPlayerPositions()
         {
+            if (player == null)
+            {
+                player = FindObjectOfType<PlayerMovement>().transform.parent;
+            }
+
             PlayerCellPosLastFrame = PlayerCellPos;
-            PlayerCellPos = TilemapManager.Instance.WorldToCell(player.transform.position);
+            PlayerPos = player.transform.position;
+            PlayerCellPos = TilemapManager.Instance.WorldToCell(PlayerPos);
         }
 
         private void CalcMousePositions()
@@ -125,7 +108,7 @@ namespace bpdev
             MPosCell = TilemapManager.Instance.WorldToCell(MPosWorld);
         }
 
-        // BUTTONS
+        // BUTTON CALLBACKS
 
         private void OnLeftClick()
         {
@@ -139,7 +122,7 @@ namespace bpdev
             }
             else
             {
-                BuildingType _selectedBuildingType = UIHotbarManager.Instance.GetSelected().buildingType;
+                BuildingType _selectedBuildingType = UIHotbar.Instance.GetSelected().buildingType;
 
                 if (_selectedBuildingType == BuildingType.UNASSIGNED) { return; }
 
@@ -169,6 +152,26 @@ namespace bpdev
         private void OnDebugPressed()
         {
             e_OnDebugButtonPressed.Raise(-1);
+        }
+    
+        private void OnCameraZoom()
+        {
+            if (cvCam == null)
+            {
+                cvCam = Camera.main.transform.parent.GetComponent<CinemachineVirtualCamera>();
+            }
+
+            cameraZoom = a_camera_zoom.ReadValue<float>();
+            if (cameraZoom == 0f) { return; }
+
+            if (cameraZoom > 0)
+            {
+                cvCam.m_Lens.OrthographicSize = Mathf.Clamp(cvCam.m_Lens.OrthographicSize + 1, MinimumZoomLevel, MaximumZoomLevel);
+            }
+            else
+            {
+                cvCam.m_Lens.OrthographicSize = Mathf.Clamp(cvCam.m_Lens.OrthographicSize - 1, MinimumZoomLevel, MaximumZoomLevel);
+            }
         }
     }
 }

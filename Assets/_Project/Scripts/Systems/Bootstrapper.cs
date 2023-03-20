@@ -7,7 +7,19 @@ namespace bpdev
     public static class Bootstrapper
     {
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        public static void Execute() => Object.DontDestroyOnLoad(Object.Instantiate(Resources.Load("PersistentSingletons")));
+        public static void Execute()
+        {
+            Object.DontDestroyOnLoad(Object.Instantiate(Resources.Load("PersistentSingletons")));
+        
+            // InitGame();
+        }
 
+        private static void InitGame()
+        {
+            if (SaveManager.Instance.saveFile != null)
+            {
+                SaveManager.Instance.Load();
+            }
+        }
     }
 }
